@@ -1,7 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PreBuildEvent>copy /y $(SolutionDir)$(SolutionName).StyleCop.json $(ProjectDir)..\..\..\stylecop.json</PreBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <Authors>Joe Fowler</Authors>
+  </PropertyGroup>
 </Project>
