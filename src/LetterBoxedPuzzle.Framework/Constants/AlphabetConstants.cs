@@ -5,7 +5,7 @@
 // </copyright>
 // ===============================================================================================================================================
 
-namespace LetterboxPuzzle.Framework.Constants
+namespace LetterBoxedPuzzle.Framework.Constants
 {
     /// <summary>
     ///     Class of constants related to the alphabet.

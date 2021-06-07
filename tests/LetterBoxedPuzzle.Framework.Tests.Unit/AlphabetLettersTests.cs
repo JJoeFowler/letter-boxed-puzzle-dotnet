@@ -5,13 +5,13 @@
 // </copyright>
 // ===============================================================================================================================================
 
-namespace LetterboxPuzzle.Framework.Tests.Unit
+namespace LetterBoxedPuzzle.Framework.Tests.Unit
 {
     using System;
 
-    using LetterboxPuzzle.Framework.Constants;
-    using LetterboxPuzzle.Framework.Enums;
-    using LetterboxPuzzle.Framework.Extensions;
+    using LetterBoxedPuzzle.Framework.Constants;
+    using LetterBoxedPuzzle.Framework.Enums;
+    using LetterBoxedPuzzle.Framework.Extensions;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

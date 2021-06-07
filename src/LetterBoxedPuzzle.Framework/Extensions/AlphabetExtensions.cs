@@ -5,14 +5,14 @@
 // </copyright>
 // ===============================================================================================================================================
 
-namespace LetterboxPuzzle.Framework.Extensions
+namespace LetterBoxedPuzzle.Framework.Extensions
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using LetterboxPuzzle.Framework.Constants;
-    using LetterboxPuzzle.Framework.Enums;
+    using LetterBoxedPuzzle.Framework.Constants;
+    using LetterBoxedPuzzle.Framework.Enums;
 
     /// <summary>
     ///     Extension methods for the bit-wise enumeration of the letters of the alphabet.

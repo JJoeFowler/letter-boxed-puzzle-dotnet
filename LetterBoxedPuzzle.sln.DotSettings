@@ -661,7 +661,7 @@
   <s:String x:Key="/Default/CodeStyle/Naming/XamlNaming/UserRules/=XAML_005FRESOURCE/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="AaBb" /&gt;</s:String>
   <s:String x:Key="/Default/Environment/Hierarchy/PsiConfigurationSettingsKey/CustomLocation/@EntryValue">C:\Users\fowler\AppData\Local\JetBrains\Transient\ReSharperPlatformVs15\v08_33986adc\SolutionCaches</s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=B3E8390572FAB54685DC000488B34B28/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=B3E8390572FAB54685DC000488B34B28/AbsolutePath/@EntryValue">C:\Repos\letterbox-puzzle-dotnet\LetterboxPuzzle.sln.DotSettings</s:String>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=B3E8390572FAB54685DC000488B34B28/AbsolutePath/@EntryValue">C:\Repos\letterbox-puzzle-dotnet\LetterBoxedPuzzle.sln.DotSettings</s:String>
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=B3E8390572FAB54685DC000488B34B28/RelativePath/@EntryValue"></s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileB3E8390572FAB54685DC000488B34B28/@KeyIndexDefined">True</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileB3E8390572FAB54685DC000488B34B28/RelativePriority/@EntryValue">1</s:Double>

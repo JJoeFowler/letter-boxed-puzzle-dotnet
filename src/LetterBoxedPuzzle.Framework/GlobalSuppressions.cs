@@ -13,4 +13,4 @@ using System.Diagnostics.CodeAnalysis;
         "SA1602:Enumeration items should be documented",
         Justification = "Letter names are self-evident.",
         Scope = "type",
-        Target = "~T:LetterboxPuzzle.Framework.Enums.AlphabetLetters")]
+        Target = "~T:LetterBoxedPuzzle.Framework.Enums.AlphabetLetters")]

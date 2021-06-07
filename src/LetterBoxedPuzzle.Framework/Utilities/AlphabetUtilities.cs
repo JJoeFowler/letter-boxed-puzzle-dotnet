@@ -5,15 +5,15 @@
 // </copyright>
 // ===============================================================================================================================================
 
-namespace LetterboxPuzzle.Framework.Utilities
+namespace LetterBoxedPuzzle.Framework.Utilities
 {
     using System;
     using System.Linq;
     using System.Text;
 
-    using LetterboxPuzzle.Framework.Constants;
-    using LetterboxPuzzle.Framework.Enums;
-    using LetterboxPuzzle.Framework.Extensions;
+    using LetterBoxedPuzzle.Framework.Constants;
+    using LetterBoxedPuzzle.Framework.Enums;
+    using LetterBoxedPuzzle.Framework.Extensions;
 
     /// <summary>
     ///     Class containing utility methods related to the alphabet.

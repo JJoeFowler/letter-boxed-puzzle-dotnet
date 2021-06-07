@@ -5,18 +5,18 @@
 // </copyright>
 // ===============================================================================================================================================
 
-namespace LetterboxPuzzle.Framework.Tests.Unit
+namespace LetterBoxedPuzzle.Framework.Tests.Unit
 {
     using System;
 
-    using LetterboxPuzzle.Framework.Enums;
-    using LetterboxPuzzle.Framework.Extensions;
-    using LetterboxPuzzle.Framework.Models;
-    using LetterboxPuzzle.Framework.Utilities;
+    using LetterBoxedPuzzle.Framework.Enums;
+    using LetterBoxedPuzzle.Framework.Extensions;
+    using LetterBoxedPuzzle.Framework.Models;
+    using LetterBoxedPuzzle.Framework.Utilities;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using static LetterboxPuzzle.Framework.Constants.AlphabetConstants;
+    using static LetterBoxedPuzzle.Framework.Constants.AlphabetConstants;
 
     /// <summary>
     ///     The unit tests for the letters enumeration.
@@ -76,7 +76,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
             var expectedAsciiSequence = new byte[]
                 {
                     116, 104, 101, 113, 117, 105, 99, 107, 98, 114, 111, 119, 110, 102, 111, 120, 106, 117, 109, 112,
-                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103
+                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103,
                 };
 
             // Act

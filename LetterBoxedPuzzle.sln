@@ -5,20 +5,20 @@ VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{37CE3F56-0927-4A75-9BDD-38236BC507DF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetterboxPuzzle.Framework", "src\LetterboxPuzzle.Framework\LetterboxPuzzle.Framework.csproj", "{5B1AEEF6-6B65-4B49-ABC9-2DC3CC93D41A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetterBoxedPuzzle.Framework", "src\LetterBoxedPuzzle.Framework\LetterBoxedPuzzle.Framework.csproj", "{5B1AEEF6-6B65-4B49-ABC9-2DC3CC93D41A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2BD105F9-F9F8-47D2-A53F-E415E2E9BEDA}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		LetterboxPuzzle.sln.DotSettings = LetterboxPuzzle.sln.DotSettings
-		LetterboxPuzzle.StyleCop.json = LetterboxPuzzle.StyleCop.json
+		LetterBoxedPuzzle.sln.DotSettings = LetterBoxedPuzzle.sln.DotSettings
+		LetterBoxedPuzzle.StyleCop.json = LetterBoxedPuzzle.StyleCop.json
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{41D09642-8A06-4BB1-BCED-C59565F52EAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetterboxPuzzle.Framework.Tests.Unit", "tests\LetterboxPuzzle.Framework.Tests.Unit\LetterboxPuzzle.Framework.Tests.Unit.csproj", "{82E3D60F-9C49-4041-8657-F65CD5A80891}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetterBoxedPuzzle.Framework.Tests.Unit", "tests\LetterBoxedPuzzle.Framework.Tests.Unit\LetterBoxedPuzzle.Framework.Tests.Unit.csproj", "{82E3D60F-9C49-4041-8657-F65CD5A80891}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Repos\letterbox-puzzle-dotnet\tests\LetterboxPuzzle.Framework.Tests.Unit\LetterboxPuzzle.Framework.Tests.Unit.xml</DocumentationFile>
+    <DocumentationFile>C:\Repos\letterbox-puzzle-dotnet\tests\LetterBoxedPuzzle.Framework.Tests.Unit\LetterBoxedPuzzle.Framework.Tests.Unit.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\LetterboxPuzzle.Framework\LetterboxPuzzle.Framework.csproj" />
+    <ProjectReference Include="..\..\src\LetterBoxedPuzzle.Framework\LetterBoxedPuzzle.Framework.csproj" />
   </ItemGroup>
 
 </Project>

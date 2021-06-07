@@ -4,7 +4,7 @@
 // Licensed under the GNU Affero General Public License v3. See LICENSE file in the project root for full license information.
 // </copyright>
 // ===============================================================================================================================================
-namespace LetterboxPuzzle.Framework.Enums
+namespace LetterBoxedPuzzle.Framework.Enums
 {
     using System;
     using System.Diagnostics.CodeAnalysis;

@@ -5,13 +5,13 @@
 // </copyright>
 // ===============================================================================================================================================
 
-namespace LetterboxPuzzle.Framework.Models
+namespace LetterBoxedPuzzle.Framework.Models
 {
     using System.Text;
 
-    using LetterboxPuzzle.Framework.Enums;
-    using LetterboxPuzzle.Framework.Extensions;
-    using LetterboxPuzzle.Framework.Utilities;
+    using LetterBoxedPuzzle.Framework.Enums;
+    using LetterBoxedPuzzle.Framework.Extensions;
+    using LetterBoxedPuzzle.Framework.Utilities;
 
     /// <summary>
     ///     Class for a case-insensitive candidate word for a letterbox puzzle, containing the ASCII sequence and its bit-wise enumerated value
