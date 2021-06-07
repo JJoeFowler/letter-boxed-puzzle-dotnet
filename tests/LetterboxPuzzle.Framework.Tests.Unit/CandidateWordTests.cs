@@ -132,7 +132,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
             var actualIsContainedIn = SimpleCandidateWord.IsContainedIn(candidateWordLetters);
 
             // Assert
-            Assert.IsFalse(actualIsContainedIn);
+            Assert.IsTrue(actualIsContainedIn);
         }
     }
 }

@@ -65,7 +65,7 @@ namespace LetterboxPuzzle.Framework.Models
         /// </returns>
         public bool IsContainedIn(CandidateWord candidateLetters)
         {
-            return (this.AlphabetBitMask & (AlphabetExtensions.AllAlphabetLettersBitMask ^ this.AlphabetBitMask)) > 0;
+            return (this.AlphabetBitMask & (AlphabetExtensions.AllAlphabetLettersBitMask ^ candidateLetters.AlphabetBitMask)) == 0;
         }
     }
 }
