@@ -8,6 +8,7 @@
 namespace LetterboxPuzzle.Framework.Utilities
 {
     using System;
+    using System.Linq;
     using System.Text;
 
     using LetterboxPuzzle.Framework.Constants;
@@ -59,6 +60,40 @@ namespace LetterboxPuzzle.Framework.Utilities
             _ = letter ?? throw new ArgumentNullException(nameof(letter));
 
             return Encoding.ASCII.GetBytes(letter)[0];
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Generates an alphabetic range character array starting with the given letter and going alphabetically to the
+        ///         next letter for the specified length.
+        ///     </para>
+        ///     <para>
+        ///         For example, { "a", "b", ..., "z" } is the alphabetic range array starting at 'a' with a length of 26.
+        ///     </para>
+        /// </summary>
+        /// <param name="startingLetter">The starting letter.</param>
+        /// <param name="length">The length of the range.</param>
+        /// <returns>The specified alphabetic range as a <see langword="char"/> array.</returns>
+        public static char[] AlphabetRangeArray(char startingLetter, int length)
+        {
+            return Enumerable.Range(startingLetter, length).Select(x => (char)x).ToArray();
+        }
+
+        /// <summary>
+        ///     <para>
+        ///         Generates an alphabetic range string starting with the given letter and going alphabetically to the next letter for
+        ///         the specified length.
+        ///     </para>
+        ///     <para>
+        ///         For example, "abcdefghijklmnopqrstuvwxyz" is the alphabetic range starting at 'a' with a length of 26.
+        ///     </para>
+        /// </summary>
+        /// <param name="startingLetter">The starting letter.</param>
+        /// <param name="length">The length of the range.</param>
+        /// <returns>Concatenated <see langword="string" /> of the specified alphabetic range.</returns>
+        public static string AlphabetRangeText(char startingLetter, int length)
+        {
+            return string.Join(string.Empty, AlphabetRangeArray(startingLetter, length));
         }
     }
 }
