@@ -7,10 +7,10 @@
       "headerDecoration":
         "===============================================================================================================================================",
       "copyrightText":
-        "Copyright (c) {copyrightDates} {companyName}. All rights reserved.\nLicensed under the {licenseName}. See {licenseFile} file in the project root for full license information.",
+        "Copyright (c) {copyrightDates} {companyName}.\nLicensed under the {licenseName}. See {licenseFile} file in the project root for full license information.",
       "variables": {
-        "copyrightDates": "2020",
-        "licenseName": "GNU Lesser General Public License v2.1",
+        "copyrightDates": "2021",
+        "licenseName": "GNU Affero General Public License v3",
         "licenseFile": "LICENSE"
       },
       "documentPrivateElements": true,
