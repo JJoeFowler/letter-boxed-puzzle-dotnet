@@ -688,6 +688,7 @@
   <s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=Intellimine/@EntryIndexedValue">True</s:Boolean>
   <s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=Kalman/@EntryIndexedValue">True</s:Boolean>
   <s:Boolean x:Key="/Default/ReSpeller/UserDictionaries/=en_005Fus/Words/=Vertice/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=abcdefghijklmnopqrstuvwxyz/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Affero/@EntryIndexedValue">True</s:Boolean>
   <s:Boolean x:Key="/Default/UserDictionary/Words/=Async/@EntryIndexedValue">True</s:Boolean>
   <s:Boolean x:Key="/Default/UserDictionary/Words/=Dbmsd/@EntryIndexedValue">True</s:Boolean>
@@ -696,4 +697,5 @@
   <s:Boolean x:Key="/Default/UserDictionary/Words/=Intellimine/@EntryIndexedValue">True</s:Boolean>
   <s:Boolean x:Key="/Default/UserDictionary/Words/=Kalman/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Suppressions/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=thequickbrownfoxjumpsoverthelazydog/@EntryIndexedValue">True</s:Boolean>
   <s:Boolean x:Key="/Default/UserDictionary/Words/=Vertice/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

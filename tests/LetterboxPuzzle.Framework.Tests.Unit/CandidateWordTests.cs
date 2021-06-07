@@ -10,8 +10,11 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
     using LetterboxPuzzle.Framework.Enums;
     using LetterboxPuzzle.Framework.Extensions;
     using LetterboxPuzzle.Framework.Models;
+    using LetterboxPuzzle.Framework.Utilities;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using static LetterboxPuzzle.Framework.Constants.AlphabetConstants;
 
     /// <summary>
     ///     The unit tests for the letters enumeration.
@@ -40,6 +43,11 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
         private static readonly CandidateWord AToZCandidateWord = new (AToZTestWord);
 
         /// <summary>
+        ///     Alphabet range text from 'a' to 'z', which is the string "abcdefghijklmnopqrstuvwxyz".
+        /// </summary>
+        private static readonly string AlphabetRangeTextFromAToZ = AlphabetUtilities.AlphabetRangeText(LowerCaseA[0], EnglishAlphabetSize);
+
+        /// <summary>
         ///     Checks whether the word of the A-to-Z candidate word is in lowercased.
         /// </summary>
         [TestMethod]
@@ -65,7 +73,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
             var expectedAsciiSequence = new byte[]
                 {
                     116, 104, 101, 113, 117, 105, 99, 107, 98, 114, 111, 119, 110, 102, 111, 120, 106, 117, 109, 112,
-                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103,
+                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103
                 };
 
             // Act
@@ -133,6 +141,48 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
 
             // Assert
             Assert.IsTrue(actualIsContainedIn);
+        }
+
+        /// <summary>
+        ///     Checks whether the letters of the A-to-Z candidate word is contained within all letters of the alphabet is true.
+        /// </summary>
+        [TestMethod]
+        public void IsContainedIn_AtoZCandidateWordGivenAllLetters_IsTrue()
+        {
+            // Arrange
+            var allCandidateLetters = new CandidateWord(AlphabetRangeTextFromAToZ);
+
+            // Act
+            var actualIsContainedIn = AToZCandidateWord.IsContainedIn(allCandidateLetters);
+
+            // Assert
+            Assert.IsTrue(actualIsContainedIn);
+        }
+
+        /// <summary>
+        ///     Checks whether the letters of the A-to-Z candidate word are contained within all letters of the alphabet but one is false.
+        /// </summary>
+        [TestMethod]
+        public void IsContainedIn_AtoZCandidateWordGivenAllLettersButOne_IsFalse()
+        {
+            // Arrange
+            var allCandidateLettersButOne = new CandidateWord[EnglishAlphabetSize];
+
+            for (var index = 0; index < EnglishAlphabetSize; index++)
+            {
+                var alphabetRangeTextMissingOneLetter =
+                    AlphabetRangeTextFromAToZ.Replace(AlphabetRangeTextFromAToZ[index].ToString(), string.Empty);
+                allCandidateLettersButOne[index] = new CandidateWord(alphabetRangeTextMissingOneLetter);
+            }
+
+            // Act and arrange
+            for (var index = 0; index < EnglishAlphabetSize; index++)
+            {
+                var candidateLettersMissingOne = allCandidateLettersButOne[index];
+                Assert.IsFalse(
+                    AToZCandidateWord.IsContainedIn(candidateLettersMissingOne),
+                    $"The A-to-Z test word '{AToZTestWord}' cannot be contained within the letters '{candidateLettersMissingOne.CaseInsensitiveWord}' missing the letter '{AlphabetRangeTextFromAToZ[index]}'.");
+            }
         }
     }
 }
