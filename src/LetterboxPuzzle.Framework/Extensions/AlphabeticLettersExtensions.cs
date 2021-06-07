@@ -11,6 +11,7 @@ namespace LetterboxPuzzle.Framework.Extensions
     using System.Collections.Generic;
     using System.Linq;
 
+    using LetterboxPuzzle.Framework.Constants;
     using LetterboxPuzzle.Framework.Enums;
 
     /// <summary>
@@ -19,34 +20,53 @@ namespace LetterboxPuzzle.Framework.Extensions
     public static class AlphabeticLettersExtensions
     {
         /// <summary>
-        ///     The alphabeticLetter values of the alphabetic letters enumeration.
+        ///     All the bit-wise alphabetic letters from <see cref="AlphabeticLetters.A" /> to <see cref="AlphabeticLetters.Z" />.
+        /// </summary>
+        public static readonly AlphabeticLetters AllAlphabeticLetters;
+
+        /// <summary>
+        ///     The bit-wise alphabetic letter values of the alphabetic letters enumeration.
         /// </summary>
         private static readonly AlphabeticLetters[] AlphabeticLetterValues = Enum.GetValues<AlphabeticLetters>();
 
         /// <summary>
-        ///     The alphabetic index values of the alphabetic letters enumeration.
+        ///     The alphabetic indices of the bit-wise alphabetic letters enumeration.
         /// </summary>
-        private static readonly int[] AlphabeticIndexValues = Enumerable.Range(0, 27).ToArray();
+        private static readonly int[] AlphabeticIndices = Enumerable.Range(0, 27).ToArray();
 
         /// <summary>
-        ///     The mapping of an alphabetic index by its alphabeticLetter where AlphabeticLetters.None maps to 0, AlphabeticLetters.A maps to 1,
-        ///     and AlphabeticLetters.Z maps to 26.
+        ///     The mapping of the alphabetic index by alphabetic letters where <see cref="AlphabeticLetters.None" /> maps to 0,
+        ///     <see cref="AlphabeticLetters.A" /> maps to 1, and <see cref="AlphabeticLetters.Z" /> maps to 26.
         /// </summary>
         private static readonly Dictionary<AlphabeticLetters, int> AlphabeticIndexByLetter = AlphabeticLetterValues
-            .Zip(AlphabeticIndexValues, (letter, index) => new KeyValuePair<AlphabeticLetters, int>(letter, index))
+            .Zip(AlphabeticIndices, (letter, index) => new KeyValuePair<AlphabeticLetters, int>(letter, index))
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
         /// <summary>
-        ///     Converts the alphabetic index of a alphabeticLetter to its corresponding alphabetic alphabeticLetter where 0 returns AlphabeticLetters.None,
-        ///     1 returns AlphabeticLetters.A, and 26 returns AlphabeticLetters.Z.
+        ///     Initializes static members of the <see cref="AlphabeticLettersExtensions" /> class.
         /// </summary>
-        /// <param name="letterIndex">The index of the alphabeticLetter.</param>
-        /// <returns>The alphabeticLetter (AlphabeticLetters.A to AlphabeticLetters.Z) of the given index if in range of 1 to 26, or AlphabeticLetters.None otherwise.</returns>
-        public static AlphabeticLetters ToAlphabeticLetter(this int letterIndex)
+        static AlphabeticLettersExtensions()
+        {
+            for (var alphabeticLetterIndex = 1; alphabeticLetterIndex <= AlphabeticConstants.EnglishAlphabetSize; alphabeticLetterIndex++)
+            {
+                AllAlphabeticLetters |= alphabeticLetterIndex.ToAlphabeticLetter();
+            }
+        }
+
+        /// <summary>
+        ///     Converts the index of an alphabetic letter to its corresponding letter where '0' returns '<see cref=" AlphabeticLetters.None" />',
+        ///     '1' returns '<see cref=" AlphabeticLetters.A" />', and '26' returns '<see cref="AlphabeticLetters.Z" />'.
+        /// </summary>
+        /// <param name="alphabeticLetterIndex">The index of the alphabetic letter.</param>
+        /// <returns>
+        ///     The alphabetic letter (<see cref="AlphabeticLetters.A" /> to <see cref="AlphabeticLetters.Z" />) of the given alphabetic
+        ///     letter index if it is in range of 1 to 26, or <see cref="AlphabeticLetters.None" /> otherwise.
+        /// </returns>
+        public static AlphabeticLetters ToAlphabeticLetter(this int alphabeticLetterIndex)
         {
             try
             {
-                return AlphabeticLetterValues[letterIndex];
+                return AlphabeticLetterValues[alphabeticLetterIndex];
             }
             catch (IndexOutOfRangeException)
             {
@@ -55,11 +75,11 @@ namespace LetterboxPuzzle.Framework.Extensions
         }
 
         /// <summary>
-        ///     Converts the alphabetic index of the alphabeticLetter to its corresponding alphabeticLetter where 0 returns AlphabeticLetters.None, 1 returns AlphabeticLetters.A,
-        ///     and 26 returns AlphabeticLetters.Z.
+        ///     Converts the alphabetic letter to its corresponding alphabetic index where '<see cref="AlphabeticLetters.None" />' returns '0',
+        ///     '<see cref="AlphabeticLetters.A" />' returns '1', and '<see cref="AlphabeticLetters.Z" />' returns '26'.
         /// </summary>
-        /// <param name="alphabeticLetter">The alphabeticLetter.</param>
-        /// <returns>The index of the given alphabeticLetter.</returns>
+        /// <param name="alphabeticLetter">The alphabetic letter.</param>
+        /// <returns>The alphabetic index between 0 to 26 of the given alphabetic letter.</returns>
         public static int ToAlphabeticIndex(this AlphabeticLetters alphabeticLetter)
         {
             try

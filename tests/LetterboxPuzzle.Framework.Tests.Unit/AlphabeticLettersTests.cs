@@ -9,6 +9,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
 {
     using System;
 
+    using LetterboxPuzzle.Framework.Constants;
     using LetterboxPuzzle.Framework.Enums;
     using LetterboxPuzzle.Framework.Extensions;
 
@@ -26,16 +27,22 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
         [TestMethod]
         public void ToAlphabeticLetter_GivenAlphabeticIndexInRange_ReturnsCorrectAlphabeticLetter()
         {
-            var letterValues = Enum.GetValues<AlphabeticLetters>();
+            var alphabeticLetterValues = Enum.GetValues<AlphabeticLetters>();
 
             // Explicitly check boundary cases.
             Assert.AreEqual(AlphabeticLetters.A, 1.ToAlphabeticLetter());
             Assert.AreEqual(AlphabeticLetters.Z, 26.ToAlphabeticLetter());
 
-            // Check remaining values.
-            for (var index = 2; index <= 25; index++)
+            // Check all values.
+            for (var index = 1; index <= AlphabeticConstants.EnglishAlphabetSize; index++)
             {
-                Assert.AreEqual(letterValues[index], index.ToAlphabeticLetter());
+                var expectedAlphabeticLetter = alphabeticLetterValues[index];
+                var actualAlphabeticLetter = index.ToAlphabeticLetter();
+
+                Assert.AreEqual(
+                    expectedAlphabeticLetter,
+                    actualAlphabeticLetter,
+                    $"The alphabetic letter for '{index}' was '{actualAlphabeticLetter}' instead of '{expectedAlphabeticLetter}'.");
             }
         }
 
@@ -64,11 +71,15 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
             Assert.AreEqual(26, AlphabeticLetters.Z.ToAlphabeticIndex());
 
             // Check all values incrementally.
-            var index = 0;
+            var expectedAlphabeticIndex = 0;
             foreach (var letter in Enum.GetValues(typeof(AlphabeticLetters)))
             {
-                Assert.AreEqual(index, ((AlphabeticLetters)letter).ToAlphabeticIndex());
-                index++;
+                var actualAlphabeticIndex = ((AlphabeticLetters)letter).ToAlphabeticIndex();
+                Assert.AreEqual(
+                    expectedAlphabeticIndex,
+                    actualAlphabeticIndex,
+                    $"The alphabetic index for '{letter}' was '{actualAlphabeticIndex}' instead of '{expectedAlphabeticIndex}'.");
+                expectedAlphabeticIndex++;
             }
         }
     }

@@ -1,5 +1,5 @@
 ﻿// ===============================================================================================================================================
-// <copyright file="WordMetadata.cs" company="Joe Fowler">
+// <copyright file="CandidateWord.cs" company="Joe Fowler">
 // Copyright (c) 2021 Joe Fowler.
 // Licensed under the GNU Affero General Public License v3. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -7,100 +7,64 @@
 
 namespace LetterboxPuzzle.Framework.Models
 {
-    using System;
     using System.Text;
 
     using LetterboxPuzzle.Framework.Enums;
     using LetterboxPuzzle.Framework.Extensions;
+    using LetterboxPuzzle.Framework.Utilities;
 
     /// <summary>
-    ///     Word metadata class containing char array of the word's letters and bit integer properties.
+    ///     Candidate word class containing the ASCII sequence of the word's letters and its alphabetic letters bit-wise enumeration.
     /// </summary>
-    public class WordMetadata
+    public class CandidateWord
     {
         /// <summary>
-        ///     The size of the English alphabet.
+        ///     Local copy of alphabetic letters by ASCII values to speed array access.
         /// </summary>
-        public const int EnglishAlphabetSize = 26;
+        private static readonly AlphabeticLetters[] AlphabeticLettersByAsciiValues = AlphabeticUtilities.AlphabeticLettersByAsciiValues;
 
         /// <summary>
-        ///     The lower case letter 'a'.
-        /// </summary>
-        public const string LowerCaseA = "a";
-
-        /// <summary>
-        ///     The upper case letter 'A'.
-        /// </summary>
-        public const string UpperCaseA = "A";
-
-        /// <summary>
-        ///     ASCII value of the upper case 'A'.
-        /// </summary>
-        public static readonly byte AsciiValueOfUpperCaseA = GetAsciiValue(UpperCaseA);
-
-        /// <summary>
-        ///     ASCII value of the lower case 'a'.
-        /// </summary>
-        public static readonly byte AsciiValueOfLowerCaseA = GetAsciiValue(LowerCaseA);
-
-        /// <summary>
-        ///     Array of letters enumeration indexed by their ASCII values.
-        /// </summary>
-        private static readonly AlphabeticLetters[] LettersByAsciiValues = new AlphabeticLetters[byte.MaxValue + 1];
-
-        /// <summary>
-        ///     Initializes static members of the <see cref="WordMetadata" /> class.
-        /// </summary>
-        static WordMetadata()
-        {
-            for (var letterIndex = 0; letterIndex < EnglishAlphabetSize; letterIndex++)
-            {
-                LettersByAsciiValues[AsciiValueOfUpperCaseA + letterIndex] =
-                    LettersByAsciiValues[AsciiValueOfLowerCaseA + letterIndex] = letterIndex.ToAlphabeticLetter();
-            }
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="WordMetadata" /> class.
+        ///     Initializes a new instance of the <see cref="CandidateWord" /> class.
         /// </summary>
         /// <param name="word">The word.</param>
-        public WordMetadata(string word)
+        public CandidateWord(string word)
         {
-            this.Word = word.ToUpper();
+            this.WordLowercased = word.ToLowerInvariant();
 
-            this.AsciiValues = Encoding.ASCII.GetBytes(this.Word);
+            this.AsciiSequence = Encoding.ASCII.GetBytes(this.WordLowercased);
 
-            foreach (var asciiValue in this.AsciiValues)
+            foreach (var asciiValue in this.AsciiSequence)
             {
-                this.LettersMask |= LettersByAsciiValues[asciiValue];
+                this.AlphabeticLetters |= AlphabeticLettersByAsciiValues[asciiValue];
             }
         }
 
         /// <summary>
-        ///     Gets the word.
+        ///     Gets the word used to initialize the candidate, which is lowercased since case is irrelevant.
         /// </summary>
-        public string Word { get; }
+        public string WordLowercased { get; }
 
         /// <summary>
-        ///     Gets the ASCII byte values of the word.
+        ///     Gets the byte values corresponding to the ASCII sequence of the word.
         /// </summary>
-        public byte[] AsciiValues { get; }
+        public byte[] AsciiSequence { get; }
 
         /// <summary>
-        ///     Gets the bit-mask of the word where the bits 1 to 26 correspond to the whether the word contains the letters A through Z.
+        ///     Gets the alphabetic letters of the word (where bits 1 to 26 correspond to the whether the word contains the letters
+        ///     <see cref="AlphabeticLetters.A"/> to <see cref="AlphabeticLetters.Z"/>, respectively.
         /// </summary>
-        public AlphabeticLetters LettersMask { get; internal set; }
+        public AlphabeticLetters AlphabeticLetters { get; internal set; }
 
         /// <summary>
-        ///     Gets the ASCII byte value for the given letter, assuming can be encoded in ASCII.
+        ///     Determines whether all the letters of the candidate word are contained within the given candidate letters.
         /// </summary>
-        /// <param name="letter">A single-character letter.</param>
-        /// <returns>The ASCII byte value of the given letter.</returns>
-        private static byte GetAsciiValue(string letter)
+        /// <param name="candidateLetters">The candidate letters.</param>
+        /// <returns>
+        ///     <see langword="true" /> if all the letters of the candidate word are contained in the given letters, or <see langword="false" /> otherwise.
+        /// </returns>
+        public bool IsContainedIn(CandidateWord candidateLetters)
         {
-            _ = letter ?? throw new ArgumentNullException(nameof(letter));
-
-            return Encoding.ASCII.GetBytes(letter)[0];
+            return (this.AlphabeticLetters & (AlphabeticLettersExtensions.AllAlphabeticLetters ^ this.AlphabeticLetters)) > 0;
         }
     }
 }
