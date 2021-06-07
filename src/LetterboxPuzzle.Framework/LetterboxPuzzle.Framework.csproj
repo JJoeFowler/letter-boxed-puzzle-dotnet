@@ -2,12 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
     <PreBuildEvent>copy /y $(SolutionDir)$(SolutionName).StyleCop.json $(ProjectDir)..\..\..\stylecop.json</PreBuildEvent>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <Authors>Joe Fowler</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Repos\letterbox-puzzle-dotnet\src\LetterboxPuzzle.Framework\LetterboxPuzzle.Framework.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

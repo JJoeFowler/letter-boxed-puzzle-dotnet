@@ -1,5 +1,5 @@
 // ===============================================================================================================================================
-// <copyright file="LettersTests.cs" company="Joe Fowler">
+// <copyright file="AlphabeticLettersTests.cs" company="Joe Fowler">
 // Copyright (c) 2021 Joe Fowler.
 // Licensed under the GNU Affero General Public License v3. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -18,56 +18,56 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
     ///     The unit tests for the letters enumeration.
     /// </summary>
     [TestClass]
-    public class LettersTests
+    public class AlphabeticLettersTests
     {
         /// <summary>
-        ///     Checks whether the given index between 0 to 26 is converted to the correct letter.
+        ///     Checks whether the given index between 0 to 26 is converted to the correct alphabeticLetter.
         /// </summary>
         [TestMethod]
-        public void ToLetter_GivenIndexInRange_ReturnsCorrectLetter()
+        public void ToAlphabeticLetter_GivenAlphabeticIndexInRange_ReturnsCorrectAlphabeticLetter()
         {
-            var letterValues = Enum.GetValues<Letters>();
+            var letterValues = Enum.GetValues<AlphabeticLetters>();
 
             // Explicitly check boundary cases.
-            Assert.AreEqual(Letters.None, 0.ToLetter());
-            Assert.AreEqual(Letters.A, 1.ToLetter());
-            Assert.AreEqual(Letters.Z, 26.ToLetter());
+            Assert.AreEqual(AlphabeticLetters.A, 1.ToAlphabeticLetter());
+            Assert.AreEqual(AlphabeticLetters.Z, 26.ToAlphabeticLetter());
 
             // Check remaining values.
             for (var index = 2; index <= 25; index++)
             {
-                Assert.AreEqual(letterValues[index], index.ToLetter());
+                Assert.AreEqual(letterValues[index], index.ToAlphabeticLetter());
             }
         }
 
         /// <summary>
-        ///     Checks whether the given index out of the range of 0 to 26 is converted to Letters.None.
+        ///     Checks whether the given index out of the range of 0 to 26 is converted to AlphabeticLetters.None.
         /// </summary>
         [TestMethod]
-        public void ToLetter_GivenIndexOfRange_ReturnsLettersNone()
+        public void ToAlphabeticLetter_GivenIndexOutOfRange_ReturnsAlphabeticLetterNone()
         {
-            Assert.AreEqual(Letters.None, int.MinValue.ToLetter());
-            Assert.AreEqual(Letters.None, (-1).ToLetter());
-            Assert.AreEqual(Letters.None, 27.ToLetter());
-            Assert.AreEqual(Letters.None, int.MaxValue.ToLetter());
+            Assert.AreEqual(AlphabeticLetters.None, int.MinValue.ToAlphabeticLetter());
+            Assert.AreEqual(AlphabeticLetters.None, (-1).ToAlphabeticLetter());
+            Assert.AreEqual(AlphabeticLetters.None, 0.ToAlphabeticLetter());
+            Assert.AreEqual(AlphabeticLetters.None, 27.ToAlphabeticLetter());
+            Assert.AreEqual(AlphabeticLetters.None, int.MaxValue.ToAlphabeticLetter());
         }
 
         /// <summary>
-        ///     Checks whether the given letter is converted to the correct index.
+        ///     Checks whether the given alphabeticLetter is converted to the correct index.
         /// </summary>
         [TestMethod]
-        public void ToIndex_GivenLetter_ReturnsCorrectIndex()
+        public void ToAlphabeticIndex_GivenAlphabeticLetter_ReturnsCorrectAlphabeticIndex()
         {
             // Explicitly check boundary cases.
-            Assert.AreEqual(0, Letters.None.ToIndex());
-            Assert.AreEqual(1, Letters.A.ToIndex());
-            Assert.AreEqual(26, Letters.Z.ToIndex());
+            Assert.AreEqual(0, AlphabeticLetters.None.ToAlphabeticIndex());
+            Assert.AreEqual(1, AlphabeticLetters.A.ToAlphabeticIndex());
+            Assert.AreEqual(26, AlphabeticLetters.Z.ToAlphabeticIndex());
 
             // Check all values incrementally.
             var index = 0;
-            foreach (var letter in Enum.GetValues(typeof(Letters)))
+            foreach (var letter in Enum.GetValues(typeof(AlphabeticLetters)))
             {
-                Assert.AreEqual(index, ((Letters)letter).ToIndex());
+                Assert.AreEqual(index, ((AlphabeticLetters)letter).ToAlphabeticIndex());
                 index++;
             }
         }

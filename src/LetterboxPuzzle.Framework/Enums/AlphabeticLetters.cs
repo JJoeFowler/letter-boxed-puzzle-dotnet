@@ -1,5 +1,5 @@
 ﻿// ===============================================================================================================================================
-// <copyright file="Letters.cs" company="Joe Fowler">
+// <copyright file="AlphabeticLetters.cs" company="Joe Fowler">
 // Copyright (c) 2021 Joe Fowler.
 // Licensed under the GNU Affero General Public License v3. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -14,8 +14,9 @@ namespace LetterboxPuzzle.Framework.Enums
     /// </summary>
     [Flags]
     [SuppressMessage("ReSharper", "StyleCop.SA1602", Justification = "Letter names are self-evident.")]
-    public enum Letters
+    public enum AlphabeticLetters
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         None = 0,
         A = 1 << 0,
         B = 1 << 1,
@@ -43,5 +44,6 @@ namespace LetterboxPuzzle.Framework.Enums
         X = 1 << 23,
         Y = 1 << 24,
         Z = 1 << 25,
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 }

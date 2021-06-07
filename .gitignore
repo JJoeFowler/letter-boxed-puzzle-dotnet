@@ -349,3 +349,5 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 stylecop.json
+*Framework.xml
+*Tests.Unit.xml

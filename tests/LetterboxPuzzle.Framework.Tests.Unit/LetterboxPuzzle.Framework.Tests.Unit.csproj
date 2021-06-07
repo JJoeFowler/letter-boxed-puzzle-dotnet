@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -10,6 +10,10 @@
     <PreBuildEvent>copy /y $(SolutionDir)$(SolutionName).StyleCop.json $(ProjectDir)..\..\..\stylecop.json</PreBuildEvent>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <Authors>Joe Fowler</Authors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Repos\letterbox-puzzle-dotnet\tests\LetterboxPuzzle.Framework.Tests.Unit\LetterboxPuzzle.Framework.Tests.Unit.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
