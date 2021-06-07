@@ -14,14 +14,15 @@ namespace LetterboxPuzzle.Framework.Models
     using LetterboxPuzzle.Framework.Utilities;
 
     /// <summary>
-    ///     Candidate word class containing the ASCII sequence of the word's letters and its alphabetic letters bit-wise enumeration.
+    ///     Class for a case-insensitive candidate word for a letterbox puzzle, containing the ASCII sequence and its bit-wise enumerated value
+    ///     of the word's lowercased letters.
     /// </summary>
     public class CandidateWord
     {
         /// <summary>
         ///     Local copy of alphabetic letters by ASCII values to speed array access.
         /// </summary>
-        private static readonly AlphabeticLetters[] AlphabeticLettersByAsciiValues = AlphabeticUtilities.AlphabeticLettersByAsciiValues;
+        private static readonly AlphabetLetters[] AlphabetLettersByAsciiValues = AlphabetUtilities.AlphabetLettersByAsciiValues;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="CandidateWord" /> class.
@@ -29,20 +30,20 @@ namespace LetterboxPuzzle.Framework.Models
         /// <param name="word">The word.</param>
         public CandidateWord(string word)
         {
-            this.WordLowercased = word.ToLowerInvariant();
+            this.CaseInsensitiveWord = word.ToLowerInvariant();
 
-            this.AsciiSequence = Encoding.ASCII.GetBytes(this.WordLowercased);
+            this.AsciiSequence = Encoding.ASCII.GetBytes(this.CaseInsensitiveWord);
 
             foreach (var asciiValue in this.AsciiSequence)
             {
-                this.AlphabeticLetters |= AlphabeticLettersByAsciiValues[asciiValue];
+                this.AlphabetBitMask |= AlphabetLettersByAsciiValues[asciiValue];
             }
         }
 
         /// <summary>
-        ///     Gets the word used to initialize the candidate, which is lowercased since case is irrelevant.
+        ///     Gets the case-insensitive word used to initialize the candidate, which is lowercased since case is irrelevant.
         /// </summary>
-        public string WordLowercased { get; }
+        public string CaseInsensitiveWord { get; }
 
         /// <summary>
         ///     Gets the byte values corresponding to the ASCII sequence of the word.
@@ -50,10 +51,10 @@ namespace LetterboxPuzzle.Framework.Models
         public byte[] AsciiSequence { get; }
 
         /// <summary>
-        ///     Gets the alphabetic letters of the word (where bits 1 to 26 correspond to the whether the word contains the letters
-        ///     <see cref="AlphabeticLetters.A"/> to <see cref="AlphabeticLetters.Z"/>, respectively.
+        ///     Gets the alphabet bitmask of the word (where bits 1 to 26 correspond to the whether the word contains the letters
+        ///     <see cref="Enums.AlphabetLetters.A" /> to <see cref="Enums.AlphabetLetters.Z" />, respectively.
         /// </summary>
-        public AlphabeticLetters AlphabeticLetters { get; internal set; }
+        public AlphabetLetters AlphabetBitMask { get; internal set; }
 
         /// <summary>
         ///     Determines whether all the letters of the candidate word are contained within the given candidate letters.
@@ -64,7 +65,7 @@ namespace LetterboxPuzzle.Framework.Models
         /// </returns>
         public bool IsContainedIn(CandidateWord candidateLetters)
         {
-            return (this.AlphabeticLetters & (AlphabeticLettersExtensions.AllAlphabeticLetters ^ this.AlphabeticLetters)) > 0;
+            return (this.AlphabetBitMask & (AlphabetExtensions.AllAlphabetLettersBitMask ^ this.AlphabetBitMask)) > 0;
         }
     }
 }

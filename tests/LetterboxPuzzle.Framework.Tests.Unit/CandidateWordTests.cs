@@ -13,8 +13,6 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using static LetterboxPuzzle.Framework.Enums.AlphabeticLetters;
-
     /// <summary>
     ///     The unit tests for the letters enumeration.
     /// </summary>
@@ -34,12 +32,12 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
         /// <summary>
         ///     Candidate word initialized with the simple test word.
         /// </summary>
-        private static readonly CandidateWord SimpleCandidateWord = new(SimpleTestWord);
+        private static readonly CandidateWord SimpleCandidateWord = new (SimpleTestWord);
 
         /// <summary>
         ///     Candidate word initialized with the A-to-Z test word.
         /// </summary>
-        private static readonly CandidateWord AToZCandidateWord = new(AToZTestWord);
+        private static readonly CandidateWord AToZCandidateWord = new (AToZTestWord);
 
         /// <summary>
         ///     Checks whether the word of the A-to-Z candidate word is in lowercased.
@@ -51,7 +49,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
             const string expectedWordLowercased = "thequickbrownfoxjumpsoverthelazydog";
 
             // Act
-            var actualWordLowercased = AToZCandidateWord.WordLowercased;
+            var actualWordLowercased = AToZCandidateWord.CaseInsensitiveWord;
 
             // Assert
             Assert.AreEqual(expectedWordLowercased, actualWordLowercased);
@@ -86,37 +84,39 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Checks whether the bit-wise alphabetic letters of the simple candidate word are correctly ORed together.
+        ///     Checks whether the alphabet bit mask of the letters of the simple candidate word are the bit-wise enumerated letters of the simple
+        ///     test word ORed together.
         /// </summary>
         [TestMethod]
-        public void AlphabeticLetters_GivenSimpleCandidateWord_AreCorrectlyORed()
+        public void AlphabetBitMask_GivenSimpleCandidateWord_IsBitMaskOfSimpleTestWordLettersORedTogether()
         {
             // Arrange
-            const AlphabeticLetters expectedAlphabeticLetters = AlphabeticLetters.S | AlphabeticLetters.I | AlphabeticLetters.M
-                | AlphabeticLetters.P | AlphabeticLetters.L | AlphabeticLetters.E | AlphabeticLetters.T | AlphabeticLetters.W | AlphabeticLetters.O
-                | AlphabeticLetters.R | AlphabeticLetters.D;
+            const AlphabetLetters expectedAlphabetBitMask = AlphabetLetters.S | AlphabetLetters.I | AlphabetLetters.M | AlphabetLetters.P
+                | AlphabetLetters.L | AlphabetLetters.E | AlphabetLetters.T | AlphabetLetters.W | AlphabetLetters.O | AlphabetLetters.R
+                | AlphabetLetters.D;
 
             // Act
-            var actualAlphabeticLetters = SimpleCandidateWord.AlphabeticLetters;
+            var actualAlphabetBitMask = SimpleCandidateWord.AlphabetBitMask;
 
             // Assert
-            Assert.AreEqual(expectedAlphabeticLetters, actualAlphabeticLetters);
+            Assert.AreEqual(expectedAlphabetBitMask, actualAlphabetBitMask);
         }
 
         /// <summary>
-        ///     Checks whether the bit-wise alphabetic letters of the A-to-Z candidate word are all alphabetic letters ORed together.
+        ///     Checks whether the alphabet bit mask of the letters of the A-to-Z candidate word are all bit-wise enumerated letters of the whole
+        ///     alphabet ORed together.
         /// </summary>
         [TestMethod]
-        public void AlphabeticLetters_GivenAToZCandidateWord_AreCorrectlyORed()
+        public void AlphabetBitMask_GivenAToZCandidateWord_IsBitMaskOfAllLettersORedTogether()
         {
             // Arrange
-            var expectedAlphabeticLetters = AlphabeticLettersExtensions.AllAlphabeticLetters;
+            var expectedAlphabetBitMask = AlphabetExtensions.AllAlphabetLettersBitMask;
 
             // Act
-            var actualAlphabeticLetters = AToZCandidateWord.AlphabeticLetters;
+            var actualAlphabetBitMask = AToZCandidateWord.AlphabetBitMask;
 
             // Assert
-            Assert.AreEqual(expectedAlphabeticLetters, actualAlphabeticLetters);
+            Assert.AreEqual(expectedAlphabetBitMask, actualAlphabetBitMask);
         }
 
         /// <summary>

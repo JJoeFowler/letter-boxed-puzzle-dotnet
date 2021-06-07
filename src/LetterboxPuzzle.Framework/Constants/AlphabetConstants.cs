@@ -1,5 +1,5 @@
 ﻿// ===============================================================================================================================================
-// <copyright file="AlphabeticConstants.cs" company="Joe Fowler">
+// <copyright file="AlphabetConstants.cs" company="Joe Fowler">
 // Copyright (c) 2021 Joe Fowler.
 // Licensed under the GNU Affero General Public License v3. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -8,9 +8,9 @@
 namespace LetterboxPuzzle.Framework.Constants
 {
     /// <summary>
-    ///     Class of alphabetic constants.
+    ///     Class of constants related to the alphabet.
     /// </summary>
-    public static class AlphabeticConstants
+    public static class AlphabetConstants
     {
         /// <summary>
         ///     The size of the English alphabet.
