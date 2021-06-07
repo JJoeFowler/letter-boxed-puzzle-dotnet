@@ -7,6 +7,8 @@
 
 namespace LetterboxPuzzle.Framework.Tests.Unit
 {
+    using System;
+
     using LetterboxPuzzle.Framework.Enums;
     using LetterboxPuzzle.Framework.Extensions;
     using LetterboxPuzzle.Framework.Models;
@@ -74,7 +76,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
             var expectedAsciiSequence = new byte[]
                 {
                     116, 104, 101, 113, 117, 105, 99, 107, 98, 114, 111, 119, 110, 102, 111, 120, 106, 117, 109, 112,
-                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103,
+                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103
                 };
 
             // Act
@@ -85,6 +87,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
             {
                 var expectedAsciiValue = expectedAsciiSequence[index];
                 var actualAsciiValue = actualAsciiSequence[index];
+
                 Assert.AreEqual(
                     expectedAsciiValue,
                     actualAsciiValue,
@@ -168,22 +171,31 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
         public void IsContainedIn_AtoZCandidateWordGivenAllLettersButOne_IsFalse()
         {
             // Arrange
-            var allCandidateLettersButOne = new CandidateWord[EnglishAlphabetSize];
+            var allCandidateLettersButOneArray = new CandidateWord[EnglishAlphabetSize];
+            var messageStart = $"A-to-Z test word '{AToZTestWord}' cannot be contained within the letters";
 
             for (var index = 0; index < EnglishAlphabetSize; index++)
             {
                 var alphabetRangeTextMissingOneLetter =
                     AlphabetRangeTextFromAToZ.Replace(AlphabetRangeTextFromAToZ[index].ToString(), string.Empty);
-                allCandidateLettersButOne[index] = new CandidateWord(alphabetRangeTextMissingOneLetter);
+
+                allCandidateLettersButOneArray[index] = new CandidateWord(alphabetRangeTextMissingOneLetter);
             }
 
             // Act and arrange
+            Console.WriteLine($"Asserting the {messageStart}:");
+
             for (var index = 0; index < EnglishAlphabetSize; index++)
             {
-                var candidateLettersMissingOne = allCandidateLettersButOne[index];
-                Assert.IsFalse(
-                    AToZCandidateWord.IsContainedIn(candidateLettersMissingOne),
-                    $"The A-to-Z test word '{AToZTestWord}' cannot be contained within the letters '{candidateLettersMissingOne.CaseInsensitiveWord}' missing the letter '{AlphabetRangeTextFromAToZ[index]}'.");
+                var allCandidateLettersButOne = allCandidateLettersButOneArray[index];
+                var allCandidateLettersButOneText = allCandidateLettersButOne.CaseInsensitiveWord;
+                var missingLetter = AlphabetRangeTextFromAToZ[index];
+
+                var messageEnd = $"'{allCandidateLettersButOneText}' missing the letter '{missingLetter}'";
+
+                Console.WriteLine($"\t{messageEnd}");
+
+                Assert.IsFalse(AToZCandidateWord.IsContainedIn(allCandidateLettersButOne), $"The {messageStart} {messageEnd}.");
             }
         }
     }
