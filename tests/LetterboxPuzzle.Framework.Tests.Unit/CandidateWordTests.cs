@@ -54,6 +54,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
         public void Word_GivenAToZCandidateWord_IsLowercased()
         {
             // Arrange
+            // ReSharper disable once StringLiteralTypo
             const string expectedWordLowercased = "thequickbrownfoxjumpsoverthelazydog";
 
             // Act
@@ -73,7 +74,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
             var expectedAsciiSequence = new byte[]
                 {
                     116, 104, 101, 113, 117, 105, 99, 107, 98, 114, 111, 119, 110, 102, 111, 120, 106, 117, 109, 112,
-                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103
+                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103,
                 };
 
             // Act
@@ -134,6 +135,7 @@ namespace LetterboxPuzzle.Framework.Tests.Unit
         public void IsContainedIn_SimpleCandidateWordGivenOnlyItsLetters_IsTrue()
         {
             // Arrange
+            // ReSharper disable once StringLiteralTypo
             var candidateWordLetters = new CandidateWord("simpletword");
 
             // Act
