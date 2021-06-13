@@ -351,3 +351,4 @@ MigrationBackup/
 stylecop.json
 *Framework.xml
 *Tests.Unit.xml
+*.zip
