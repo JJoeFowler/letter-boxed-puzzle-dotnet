@@ -20,28 +20,28 @@ namespace LetterBoxedPuzzle.Framework.Extensions
     public static class AlphabetExtensions
     {
         /// <summary>
-        ///     All 26 letters of the bit-wise enumerated alphabet from <see cref="AlphabetLetters.A" /> to <see cref="AlphabetLetters.Z" />
+        ///     All 26 letters of the bit-wise enumerated alphabet from <see cref="AlphabetBitMask.A" /> to <see cref="AlphabetBitMask.Z" />
         ///     ORed together.
         /// </summary>
-        public static readonly AlphabetLetters AllAlphabetLettersBitMask;
+        public static readonly AlphabetBitMask AlphabetBitMaskAllBitsSet;
 
         /// <summary>
         ///     The 26 values of the bit-wise enumeration of the letters of the alphabet.
         /// </summary>
-        private static readonly AlphabetLetters[] AlphabeticLetterValues = Enum.GetValues<AlphabetLetters>();
+        private static readonly AlphabetBitMask[] AlphabetBitMaskValues = Enum.GetValues<AlphabetBitMask>();
 
         /// <summary>
         ///     The alphabetic indices from 0 to 26 of the bit-wise enumerated letters of the alphabet, where index '0' corresponds to
-        ///     '<see cref="AlphabetLetters.None"/>'.
+        ///     '<see cref="AlphabetBitMask.None"/>'.
         /// </summary>
         private static readonly int[] AlphabeticIndices = Enumerable.Range(0, 27).ToArray();
 
         /// <summary>
-        ///     The mapping of the alphabetic index by alphabet letters where '<see cref="AlphabetLetters.None" />' maps to '0',
-        ///     '<see cref="AlphabetLetters.A" />' maps to '1', and '<see cref="AlphabetLetters.Z" />' maps to '26'.
+        ///     The mapping of the alphabetic index by the alphabet bit mask where '<see cref="AlphabetBitMask.None" />' maps to '0',
+        ///     '<see cref="AlphabetBitMask.A" />' maps to '1', and '<see cref="AlphabetBitMask.Z" />' maps to '26'.
         /// </summary>
-        private static readonly Dictionary<AlphabetLetters, int> AlphabeticIndexByLetter = AlphabeticLetterValues
-            .Zip(AlphabeticIndices, (letter, index) => new KeyValuePair<AlphabetLetters, int>(letter, index))
+        private static readonly Dictionary<AlphabetBitMask, int> AlphabeticIndexByLetter = AlphabetBitMaskValues
+            .Zip(AlphabeticIndices, (letter, index) => new KeyValuePair<AlphabetBitMask, int>(letter, index))
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
         /// <summary>
@@ -51,48 +51,48 @@ namespace LetterBoxedPuzzle.Framework.Extensions
         {
             for (var alphabeticIndex = 1; alphabeticIndex <= AlphabetConstants.EnglishAlphabetSize; alphabeticIndex++)
             {
-                AllAlphabetLettersBitMask |= alphabeticIndex.ToAlphabetLetter();
+                AlphabetBitMaskAllBitsSet |= alphabeticIndex.ToAlphabetBitMask();
             }
         }
 
         /// <summary>
         ///     Converts the alphabetic index between 1 and 26 to its corresponding bit-wise enumerated letter (where '1' returns
-        ///     '<see cref=" AlphabetLetters.A" />' and '26' returns '<see cref="AlphabetLetters.Z" />') or '<see cref="AlphabetLetters.None"/>'
+        ///     '<see cref=" AlphabetBitMask.A" />' and '26' returns '<see cref="AlphabetBitMask.Z" />') or '<see cref="AlphabetBitMask.None"/>'
         ///     if out of range.
         /// </summary>
         /// <param name="alphabeticIndex">The alphabetic index between 1 to 26 corresponding to a letter of the alphabet.</param>
         /// <returns>
-        ///     The bit-wise enumerated alphabet letter (<see cref="AlphabetLetters.A" /> to <see cref="AlphabetLetters.Z" />) of the given
-        ///     alphabetic index if between 1 and 26, or <see cref="AlphabetLetters.None" /> otherwise.
+        ///     The bit-wise enumerated alphabet bit mask (<see cref="AlphabetBitMask.A" /> to <see cref="AlphabetBitMask.Z" />) of the given
+        ///     alphabetic index if between 1 and 26, or <see cref="AlphabetBitMask.None" /> otherwise.
         /// </returns>
-        public static AlphabetLetters ToAlphabetLetter(this int alphabeticIndex)
+        public static AlphabetBitMask ToAlphabetBitMask(this int alphabeticIndex)
         {
             try
             {
-                return AlphabeticLetterValues[alphabeticIndex];
+                return AlphabetBitMaskValues[alphabeticIndex];
             }
             catch (IndexOutOfRangeException)
             {
-                return AlphabetLetters.None;
+                return AlphabetBitMask.None;
             }
         }
 
         /// <summary>
-        ///     Converts the bit-wise enumerated alphabet letter to its corresponding alphabetic index where '<see cref="AlphabetLetters.None" />'
-        ///     returns '0', '<see cref="AlphabetLetters.A" />' returns '1', and '<see cref="AlphabetLetters.Z" />' returns '26'.
+        ///     Converts the bit-wise enumerated alphabet bit mask to its corresponding alphabetic index where '<see cref="AlphabetBitMask.None" />'
+        ///     returns '0', '<see cref="AlphabetBitMask.A" />' returns '1', and '<see cref="AlphabetBitMask.Z" />' returns '26'.
         /// </summary>
-        /// <param name="alphabetLetter">The alphabet letter.</param>
-        /// <returns>The alphabetic index between 0 and 26 of the given bit-wise enumerated alphabet letter.</returns>
-        public static int ToAlphabeticIndex(this AlphabetLetters alphabetLetter)
+        /// <param name="alphabetBitMask">The alphabet bit mask.</param>
+        /// <returns>The alphabetic index between 0 and 26 of the given bit-wise enumerated alphabet bit mask.</returns>
+        public static int ToAlphabeticIndex(this AlphabetBitMask alphabetBitMask)
         {
             try
             {
-                return AlphabeticIndexByLetter[alphabetLetter];
+                return AlphabeticIndexByLetter[alphabetBitMask];
             }
             catch (KeyNotFoundException keyNotFoundException)
             {
                 throw new KeyNotFoundException(
-                    "Internal error (should never happen) where the given alphabet letter does not have an index.",
+                    "Internal error (should never happen) where the given alphabet bit mask does not have an index.",
                     keyNotFoundException);
             }
         }

@@ -103,9 +103,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void AlphabetBitMask_GivenSimpleCandidateWord_IsBitMaskOfSimpleTestWordLettersORedTogether()
         {
             // Arrange
-            const AlphabetLetters expectedAlphabetBitMask = AlphabetLetters.S | AlphabetLetters.I | AlphabetLetters.M | AlphabetLetters.P
-                | AlphabetLetters.L | AlphabetLetters.E | AlphabetLetters.T | AlphabetLetters.W | AlphabetLetters.O | AlphabetLetters.R
-                | AlphabetLetters.D;
+            const AlphabetBitMask expectedAlphabetBitMask = AlphabetBitMask.S | AlphabetBitMask.I | AlphabetBitMask.M | AlphabetBitMask.P
+                | AlphabetBitMask.L | AlphabetBitMask.E | AlphabetBitMask.T | AlphabetBitMask.W | AlphabetBitMask.O | AlphabetBitMask.R
+                | AlphabetBitMask.D;
 
             // Act
             var actualAlphabetBitMask = SimpleCandidateWord.AlphabetBitMask;
@@ -122,7 +122,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void AlphabetBitMask_GivenAToZCandidateWord_IsBitMaskOfAllLettersORedTogether()
         {
             // Arrange
-            var expectedAlphabetBitMask = AlphabetExtensions.AllAlphabetLettersBitMask;
+            var expectedAlphabetBitMask = AlphabetExtensions.AlphabetBitMaskAllBitsSet;
 
             // Act
             var actualAlphabetBitMask = AToZCandidateWord.AlphabetBitMask;

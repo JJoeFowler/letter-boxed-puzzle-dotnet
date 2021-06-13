@@ -40,15 +40,15 @@ namespace LetterBoxedPuzzle.Framework.Utilities
                 var upperCaseLetterAsciiValue = AsciiValueOfUpperCaseA + alphabeticIndex - 1;
                 var lowerCaseLetterAsciiValue = AsciiValueOfLowerCaseA + alphabeticIndex - 1;
 
-                AlphabetLettersByAsciiValues[upperCaseLetterAsciiValue] =
-                    AlphabetLettersByAsciiValues[lowerCaseLetterAsciiValue] = alphabeticIndex.ToAlphabetLetter();
+                AlphabetBitMaskByAsciiValues[upperCaseLetterAsciiValue] =
+                    AlphabetBitMaskByAsciiValues[lowerCaseLetterAsciiValue] = alphabeticIndex.ToAlphabetBitMask();
             }
         }
 
         /// <summary>
         ///     Gets the bit-wise enumerated letters of the alphabet indexed by their ASCII values.
         /// </summary>
-        public static AlphabetLetters[] AlphabetLettersByAsciiValues { get; } = new AlphabetLetters[byte.MaxValue + 1];
+        public static AlphabetBitMask[] AlphabetBitMaskByAsciiValues { get; } = new AlphabetBitMask[byte.MaxValue + 1];
 
         /// <summary>
         ///     Gets the ASCII byte value for the given letter, assuming it can be encoded in ASCII.

@@ -1,5 +1,5 @@
 // ===============================================================================================================================================
-// <copyright file="AlphabetLettersTests.cs" company="Joe Fowler">
+// <copyright file="AlphabetBitMaskTests.cs" company="Joe Fowler">
 // Copyright (c) 2021 Joe Fowler.
 // Licensed under the GNU Affero General Public License v3. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -19,62 +19,62 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     ///     The unit tests for the letters enumeration.
     /// </summary>
     [TestClass]
-    public class AlphabetLettersTests
+    public class AlphabetBitMaskTests
     {
         /// <summary>
         ///     Checks whether the given alphabetic index between 0 to 26 is converted to the correct bit-wise enumerated letter of the alphabet.
         /// </summary>
         [TestMethod]
-        public void ToAlphabetLetter_GivenAlphabeticIndexInRange_ReturnsCorrectAlphabetLetter()
+        public void ToAlphabetBitMask_GivenAlphabeticIndexInRange_ReturnsCorrectAlphabetBitMask()
         {
-            var alphabetLetterValues = Enum.GetValues<AlphabetLetters>();
+            var alphabetBitMaskValues = Enum.GetValues<AlphabetBitMask>();
 
             // Explicitly check boundary cases.
-            Assert.AreEqual(AlphabetLetters.A, 1.ToAlphabetLetter());
-            Assert.AreEqual(AlphabetLetters.Z, 26.ToAlphabetLetter());
+            Assert.AreEqual(AlphabetBitMask.A, 1.ToAlphabetBitMask());
+            Assert.AreEqual(AlphabetBitMask.Z, 26.ToAlphabetBitMask());
 
             // Check all values incrementally.
             for (var alphabeticIndex = 1; alphabeticIndex <= AlphabetConstants.EnglishAlphabetSize; alphabeticIndex++)
             {
-                var expectedAlphabetLetter = alphabetLetterValues[alphabeticIndex];
-                var actualAlphabetLetter = alphabeticIndex.ToAlphabetLetter();
+                var expectedAlphabetBitMask = alphabetBitMaskValues[alphabeticIndex];
+                var actualAlphabetBitMask = alphabeticIndex.ToAlphabetBitMask();
 
                 Assert.AreEqual(
-                    expectedAlphabetLetter,
-                    actualAlphabetLetter,
-                    $"The alphabet letter for '{alphabeticIndex}' was '{actualAlphabetLetter}' instead of '{expectedAlphabetLetter}'.");
+                    expectedAlphabetBitMask,
+                    actualAlphabetBitMask,
+                    $"The alphabet bit mask for '{alphabeticIndex}' was '{actualAlphabetBitMask}' instead of '{expectedAlphabetBitMask}'.");
             }
         }
 
         /// <summary>
-        ///     Checks whether the given out-of-range index, which is not between 1 to 26, is converted to '<see cref="AlphabetLetters.None"/>'.
+        ///     Checks whether the given out-of-range index, which is not between 1 to 26, is converted to '<see cref="AlphabetBitMask.None"/>'.
         /// </summary>
         [TestMethod]
-        public void ToAlphabetLetter_GivenIndexOutOfRange_ReturnsAlphabetLetterNone()
+        public void ToAlphabetBitMask_GivenIndexOutOfRange_ReturnsAlphabetBitMaskNone()
         {
-            Assert.AreEqual(AlphabetLetters.None, int.MinValue.ToAlphabetLetter());
-            Assert.AreEqual(AlphabetLetters.None, (-1).ToAlphabetLetter());
-            Assert.AreEqual(AlphabetLetters.None, 0.ToAlphabetLetter());
-            Assert.AreEqual(AlphabetLetters.None, 27.ToAlphabetLetter());
-            Assert.AreEqual(AlphabetLetters.None, int.MaxValue.ToAlphabetLetter());
+            Assert.AreEqual(AlphabetBitMask.None, int.MinValue.ToAlphabetBitMask());
+            Assert.AreEqual(AlphabetBitMask.None, (-1).ToAlphabetBitMask());
+            Assert.AreEqual(AlphabetBitMask.None, 0.ToAlphabetBitMask());
+            Assert.AreEqual(AlphabetBitMask.None, 27.ToAlphabetBitMask());
+            Assert.AreEqual(AlphabetBitMask.None, int.MaxValue.ToAlphabetBitMask());
         }
 
         /// <summary>
         ///     Checks whether the given bit-wise enumerated letter of the alphabet is converted to the correct alphabetic index.
         /// </summary>
         [TestMethod]
-        public void ToAlphabeticIndex_GivenAlphabetLetter_ReturnsCorrectAlphabeticIndex()
+        public void ToAlphabeticIndex_GivenAlphabetBitMask_ReturnsCorrectAlphabeticIndex()
         {
             // Explicitly check boundary cases.
-            Assert.AreEqual(0, AlphabetLetters.None.ToAlphabeticIndex());
-            Assert.AreEqual(1, AlphabetLetters.A.ToAlphabeticIndex());
-            Assert.AreEqual(26, AlphabetLetters.Z.ToAlphabeticIndex());
+            Assert.AreEqual(0, AlphabetBitMask.None.ToAlphabeticIndex());
+            Assert.AreEqual(1, AlphabetBitMask.A.ToAlphabeticIndex());
+            Assert.AreEqual(26, AlphabetBitMask.Z.ToAlphabeticIndex());
 
             // Check all values incrementally.
             var expectedAlphabeticIndex = 0;
-            foreach (var letter in Enum.GetValues(typeof(AlphabetLetters)))
+            foreach (var letter in Enum.GetValues(typeof(AlphabetBitMask)))
             {
-                var actualAlphabeticIndex = ((AlphabetLetters)letter).ToAlphabeticIndex();
+                var actualAlphabeticIndex = ((AlphabetBitMask)letter).ToAlphabeticIndex();
                 Assert.AreEqual(
                     expectedAlphabeticIndex,
                     actualAlphabeticIndex,

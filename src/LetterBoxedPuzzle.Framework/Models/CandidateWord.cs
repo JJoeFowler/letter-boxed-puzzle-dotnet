@@ -22,7 +22,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <summary>
         ///     Local copy of alphabetic letters by ASCII values to speed array access.
         /// </summary>
-        private static readonly AlphabetLetters[] AlphabetLettersByAsciiValues = AlphabetUtilities.AlphabetLettersByAsciiValues;
+        private static readonly AlphabetBitMask[] AlphabetBitMaskByAsciiValues = AlphabetUtilities.AlphabetBitMaskByAsciiValues;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="CandidateWord" /> class.
@@ -36,7 +36,7 @@ namespace LetterBoxedPuzzle.Framework.Models
 
             foreach (var asciiValue in this.AsciiSequence)
             {
-                this.AlphabetBitMask |= AlphabetLettersByAsciiValues[asciiValue];
+                this.AlphabetBitMask |= AlphabetBitMaskByAsciiValues[asciiValue];
             }
         }
 
@@ -52,9 +52,9 @@ namespace LetterBoxedPuzzle.Framework.Models
 
         /// <summary>
         ///     Gets the alphabet bitmask of the word (where bits 1 to 26 correspond to the whether the word contains the letters
-        ///     <see cref="Enums.AlphabetLetters.A" /> to <see cref="Enums.AlphabetLetters.Z" />, respectively.
+        ///     <see cref="Enums.AlphabetBitMask.A" /> to <see cref="Enums.AlphabetBitMask.Z" />, respectively.
         /// </summary>
-        public AlphabetLetters AlphabetBitMask { get; internal set; }
+        public AlphabetBitMask AlphabetBitMask { get; internal set; }
 
         /// <summary>
         ///     Determines whether all the letters of the candidate word are contained within the given candidate letters.
@@ -65,7 +65,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// </returns>
         public bool IsContainedIn(CandidateWord candidateLetters)
         {
-            return (this.AlphabetBitMask & (AlphabetExtensions.AllAlphabetLettersBitMask ^ candidateLetters.AlphabetBitMask)) == 0;
+            return (this.AlphabetBitMask & (AlphabetExtensions.AlphabetBitMaskAllBitsSet ^ candidateLetters.AlphabetBitMask)) == 0;
         }
     }
 }

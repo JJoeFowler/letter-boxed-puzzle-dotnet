@@ -1,5 +1,5 @@
 ﻿// ===============================================================================================================================================
-// <copyright file="AlphabetLetters.cs" company="Joe Fowler">
+// <copyright file="AlphabetBitMask.cs" company="Joe Fowler">
 // Copyright (c) 2021 Joe Fowler.
 // Licensed under the GNU Affero General Public License v3. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -14,7 +14,7 @@ namespace LetterBoxedPuzzle.Framework.Enums
     /// </summary>
     [Flags]
     [SuppressMessage("ReSharper", "StyleCop.SA1602", Justification = "Letter names are self-evident.")]
-    public enum AlphabetLetters
+    public enum AlphabetBitMask
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         None = 0,
