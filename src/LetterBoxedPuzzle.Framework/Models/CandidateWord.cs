@@ -40,14 +40,14 @@ namespace LetterBoxedPuzzle.Framework.Models
 
             this.AsciiSequence = Encoding.ASCII.GetBytes(this.CaseInsensitiveWord);
 
-            byte lastAsciiValue = 0;
-
+            // byte lastAsciiValue = 0;
             foreach (var asciiValue in this.AsciiSequence)
             {
                 var alphabetBitMaskByAsciiValue = AlphabetBitMaskByAsciiValues[asciiValue];
-                this.HasDoubleLetters = this.HasDoubleLetters || (asciiValue == lastAsciiValue);
                 this.AlphabetBitMask |= alphabetBitMaskByAsciiValue;
-                lastAsciiValue = asciiValue;
+
+                // this.HasDoubleLetters = this.HasDoubleLetters || (asciiValue == lastAsciiValue);
+                // lastAsciiValue = asciiValue;
             }
 
             this.FirstLetter = word[0];
