@@ -12,11 +12,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using LetterBoxedPuzzle.Framework.Enums;
     using LetterBoxedPuzzle.Framework.Extensions;
     using LetterBoxedPuzzle.Framework.Models;
-    using LetterBoxedPuzzle.Framework.Utilities;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-    using static LetterBoxedPuzzle.Framework.Constants.AlphabetConstants;
+    using static Constants.AlphabetConstants;
 
     /// <summary>
     ///     The unit tests for the letters enumeration.
@@ -43,11 +42,6 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         ///     Candidate word initialized with the A-to-Z test word.
         /// </summary>
         private static readonly CandidateWord AToZCandidateWord = new (AToZTestWord);
-
-        /// <summary>
-        ///     Alphabet range text from 'a' to 'z', which is the string "abcdefghijklmnopqrstuvwxyz".
-        /// </summary>
-        private static readonly string AlphabetRangeTextFromAToZ = AlphabetUtilities.AlphabetRangeText(LowerCaseA[0], EnglishAlphabetSize);
 
         /// <summary>
         ///     Checks whether the word of the A-to-Z candidate word is in lowercased.

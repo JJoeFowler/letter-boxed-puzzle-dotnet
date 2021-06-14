@@ -55,11 +55,19 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </summary>
         /// <param name="letter">A single-character letter.</param>
         /// <returns>The ASCII byte value of the given letter.</returns>
-        public static byte GetAsciiValue(string letter)
+        public static byte GetAsciiValue(char letter)
         {
-            _ = letter ?? throw new ArgumentNullException(nameof(letter));
+            return Encoding.ASCII.GetBytes(letter.ToString())[0];
+        }
 
-            return Encoding.ASCII.GetBytes(letter)[0];
+        /// <summary>
+        /// Get the alphabet bit mask value for the given alphabet letter.
+        /// </summary>
+        /// <param name="alphabetLetter">The alphabet letter.</param>
+        /// <returns>The bit mask </returns>
+        public static AlphabetBitMask GetAlphabetBitMask(char alphabetLetter)
+        {
+            return AlphabetBitMaskByAsciiValues[GetAsciiValue(alphabetLetter)];
         }
 
         /// <summary>

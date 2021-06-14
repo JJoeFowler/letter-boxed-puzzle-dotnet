@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LetterBoxedPuzzle.Framework
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2BD105F9-F9F8-47D2-A53F-E415E2E9BEDA}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		LetterBoxedPuzzle.sln.DotSettings = LetterBoxedPuzzle.sln.DotSettings
 		LetterBoxedPuzzle.StyleCop.json = LetterBoxedPuzzle.StyleCop.json

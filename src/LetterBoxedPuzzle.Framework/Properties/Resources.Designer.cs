@@ -118,9 +118,9 @@ namespace LetterBoxedPuzzle.Framework.Properties {
         ///ABANDONEES
         ///ABAN [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Scrabble_Words__2019_txt {
+        internal static string Scrabble_Words_2019 {
             get {
-                return ResourceManager.GetString("Scrabble_Words__2019.txt", resourceCulture);
+                return ResourceManager.GetString("Scrabble_Words_2019", resourceCulture);
             }
         }
     }

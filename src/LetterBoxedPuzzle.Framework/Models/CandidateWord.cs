@@ -7,6 +7,7 @@
 
 namespace LetterBoxedPuzzle.Framework.Models
 {
+    using System;
     using System.Text;
 
     using LetterBoxedPuzzle.Framework.Enums;
@@ -30,15 +31,43 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <param name="word">The word.</param>
         public CandidateWord(string word)
         {
+            if (string.IsNullOrWhiteSpace(word))
+            {
+                throw new ArgumentException($"Cannot use null, empty string, or white space to initialize a candidate word.");
+            }
+
             this.CaseInsensitiveWord = word.ToLowerInvariant();
 
             this.AsciiSequence = Encoding.ASCII.GetBytes(this.CaseInsensitiveWord);
 
+            byte lastAsciiValue = 0;
+
             foreach (var asciiValue in this.AsciiSequence)
             {
-                this.AlphabetBitMask |= AlphabetBitMaskByAsciiValues[asciiValue];
+                var alphabetBitMaskByAsciiValue = AlphabetBitMaskByAsciiValues[asciiValue];
+                this.HasDoubleLetters = this.HasDoubleLetters || (asciiValue == lastAsciiValue);
+                this.AlphabetBitMask |= alphabetBitMaskByAsciiValue;
+                lastAsciiValue = asciiValue;
             }
+
+            this.FirstLetter = word[0];
+            this.LastLetter = word[^1];
         }
+
+        /// <summary>
+        ///     Gets the first letter of the word.
+        /// </summary>
+        public char FirstLetter { get; }
+
+        /// <summary>
+        ///     Gets the first letter of the word.
+        /// </summary>
+        public char LastLetter { get; }
+
+        /// <summary>
+        ///     Gets a value indicating whether the candidate word has double letters, i.e., two of the same letters in a row.
+        /// </summary>
+        public bool HasDoubleLetters { get; }
 
         /// <summary>
         ///     Gets the case-insensitive word used to initialize the candidate, which is lowercased since case is irrelevant.

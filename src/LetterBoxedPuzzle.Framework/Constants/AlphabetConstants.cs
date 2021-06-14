@@ -7,6 +7,8 @@
 
 namespace LetterBoxedPuzzle.Framework.Constants
 {
+    using LetterBoxedPuzzle.Framework.Utilities;
+
     /// <summary>
     ///     Class of constants related to the alphabet.
     /// </summary>
@@ -20,11 +22,16 @@ namespace LetterBoxedPuzzle.Framework.Constants
         /// <summary>
         ///     The lower case letter 'a'.
         /// </summary>
-        public const string LowerCaseA = "a";
+        public const char LowerCaseA = 'a';
 
         /// <summary>
         ///     The upper case letter 'A'.
         /// </summary>
-        public const string UpperCaseA = "A";
+        public const char UpperCaseA = 'A';
+
+        /// <summary>
+        ///     Alphabet range text from 'a' to 'z', which is the string "abcdefghijklmnopqrstuvwxyz".
+        /// </summary>
+        public static readonly string AlphabetRangeTextFromAToZ = AlphabetUtilities.AlphabetRangeText(LowerCaseA, EnglishAlphabetSize);
     }
 }
