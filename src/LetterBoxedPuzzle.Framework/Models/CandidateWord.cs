@@ -10,21 +10,16 @@ namespace LetterBoxedPuzzle.Framework.Models
     using System;
     using System.Text;
 
+    using LetterBoxedPuzzle.Framework.Constants;
     using LetterBoxedPuzzle.Framework.Enums;
-    using LetterBoxedPuzzle.Framework.Extensions;
-    using LetterBoxedPuzzle.Framework.Utilities;
+
+    using static Utilities.AlphabetUtilities;
 
     /// <summary>
-    ///     Class for a case-insensitive candidate word for a letterbox puzzle, containing the ASCII sequence and its bit-wise enumerated value
-    ///     of the word's lowercased letters.
+    ///     Class for a case-insensitive candidate word for a letter boxed puzzle, containing the ASCII sequence and its alphabet bit mask.
     /// </summary>
     public class CandidateWord
     {
-        /// <summary>
-        ///     Local copy of alphabetic letters by ASCII values to speed array access.
-        /// </summary>
-        private static readonly AlphabetBitMask[] AlphabetBitMaskByAsciiValues = AlphabetUtilities.AlphabetBitMaskByAsciiValues;
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="CandidateWord" /> class.
         /// </summary>
@@ -33,21 +28,17 @@ namespace LetterBoxedPuzzle.Framework.Models
         {
             if (string.IsNullOrWhiteSpace(word))
             {
-                throw new ArgumentException($"Cannot use null, empty string, or white space to initialize a candidate word.");
+                throw new ArgumentException("Cannot use null, empty string, or white space to initialize a candidate word.");
             }
 
             this.CaseInsensitiveWord = word.ToLowerInvariant();
 
             this.AsciiSequence = Encoding.ASCII.GetBytes(this.CaseInsensitiveWord);
 
-            // byte lastAsciiValue = 0;
             foreach (var asciiValue in this.AsciiSequence)
             {
                 var alphabetBitMaskByAsciiValue = AlphabetBitMaskByAsciiValues[asciiValue];
                 this.AlphabetBitMask |= alphabetBitMaskByAsciiValue;
-
-                // this.HasDoubleLetters = this.HasDoubleLetters || (asciiValue == lastAsciiValue);
-                // lastAsciiValue = asciiValue;
             }
 
             this.FirstLetter = word[0];
@@ -65,11 +56,6 @@ namespace LetterBoxedPuzzle.Framework.Models
         public char LastLetter { get; }
 
         /// <summary>
-        ///     Gets a value indicating whether the candidate word has double letters, i.e., two of the same letters in a row.
-        /// </summary>
-        public bool HasDoubleLetters { get; }
-
-        /// <summary>
         ///     Gets the case-insensitive word used to initialize the candidate, which is lowercased since case is irrelevant.
         /// </summary>
         public string CaseInsensitiveWord { get; }
@@ -80,8 +66,8 @@ namespace LetterBoxedPuzzle.Framework.Models
         public byte[] AsciiSequence { get; }
 
         /// <summary>
-        ///     Gets the alphabet bitmask of the word (where bits 1 to 26 correspond to the whether the word contains the letters
-        ///     <see cref="Enums.AlphabetBitMask.A" /> to <see cref="Enums.AlphabetBitMask.Z" />, respectively.
+        ///     Gets the alphabet bit mask of the word where '<see cref="Enums.AlphabetBitMask.A" />', ..., <see cref="Enums.AlphabetBitMask.Z" />
+        ///     correspond to bits 1, ..., 26 to the whether the word contains the respective letters.
         /// </summary>
         public AlphabetBitMask AlphabetBitMask { get; internal set; }
 
@@ -92,9 +78,9 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <returns>
         ///     <see langword="true" /> if all the letters of the candidate word are contained in the given letters, or <see langword="false" /> otherwise.
         /// </returns>
-        public bool IsContainedIn(CandidateWord candidateLetters)
+        public bool IsContainedIn(string candidateLetters)
         {
-            return (this.AlphabetBitMask & (AlphabetExtensions.AlphabetBitMaskAllBitsSet ^ candidateLetters.AlphabetBitMask)) == 0;
+            return (this.AlphabetBitMask & (AlphabetConstants.AlphabetBitMaskWithAllBitsSet.Value ^ GetAlphabetBitMask(candidateLetters))) == 0;
         }
     }
 }

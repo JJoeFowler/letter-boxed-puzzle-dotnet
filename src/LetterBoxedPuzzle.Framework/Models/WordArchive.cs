@@ -9,7 +9,6 @@ namespace LetterBoxedPuzzle.Framework.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text.RegularExpressions;
 
@@ -24,7 +23,8 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <param name="whiteSpaceDelimitedAllowedWordText">The text of allowed words, white-spaced delimited.</param>
         public WordArchive(string whiteSpaceDelimitedAllowedWordText)
         {
-            this.AllowedWords = Regex.Split(whiteSpaceDelimitedAllowedWordText.ToLowerInvariant(), @"\s+").Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
+            this.AllowedWords = Regex.Split(whiteSpaceDelimitedAllowedWordText.ToLowerInvariant(), @"\s+")
+                .Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
         }
 
         /// <summary>

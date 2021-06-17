@@ -10,7 +10,7 @@ namespace LetterBoxedPuzzle.Framework.Enums
     using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
-    ///     The bit-wise enumeration for the 26 letters of the English alphabet.
+    ///     Enumeration of the bit mask for the 26 letters of the English alphabet.
     /// </summary>
     [Flags]
     [SuppressMessage("ReSharper", "StyleCop.SA1602", Justification = "Letter names are self-evident.")]

@@ -13,9 +13,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
     using LetterBoxedPuzzle.Framework.Constants;
     using LetterBoxedPuzzle.Framework.Models;
-    using LetterBoxedPuzzle.Framework.Utilities;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using static Utilities.AlphabetUtilities;
 
     /// <summary>
     ///     The unit tests for the word archive.
@@ -36,13 +37,14 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             var wordArchive = new WordArchive(WordConstants.AllLegalWordsText);
 
+            // var letterBoxedLetterGroups = new[] { "ifl", "swo", "gnm", "yae" };
+            // var letterBoxedLetterGroups = new[] { "abc", "def", "ghi", "rst" };
             // var letterBoxedLetterGroups = new[] { "tyb", "oaz", "ngr", "hle" };
             // var letterBoxedLetterGroups = new[] { "ewb", "vcm", "lrn", "iao" };
             // var letterBoxedLetterGroups = new[] { "hap", "oil", "sew", "nzr" };
             // var letterBoxedLetterGroups = new[] { "ayg", "ocb", "rif", "tln" };
             // var letterBoxedLetterGroups = new[] { "aik", "buo", "fmt", "rcj" };
-            // var letterBoxedLetterGroups = new[] { "nby", "aoh", "itu", "slm" };
-            var letterBoxedLetterGroups = new[] { "ifl", "swo", "gnm", "yae" };
+            var letterBoxedLetterGroups = new[] { "nby", "aoh", "itu", "slm" };
 
             void OutputDuplicateWords(IEnumerable<string> words, string description)
             {
@@ -77,13 +79,11 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             }
 
             var letterBoxedLetters = string.Join(string.Empty, letterBoxedLetterGroups);
-
-            var letterBoxCandidateWord = new CandidateWord(letterBoxedLetters);
+            var letterBoxedLettersBitMask = GetAlphabetBitMask(letterBoxedLetters);
 
             var candidateWordsByName = wordArchive.CandidateWordsByName;
 
-            var letterBoxedWords = wordArchive.AllowedWords.Where(word => candidateWordsByName[word].IsContainedIn(letterBoxCandidateWord))
-                .ToArray();
+            var letterBoxedWords = wordArchive.AllowedWords.Where(word => candidateWordsByName[word].IsContainedIn(letterBoxedLetters)).ToArray();
             var letterBoxedWordsLength = letterBoxedWords.Length;
 
             var letterBoxedPairs = new HashSet<string>();
@@ -146,7 +146,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             Console.WriteLine();
             Console.WriteLine($"This gives a total of {totalOneWordChecks} checks for a one-word solution.");
 
-            bool HasAllLetters(string word) => new CandidateWord(word).AlphabetBitMask == letterBoxCandidateWord.AlphabetBitMask;
+            bool HasAllLetters(string word) => GetAlphabetBitMask(word) == letterBoxedLettersBitMask;
 
             var oneWordSolutions = new List<string>();
 
@@ -179,7 +179,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             foreach (var letter in letterBoxedLetters)
             {
-                var letterBitMask = AlphabetUtilities.GetAlphabetBitMask(letter);
+                var letterBitMask = GetAlphabetBitMask(letter);
                 var legalWordsForLetter =
                     legalWords.Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) > 0).ToArray();
 
@@ -200,7 +200,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             foreach (var letter in sortedLetters)
             {
-                var letterBitMask = AlphabetUtilities.GetAlphabetBitMask(letter) | AlphabetUtilities.GetAlphabetBitMask(smallestLetter);
+                var letterBitMask = GetAlphabetBitMask(letter) | GetAlphabetBitMask(smallestLetter);
                 var legalWordsForLetterWithSmallestLetter = legalWords
                     .Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) == (int)letterBitMask).ToArray();
 
@@ -298,20 +298,25 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 .ToArray();
 
             Console.WriteLine();
-            Console.WriteLine($"There were a total of {sortedTwoWordSolutions.Length} two-word solutions.");
+            var sortedTwoWordSolutionsLength = sortedTwoWordSolutions.Length;
+            Console.WriteLine($"There were a total of {sortedTwoWordSolutionsLength} two-word solutions.");
             Console.WriteLine();
 
-            Console.WriteLine("Two-word solutions: ");
-            var joinedTwoWordSolutions = sortedTwoWordSolutions.Select(s => $"{s.first}-{s.second}");
-            var minSolutionLength = joinedTwoWordSolutions.Min(x => x.Length);
-            var maxSolutionLength = joinedTwoWordSolutions.Max(x => x.Length);
-
-            for (var length = minSolutionLength; length <= maxSolutionLength; length++)
+            if (sortedTwoWordSolutionsLength > 0)
             {
-                var lengthTwoWordSolutions = joinedTwoWordSolutions.Where(x => x.Length == length).ToArray();
-                Console.WriteLine($"  Length {length - 1} solutions with {lengthTwoWordSolutions.Length} words: ");
-                Console.WriteLine("    " + string.Join(", ", lengthTwoWordSolutions));
-                Console.WriteLine();
+                Console.WriteLine("Two-word solutions: ");
+
+                var joinedTwoWordSolutions = sortedTwoWordSolutions.Select(s => $"{s.first}-{s.second}");
+                var minSolutionLength = joinedTwoWordSolutions.Min(x => x.Length);
+                var maxSolutionLength = joinedTwoWordSolutions.Max(x => x.Length);
+
+                for (var length = minSolutionLength; length <= maxSolutionLength; length++)
+                {
+                    var lengthTwoWordSolutions = joinedTwoWordSolutions.Where(x => x.Length == length).ToArray();
+                    Console.WriteLine($"  Length {length - 1} solutions with {lengthTwoWordSolutions.Length} words: ");
+                    Console.WriteLine("    " + string.Join(", ", lengthTwoWordSolutions));
+                    Console.WriteLine();
+                }
             }
 
             Assert.IsTrue(wordArchive.CandidateWordsByName.ContainsKey(TestLegalWord));

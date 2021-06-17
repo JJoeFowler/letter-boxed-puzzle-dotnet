@@ -10,7 +10,6 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using System;
 
     using LetterBoxedPuzzle.Framework.Enums;
-    using LetterBoxedPuzzle.Framework.Extensions;
     using LetterBoxedPuzzle.Framework.Models;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -116,7 +115,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void AlphabetBitMask_GivenAToZCandidateWord_IsBitMaskOfAllLettersORedTogether()
         {
             // Arrange
-            var expectedAlphabetBitMask = AlphabetExtensions.AlphabetBitMaskAllBitsSet;
+            var expectedAlphabetBitMask = AlphabetBitMaskWithAllBitsSet;
 
             // Act
             var actualAlphabetBitMask = AToZCandidateWord.AlphabetBitMask;
@@ -131,12 +130,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         [TestMethod]
         public void IsContainedIn_SimpleCandidateWordGivenOnlyItsLetters_IsTrue()
         {
-            // Arrange
+            // Arrange and act
             // ReSharper disable once StringLiteralTypo
-            var candidateWordLetters = new CandidateWord("simpletword");
-
-            // Act
-            var actualIsContainedIn = SimpleCandidateWord.IsContainedIn(candidateWordLetters);
+            var actualIsContainedIn = SimpleCandidateWord.IsContainedIn("simpletestword");
 
             // Assert
             Assert.IsTrue(actualIsContainedIn);
@@ -148,11 +144,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         [TestMethod]
         public void IsContainedIn_AtoZCandidateWordGivenAllLetters_IsTrue()
         {
-            // Arrange
-            var allCandidateLetters = new CandidateWord(AlphabetRangeTextFromAToZ);
-
-            // Act
-            var actualIsContainedIn = AToZCandidateWord.IsContainedIn(allCandidateLetters);
+            // Arrange and act
+            var actualIsContainedIn = AToZCandidateWord.IsContainedIn(AlphabetRangeTextFromAToZ);
 
             // Assert
             Assert.IsTrue(actualIsContainedIn);
@@ -189,7 +182,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
                 Console.WriteLine($"\t{messageEnd}");
 
-                Assert.IsFalse(AToZCandidateWord.IsContainedIn(allCandidateLettersButOne), $"The {messageStart} {messageEnd}.");
+                Assert.IsFalse(AToZCandidateWord.IsContainedIn(allCandidateLettersButOneText), $"The {messageStart} {messageEnd}.");
             }
         }
     }

@@ -11,59 +11,42 @@ namespace LetterBoxedPuzzle.Framework.Extensions
     using System.Collections.Generic;
     using System.Linq;
 
-    using LetterBoxedPuzzle.Framework.Constants;
     using LetterBoxedPuzzle.Framework.Enums;
 
     /// <summary>
-    ///     Extension methods for the bit-wise enumeration of the letters of the alphabet.
+    ///     Extension methods for to convert a one-letter alphabet bit mask to and from its corresponding alphabetic index.
     /// </summary>
     public static class AlphabetExtensions
     {
         /// <summary>
-        ///     All 26 letters of the bit-wise enumerated alphabet from <see cref="AlphabetBitMask.A" /> to <see cref="AlphabetBitMask.Z" />
-        ///     ORed together.
-        /// </summary>
-        public static readonly AlphabetBitMask AlphabetBitMaskAllBitsSet;
-
-        /// <summary>
-        ///     The 26 values of the bit-wise enumeration of the letters of the alphabet.
+        ///     The values for the alphabet bit mask which bit-wise enumerates the 26 letters of the alphabet.
         /// </summary>
         private static readonly AlphabetBitMask[] AlphabetBitMaskValues = Enum.GetValues<AlphabetBitMask>();
 
         /// <summary>
-        ///     The alphabetic indices from 0 to 26 of the bit-wise enumerated letters of the alphabet, where index '0' corresponds to
-        ///     '<see cref="AlphabetBitMask.None"/>'.
+        ///     The alphabetic indices from 0 to 26 of the bit-wise enumerated letters of the alphabet, where indices '0', '1', ..., '26'
+        ///     corresponds to the bit masks '<see cref="AlphabetBitMask.None" />', '<see cref="AlphabetBitMask.A" />', ...,
+        ///     '<see cref="AlphabetBitMask.Z" />', respectively.
         /// </summary>
         private static readonly int[] AlphabeticIndices = Enumerable.Range(0, 27).ToArray();
 
         /// <summary>
-        ///     The mapping of the alphabetic index by the alphabet bit mask where '<see cref="AlphabetBitMask.None" />' maps to '0',
-        ///     '<see cref="AlphabetBitMask.A" />' maps to '1', and '<see cref="AlphabetBitMask.Z" />' maps to '26'.
+        ///     The mapping of the alphabetic index by the alphabet bit mask where '<see cref="AlphabetBitMask.None" />',
+        ///     '<see cref="AlphabetBitMask.A" />', ..., '<see cref="AlphabetBitMask.Z" />' maps to '0', '1', ..., '26', respectively.
         /// </summary>
         private static readonly Dictionary<AlphabetBitMask, int> AlphabeticIndexByLetter = AlphabetBitMaskValues
             .Zip(AlphabeticIndices, (letter, index) => new KeyValuePair<AlphabetBitMask, int>(letter, index))
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
         /// <summary>
-        ///     Initializes static members of the <see cref="AlphabetExtensions" /> class.
-        /// </summary>
-        static AlphabetExtensions()
-        {
-            for (var alphabeticIndex = 1; alphabeticIndex <= AlphabetConstants.EnglishAlphabetSize; alphabeticIndex++)
-            {
-                AlphabetBitMaskAllBitsSet |= alphabeticIndex.ToAlphabetBitMask();
-            }
-        }
-
-        /// <summary>
-        ///     Converts the alphabetic index between 1 and 26 to its corresponding bit-wise enumerated letter (where '1' returns
-        ///     '<see cref=" AlphabetBitMask.A" />' and '26' returns '<see cref="AlphabetBitMask.Z" />') or '<see cref="AlphabetBitMask.None"/>'
-        ///     if out of range.
+        ///     Converts the alphabetic index between 1 and 26 to its corresponding one-letter alphabet bit mask (where indices '1', ..., '26'
+        ///     return '<see cref=" AlphabetBitMask.A" />', ..., '<see cref="AlphabetBitMask.Z" />', respectively) or the default bit mask
+        ///     '<see cref="AlphabetBitMask.None" />' if out of range.
         /// </summary>
         /// <param name="alphabeticIndex">The alphabetic index between 1 to 26 corresponding to a letter of the alphabet.</param>
         /// <returns>
-        ///     The bit-wise enumerated alphabet bit mask (<see cref="AlphabetBitMask.A" /> to <see cref="AlphabetBitMask.Z" />) of the given
-        ///     alphabetic index if between 1 and 26, or <see cref="AlphabetBitMask.None" /> otherwise.
+        ///     The one-letter alphabet bit mask ('<see cref="AlphabetBitMask.A" />' to '<see cref="AlphabetBitMask.Z" />') of the given
+        ///     alphabetic index if between '1' and '26', or '<see cref="AlphabetBitMask.None" />' otherwise.
         /// </returns>
         public static AlphabetBitMask ToAlphabetBitMask(this int alphabeticIndex)
         {
@@ -78,11 +61,11 @@ namespace LetterBoxedPuzzle.Framework.Extensions
         }
 
         /// <summary>
-        ///     Converts the bit-wise enumerated alphabet bit mask to its corresponding alphabetic index where '<see cref="AlphabetBitMask.None" />'
-        ///     returns '0', '<see cref="AlphabetBitMask.A" />' returns '1', and '<see cref="AlphabetBitMask.Z" />' returns '26'.
+        ///     Converts the one-letter alphabet bit mask to its corresponding alphabetic index where '<see cref="AlphabetBitMask.None" />'
+        ///     '<see cref="AlphabetBitMask.A" />', ..., '<see cref="AlphabetBitMask.Z" />' returns '0', '1', ..., '26', respectively.
         /// </summary>
         /// <param name="alphabetBitMask">The alphabet bit mask.</param>
-        /// <returns>The alphabetic index between 0 and 26 of the given bit-wise enumerated alphabet bit mask.</returns>
+        /// <returns>The alphabetic index between 0 and 26 of the given one-letter alphabet bit mask.</returns>
         public static int ToAlphabeticIndex(this AlphabetBitMask alphabetBitMask)
         {
             try

@@ -2,3 +2,9 @@
 
 # IDE0055: Fix formatting
 dotnet_diagnostic.IDE0055.severity = suggestion
+
+# IDE0065: Misplaced using directive
+csharp_using_directive_placement = inside_namespace
+
+# SA1135: Using directives should be qualified
+dotnet_diagnostic.SA1135.severity = silent

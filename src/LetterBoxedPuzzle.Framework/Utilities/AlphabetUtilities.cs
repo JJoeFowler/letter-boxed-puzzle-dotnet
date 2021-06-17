@@ -7,7 +7,6 @@
 
 namespace LetterBoxedPuzzle.Framework.Utilities
 {
-    using System;
     using System.Linq;
     using System.Text;
 
@@ -21,24 +20,14 @@ namespace LetterBoxedPuzzle.Framework.Utilities
     public static class AlphabetUtilities
     {
         /// <summary>
-        ///     ASCII value of the upper case 'A'.
-        /// </summary>
-        public static readonly byte AsciiValueOfUpperCaseA = GetAsciiValue(AlphabetConstants.UpperCaseA);
-
-        /// <summary>
-        ///     ASCII value of the lower case 'a'.
-        /// </summary>
-        public static readonly byte AsciiValueOfLowerCaseA = GetAsciiValue(AlphabetConstants.LowerCaseA);
-
-        /// <summary>
         ///     Initializes static members of the <see cref="AlphabetUtilities" /> class.
         /// </summary>
         static AlphabetUtilities()
         {
             for (var alphabeticIndex = 1; alphabeticIndex <= AlphabetConstants.EnglishAlphabetSize; alphabeticIndex++)
             {
-                var upperCaseLetterAsciiValue = AsciiValueOfUpperCaseA + alphabeticIndex - 1;
-                var lowerCaseLetterAsciiValue = AsciiValueOfLowerCaseA + alphabeticIndex - 1;
+                var upperCaseLetterAsciiValue = AlphabetConstants.AsciiValueOfUpperCaseA + alphabeticIndex - 1;
+                var lowerCaseLetterAsciiValue = AlphabetConstants.AsciiValueOfLowerCaseA + alphabeticIndex - 1;
 
                 AlphabetBitMaskByAsciiValues[upperCaseLetterAsciiValue] =
                     AlphabetBitMaskByAsciiValues[lowerCaseLetterAsciiValue] = alphabeticIndex.ToAlphabetBitMask();
@@ -61,13 +50,23 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         }
 
         /// <summary>
-        /// Get the alphabet bit mask value for the given alphabet letter.
+        ///     Get the alphabet bit mask value for the given alphabet letter.
         /// </summary>
         /// <param name="alphabetLetter">The alphabet letter.</param>
-        /// <returns>The bit mask </returns>
+        /// <returns>The bit mask of the given letter.</returns>
         public static AlphabetBitMask GetAlphabetBitMask(char alphabetLetter)
         {
             return AlphabetBitMaskByAsciiValues[GetAsciiValue(alphabetLetter)];
+        }
+
+        /// <summary>
+        ///     Get the alphabet bit mask value for the given alphabet letters.
+        /// </summary>
+        /// <param name="alphabetLetters">The alphabet letters.</param>
+        /// <returns>The bit mask of the given letter.</returns>
+        public static AlphabetBitMask GetAlphabetBitMask(string alphabetLetters)
+        {
+            return alphabetLetters.Aggregate(AlphabetBitMask.None, (current, alphabetLetter) => current | GetAlphabetBitMask(alphabetLetter));
         }
 
         /// <summary>
@@ -81,7 +80,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </summary>
         /// <param name="startingLetter">The starting letter.</param>
         /// <param name="length">The length of the range.</param>
-        /// <returns>The specified alphabetic range as a <see langword="char"/> array.</returns>
+        /// <returns>The specified alphabetic range as a <see langword="char" /> array.</returns>
         public static char[] AlphabetRangeArray(char startingLetter, int length)
         {
             return Enumerable.Range(startingLetter, length).Select(x => (char)x).ToArray();
