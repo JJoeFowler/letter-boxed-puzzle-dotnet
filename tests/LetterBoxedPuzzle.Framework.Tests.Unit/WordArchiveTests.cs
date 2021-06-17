@@ -86,11 +86,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             var candidateWordsByName = wordArchive.CandidateWordsByName;
 
-            var letterBoxedWords = wordArchive.AllowedWords.Where(word => candidateWordsByName[word].IsContainedIn(letterBoxCandidateWord)).ToArray();
+            var letterBoxedWords = wordArchive.AllowedWords.Where(word => candidateWordsByName[word].IsContainedIn(letterBoxCandidateWord))
+                .ToArray();
 
-            OutputDuplicateWords(letterBoxedWords, nameof(letterBoxedWords));
-
-            // var nonDuplicateWords = someWords.Where(word => !candidateWordsByName[word].HasDoubleLetters).ToArray();
             var letterBoxedPairs = new HashSet<string>();
 
             static void AllStringPairs(string text, ISet<string> pairs)
@@ -99,7 +97,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 {
                     foreach (var secondText in text)
                     {
-                        pairs.Add(firstText.ToString() + secondText.ToString());
+                        pairs.Add(firstText + secondText.ToString());
                     }
                 }
             }
@@ -112,12 +110,68 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             var sortedLetterBoxedPairs = letterBoxedPairs.OrderBy(x => x).ToArray();
 
             const int LetterBoxedMinimumWordLength = 3;
-
-            var legalWords = letterBoxedWords.Where(word => word.Length >= LetterBoxedMinimumWordLength && !HasWordPair(word, letterBoxedPairs)).ToArray();
+            var legalWords = letterBoxedWords.Where(word => word.Length >= LetterBoxedMinimumWordLength && !HasWordPair(word, letterBoxedPairs))
+                .ToArray();
 
             OutputDuplicateWords(legalWords, nameof(legalWords));
 
-            Console.WriteLine($"There are a total of {legalWords.Length} for the letter boxed string '{letterBoxedLetters}'");
+            Console.WriteLine($"There are {letterBoxedWords.Length} words using only letters '{letterBoxedLetters}'.");
+            Console.WriteLine($"Of those there are {legalWords.Length} words not having any of the following pairs:");
+            Console.WriteLine($"  '{string.Join("', '", sortedLetterBoxedPairs)}");
+            Console.WriteLine();
+
+            Console.WriteLine($"Computing one-word solutions based upon length of those {legalWords.Length} words:");
+
+            const int minOneWordLength = 12;
+            var minLength = legalWords.Min(word => word.Length);
+            var maxLength = legalWords.Max(word => word.Length);
+
+            var wordGroups = new string[maxLength][];
+
+            var totalOneWordChecks = 0;
+            for (var length = minLength; length < maxLength; length++)
+            {
+                var wordGroup = legalWords.Where(x => x.Length == length).ToArray();
+                wordGroups[length - 1] = wordGroup;
+                Console.Write($"  Length {length} has {wordGroup.Length} words");
+
+                if (length == minOneWordLength)
+                {
+                    totalOneWordChecks += wordGroup.Length;
+                    Console.Write(" that add to the total number of one-word solution checks");
+                }
+
+                Console.WriteLine(".");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine($"This gives a total of {totalOneWordChecks} checks for a one-word solution." );
+
+            bool HasAllLetters(string word) => new CandidateWord(word).AlphabetBitMask == letterBoxCandidateWord.AlphabetBitMask;
+
+            var oneWordSolutions = new List<string>();
+
+            for (var length = minOneWordLength; length < maxLength; length++)
+            {
+                foreach (var word in wordGroups[length - 1].Where(HasAllLetters))
+                {
+                    oneWordSolutions.Add(word);
+                }
+            }
+
+            Console.WriteLine($"There were a total of {oneWordSolutions.Count} one-word solutions.");
+            Console.WriteLine();
+
+            var sortedOneWordSolutions = oneWordSolutions.OrderBy(x => x.Length);
+
+            if (oneWordSolutions.Count > 0)
+            {
+                Console.WriteLine("One-word solutions: " + string.Join(", ", sortedOneWordSolutions));
+                Console.WriteLine();
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Computing two-word solutions:");
 
             var legalWordsByLetter = new Dictionary<char, string[]>();
 
@@ -127,13 +181,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             foreach (var letter in letterBoxedLetters)
             {
                 var letterBitMask = AlphabetUtilities.GetAlphabetBitMask(letter);
-                var legalWordsForLetter = legalWords.Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) > 0).ToArray();
-                var wordsStartWithLetter = legalWords.Where(word => word[0] == letter).ToArray();
-                var wordsEndWithLetter = legalWords.Where(word => word[^1] == letter).ToArray();
-
-                OutputDuplicateWords(legalWordsForLetter, $"{nameof(legalWordsForLetter)} '{letter}'");
-                OutputDuplicateWords(wordsStartWithLetter, $"{nameof(wordsStartWithLetter)} '{letter}'");
-                OutputDuplicateWords(wordsEndWithLetter, $"{nameof(wordsEndWithLetter)} '{letter}'");
+                var legalWordsForLetter =
+                    legalWords.Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) > 0).ToArray();
+                var wordsStartWithLetter = legalWordsForLetter.Where(word => word[0] == letter).ToArray();
+                var wordsEndWithLetter = legalWordsForLetter.Where(word => word[^1] == letter).ToArray();
 
                 legalWordsByLetter[letter] = legalWordsForLetter;
                 startsWithWordsByLetter[letter] = wordsStartWithLetter;
@@ -141,51 +192,73 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             }
 
             var sortedLetters = letterBoxedLetters.ToCharArray().OrderBy(c => legalWordsByLetter[c].Length);
+            var smallestLetter = sortedLetters.First();
+
+            var legalWordsWithSmallestLetterByLetter = new Dictionary<char, string[]>();
+            var startsWithWordsWithSmallestLetterByLetter = new Dictionary<char, string[]>();
+            var endsWithWordsWithSmallestLetterByLetter = new Dictionary<char, string[]>();
 
             foreach (var letter in sortedLetters)
             {
-                Console.Write($"{letter} -> {legalWordsByLetter[letter].Length} total words with '{letter}' where ");
-                Console.Write($"{startsWithWordsByLetter[letter].Length} words starts with '{letter}' and ");
-                Console.WriteLine($"{endsWithWordsByLetter[letter].Length} words ends with '{letter}'");
+                var letterBitMask = AlphabetUtilities.GetAlphabetBitMask(letter) | AlphabetUtilities.GetAlphabetBitMask(smallestLetter);
+                var legalWordsForLetterWithSmallestLetter = legalWords
+                    .Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) == (int)letterBitMask).ToArray();
+                var wordsStartWithLetterWithSmallestLetter = legalWordsForLetterWithSmallestLetter.Where(word => word[0] == letter).ToArray();
+                var wordsEndWithLetterWithSmallestLetter = legalWordsForLetterWithSmallestLetter.Where(word => word[^1] == letter).ToArray();
+
+                legalWordsWithSmallestLetterByLetter[letter] = legalWordsForLetterWithSmallestLetter;
+                startsWithWordsWithSmallestLetterByLetter[letter] = wordsStartWithLetterWithSmallestLetter;
+                endsWithWordsWithSmallestLetterByLetter[letter] = wordsEndWithLetterWithSmallestLetter;
             }
 
-            var minLength = legalWords.Min(word => word.Length);
-            var maxLength = legalWords.Max(word => word.Length);
-
-            var wordGroups = new string[maxLength][];
-
-            for (var length = minLength; length < maxLength; length++)
+            var totalTwoWordChecks = 0;
+            foreach (var letter in sortedLetters)
             {
-                var wordGroup = legalWords.Where(x => x.Length == length).ToArray();
-                wordGroups[length - 1] = wordGroup;
-                Console.WriteLine($"Length {length} has {wordGroup.Length} words");
-            }
+                Console.Write($"  {letter} -> {legalWordsByLetter[letter].Length} total words with '{letter}' where ");
 
-            bool HasAllLetters(string word) => new CandidateWord(word).AlphabetBitMask == letterBoxCandidateWord.AlphabetBitMask;
+                var endWithSmallestLetterLength = endsWithWordsWithSmallestLetterByLetter[letter].Length;
+                var startLength = startsWithWordsByLetter[letter].Length;
 
-            var oneWordSolutions = new List<string>();
+                int startWithSmallestLetterLength;
+                var endLength = startWithSmallestLetterLength = 0;
 
-            for (var length = 12; length < maxLength; length++)
-            {
-                foreach (var word in wordGroups[length - 1].Where(HasAllLetters))
+                if (letter != smallestLetter)
                 {
-                    oneWordSolutions.Add(word);
+                    endLength = endsWithWordsByLetter[letter].Length;
+                    startWithSmallestLetterLength = startsWithWordsWithSmallestLetterByLetter[letter].Length;
                 }
+
+                var twoWordChecks = startLength * endWithSmallestLetterLength + startWithSmallestLetterLength * endLength;
+                totalTwoWordChecks += twoWordChecks;
+
+                Console.Write($"({startLength} words start with '{letter}' and ");
+                Console.Write($"{endWithSmallestLetterLength} words ends with '{letter}' having '{smallestLetter}') ");
+                if (letter != smallestLetter)
+                {
+                    Console.WriteLine();
+                    Console.Write($"       along with ({startWithSmallestLetterLength} words starts with '{letter}' having {smallestLetter} and ");
+                    Console.Write($"{endLength} words ends with '{letter}') ");
+                }
+
+                Console.WriteLine();
+                Console.WriteLine($"         adding {twoWordChecks} more checks.");
             }
 
-            var twoWordSolutions = new List<(string first, string second)>();
+            Console.WriteLine();
+            Console.WriteLine($"This gives a total of {totalTwoWordChecks} checks to obtain all two-word solutions.");
+
+            var twoWordSolutions = new HashSet<(string first, string second)>();
 
             foreach (var letter in sortedLetters)
             {
                 var endsWithWords = endsWithWordsByLetter[letter];
                 var startsWithWords = startsWithWordsByLetter[letter];
-
-                OutputDuplicateWords(endsWithWords, $"{nameof(endsWithWords)} for letter '{letter}'");
-                OutputDuplicateWords(startsWithWords, $"{nameof(startsWithWords)} for letter '{letter}'");
+                var endsWithWordsWithSmallestLetter = endsWithWordsWithSmallestLetterByLetter[letter];
+                var startsWithWordsWithSmallestLetter = startsWithWordsWithSmallestLetterByLetter[letter];
 
                 foreach (var endsWithWord in endsWithWords)
                 {
-                    foreach (var startsWithWord in startsWithWords)
+                    foreach (var startsWithWord in startsWithWordsWithSmallestLetter)
                     {
                         var bothWords = endsWithWord + startsWithWord;
 
@@ -195,18 +268,38 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                         }
                     }
                 }
+
+                if (letter == smallestLetter)
+                {
+                    continue;
+                }
+
+                foreach (var endsWithWord in endsWithWordsWithSmallestLetter)
+                {
+                    foreach (var startsWithWord in startsWithWords)
+                    {
+                        var bothWords = endsWithWord + startsWithWord;
+
+                        if (HasAllLetters(bothWords))
+                        {
+                            var twoWordSolution = (endsWithWord, startsWithWord);
+                            if (!twoWordSolutions.Contains(twoWordSolution))
+                            {
+                                twoWordSolutions.Add(twoWordSolution);
+                            }
+                        }
+                    }
+                }
             }
 
-            var sortedOneWordSolutions = oneWordSolutions.OrderBy(x => x.Length);
-            var sortedTwoWordSolutions = twoWordSolutions.OrderBy(x => x.first.Length + x.second.Length).ThenBy(x => x.first)
-                .ThenBy(x => x.second).ToArray();
+            var sortedTwoWordSolutions = twoWordSolutions.OrderBy(x => x.first.Length + x.second.Length).ThenBy(x => x.first).ThenBy(x => x.second)
+                .ToArray();
 
-            Console.WriteLine($"There are {letterBoxedWords.Length} words using only letters '{letterBoxedLetters}'.");
-            Console.WriteLine($"Of those there are {legalWords.Length} words not having any of the following pairs:");
-            Console.WriteLine($"  '{string.Join("', '", sortedLetterBoxedPairs)}");
-            Console.WriteLine($"There were {oneWordSolutions.Count} one-word and {twoWordSolutions.Count} two-word solutions");
+            Console.WriteLine();
 
-            Console.WriteLine("One-word solutions: " + string.Join(", ", sortedOneWordSolutions));
+            Console.WriteLine($"There were a total of {twoWordSolutions.Count} two-word solutions.");
+            Console.WriteLine();
+
             Console.WriteLine("Two-word solutions: ");
             var joinedTwoWordSolutions = sortedTwoWordSolutions.Select(s => $"{s.first}-{s.second}");
             var minSolutionLength = joinedTwoWordSolutions.Min(x => x.Length);
@@ -214,8 +307,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             for (var length = minSolutionLength; length < maxSolutionLength; length++)
             {
-                Console.Write($"Length {length - 1}: ");
-                Console.WriteLine(string.Join(", ", joinedTwoWordSolutions.Where(x => x.Length == length)));
+                var lengthTwoWordSolutions = joinedTwoWordSolutions.Where(x => x.Length == length).ToArray();
+                Console.WriteLine($"  Length {length - 1} solutions with {lengthTwoWordSolutions.Length} words: ");
+                Console.WriteLine("    " + string.Join(", ", lengthTwoWordSolutions));
                 Console.WriteLine();
             }
 
