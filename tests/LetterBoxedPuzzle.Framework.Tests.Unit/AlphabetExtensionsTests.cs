@@ -1,5 +1,5 @@
 // ===============================================================================================================================================
-// <copyright file="AlphabetBitMaskTests.cs" company="Joe Fowler">
+// <copyright file="AlphabetExtensionsTests.cs" company="Joe Fowler">
 // Copyright (c) 2021 Joe Fowler.
 // Licensed under the GNU Affero General Public License v3. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -19,7 +19,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     ///     The unit tests for the letters enumeration.
     /// </summary>
     [TestClass]
-    public class AlphabetBitMaskTests
+    public class AlphabetExtensionsTests
     {
         /// <summary>
         ///     Checks whether the given alphabetic index between 0 to 26 is converted to the correct bit-wise enumerated letter of the alphabet.
