@@ -7,8 +7,8 @@
 
 namespace LetterBoxedPuzzle.Framework.Utilities
 {
+    using System;
     using System.Linq;
-    using System.Text;
 
     using LetterBoxedPuzzle.Framework.Constants;
     using LetterBoxedPuzzle.Framework.Enums;
@@ -22,7 +22,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <summary>
         ///     The bit-wise enumerated letters of the alphabet indexed by their ASCII values.
         /// </summary>
-        public static readonly AlphabetBitMask[] AlphabetBitMaskByAsciiValues = new AlphabetBitMask[byte.MaxValue + 1];
+        internal static readonly AlphabetBitMask[] AlphabetBitMaskByAsciiValues = new AlphabetBitMask[byte.MaxValue + 1];
 
         /// <summary>
         ///     Initializes static members of the <see cref="AlphabetUtilities" /> class.
@@ -31,8 +31,8 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         {
             for (var alphabeticIndex = 1; alphabeticIndex <= AlphabetConstants.EnglishAlphabetSize; alphabeticIndex++)
             {
-                var upperCaseLetterAsciiValue = AlphabetConstants.AsciiValueOfUpperCaseA + alphabeticIndex - 1;
-                var lowerCaseLetterAsciiValue = AlphabetConstants.AsciiValueOfLowerCaseA + alphabeticIndex - 1;
+                var upperCaseLetterAsciiValue = GetExtendedAsciiValue(AlphabetConstants.UpperCaseA) + alphabeticIndex - 1;
+                var lowerCaseLetterAsciiValue = GetExtendedAsciiValue(AlphabetConstants.LowerCaseA) + alphabeticIndex - 1;
 
                 AlphabetBitMaskByAsciiValues[upperCaseLetterAsciiValue] =
                     AlphabetBitMaskByAsciiValues[lowerCaseLetterAsciiValue] = alphabeticIndex.ToAlphabetBitMask();
@@ -58,13 +58,21 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         }
 
         /// <summary>
-        ///     Gets the ASCII byte value for the given letter, assuming it can be encoded in ASCII.
+        ///     Gets the extended ASCII byte value for the given letter.
         /// </summary>
         /// <param name="letter">A single-character letter.</param>
-        /// <returns>The ASCII byte value of the given letter.</returns>
-        public static byte GetAsciiValue(char letter)
+        /// <returns>The extended ASCII byte value of the given letter.</returns>
+        /// <exception cref="OverflowException">Thrown when the given unicode character is outside the extended ASCII range.</exception>
+        public static byte GetExtendedAsciiValue(char letter)
         {
-            return Encoding.ASCII.GetBytes(letter.ToString())[0];
+            try
+            {
+                return Convert.ToByte(letter);
+            }
+            catch (OverflowException overflowException)
+            {
+                throw new OverflowException("Given unicode character '{letter}' is outside of ASCII range.", overflowException);
+            }
         }
 
         /// <summary>
@@ -74,7 +82,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <returns>The bit mask of the given letter.</returns>
         public static AlphabetBitMask GetAlphabetBitMask(char alphabetLetter)
         {
-            return AlphabetBitMaskByAsciiValues[GetAsciiValue(alphabetLetter)];
+            return AlphabetBitMaskByAsciiValues[GetExtendedAsciiValue(alphabetLetter)];
         }
 
         /// <summary>
