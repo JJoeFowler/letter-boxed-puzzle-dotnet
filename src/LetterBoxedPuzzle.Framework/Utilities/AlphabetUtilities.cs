@@ -44,7 +44,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
                 new Dictionary<char, bool>(),
                 (current, character) =>
                 {
-                    current[character] = IsAlphabetLetterSlowMethod(character);
+                    current[character] = IsLowercaseOrUppercaseAlphabetLetter(character);
                     return current;
                 });
 
@@ -59,6 +59,36 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         public static bool IsAlphabetLetter(char character)
         {
             return IsAlphabetLetterByLetter[character];
+        }
+
+        /// <summary>
+        ///     Determine whether the given character is a lowercase alphabet letter, which is between 'a' and 'z'.
+        /// </summary>
+        /// <param name="character">The character.</param>
+        /// <returns>
+        ///     <see langword="true" /> if given character is a lowercase alphabet letter, or <see langword="false" /> otherwise.
+        /// </returns>
+        public static bool IsLowercaseAlphabetLetter(char character)
+        {
+            var isAtLeastLowerCaseA = character.CompareTo(AlphabetConstants.LowerCaseA) >= 0;
+            var isAtMostLowerCaseZ = character.CompareTo(AlphabetConstants.LowerCaseZ) <= 0;
+
+            return isAtLeastLowerCaseA && isAtMostLowerCaseZ;
+        }
+
+        /// <summary>
+        ///     Determine whether the given character is an uppercase alphabet letter, which is between 'A' and 'Z'.
+        /// </summary>
+        /// <param name="character">The character.</param>
+        /// <returns>
+        ///     <see langword="true" /> if given character is an uppercase alphabet letter, or <see langword="false" /> otherwise.
+        /// </returns>
+        public static bool IsUppercaseAlphabetLetter(char character)
+        {
+            var isAtLeastUpperCaseA = character.CompareTo(AlphabetConstants.UpperCaseA) >= 0;
+            var isAtMostUpperCaseZ = character.CompareTo(AlphabetConstants.UpperCaseZ) <= 0;
+
+            return isAtLeastUpperCaseA && isAtMostUpperCaseZ;
         }
 
         /// <summary>
@@ -89,7 +119,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <exception cref="ArgumentException">Thrown when given a character not in the alphabet.</exception>
         public static AlphabetBitMask GetAlphabetBitMask(char alphabetLetter)
         {
-            if (!IsAlphabetLetterSlowMethod(alphabetLetter))
+            if (!IsLowercaseOrUppercaseAlphabetLetter(alphabetLetter))
             {
                 throw new ArgumentException($"Given character {alphabetLetter} must be an alphabet letter.");
             }
@@ -123,13 +153,24 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <param name="startingLetter">The starting letter.</param>
         /// <param name="length">The length of the range.</param>
         /// <returns>The specified alphabetic range as a <see langword="char" /> array.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when given a length of zero or less.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when not given a length less than 1 or a length out of range that would lead to non-alphabetic sequence.
+        /// </exception>
         /// <exception cref="ArgumentException">Thrown when given a starting letter that is not in the alphabet.</exception>
         public static char[] GenerateAlphabeticRangeSequence(char startingLetter, int length)
         {
-            if (!IsAlphabetLetterSlowMethod(startingLetter))
+            if (!IsLowercaseOrUppercaseAlphabetLetter(startingLetter))
             {
                 throw new ArgumentException($"Given starting letter {startingLetter} must be a letter of the alphabet.");
+            }
+
+            var maximumLength = AlphabetConstants.EnglishAlphabetSize - startingLetter
+                + (IsLowercaseAlphabetLetter(startingLetter) ? AlphabetConstants.LowerCaseA : AlphabetConstants.UpperCaseA);
+
+            if ((length < 1) || (length > maximumLength))
+            {
+                throw new ArgumentOutOfRangeException(
+                    $"The length {length} for starting letter '{startingLetter}' exceeded maximum allow value of {maximumLength}.");
             }
 
             return Enumerable.Range(startingLetter, length).Select(x => (char)x).ToArray();
@@ -147,7 +188,9 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <param name="startingLetter">The starting letter.</param>
         /// <param name="length">The length of the range.</param>
         /// <returns>Concatenated <see langword="string" /> of the specified alphabetic range.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when given a length of zero or less.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when not given a length less than 1 or a length out of range that would lead to non-alphabetic text.
+        /// </exception>
         /// <exception cref="ArgumentException">Thrown when given a starting letter that is not in the alphabet.</exception>
         public static string GenerateAlphabeticRangeAsText(char startingLetter, int length)
         {
@@ -165,7 +208,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         {
             _ = text ?? throw new ArgumentNullException(nameof(text));
 
-            if (!text.All(IsAlphabetLetterSlowMethod))
+            if (!text.All(IsLowercaseOrUppercaseAlphabetLetter))
             {
                 throw new ArgumentException($"Given '{text}' can only contain letters in the alphabet.");
             }
@@ -176,22 +219,16 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         }
 
         /// <summary>
-        ///     Using a slow comparison method, determine whether the given character is an alphabet letter, which is either between 'a' and 'z'
-        ///     or between 'A' and 'Z'.
+        ///     Determine whether the given character is a lowercase alphabet letter between 'a' and 'z' or an uppercase alphabet
+        ///     letter between 'A' and 'Z'.
         /// </summary>
         /// <param name="character">The character.</param>
         /// <returns>
-        ///     <see langword="true" /> if given character is an alphabet letter, or <see langword="false" /> otherwise.
+        ///     <see langword="true" /> if given character is a lowercase or an uppercase alphabet letter, or <see langword="false" /> otherwise.
         /// </returns>
-        private static bool IsAlphabetLetterSlowMethod(char character)
+        private static bool IsLowercaseOrUppercaseAlphabetLetter(char character)
         {
-            var isAtLeastLowerCaseA = character.CompareTo(AlphabetConstants.LowerCaseA) >= 0;
-            var isAtLeastUpperCaseA = character.CompareTo(AlphabetConstants.UpperCaseA) >= 0;
-
-            var isAtMostLowerCaseZ = character.CompareTo(AlphabetConstants.LowerCaseZ) <= 0;
-            var isAtMostUpperCaseZ = character.CompareTo(AlphabetConstants.UpperCaseZ) <= 0;
-
-            return (isAtLeastLowerCaseA && isAtMostLowerCaseZ) || (isAtLeastUpperCaseA && isAtMostUpperCaseZ);
+            return IsLowercaseAlphabetLetter(character) || IsUppercaseAlphabetLetter(character);
         }
     }
 }
