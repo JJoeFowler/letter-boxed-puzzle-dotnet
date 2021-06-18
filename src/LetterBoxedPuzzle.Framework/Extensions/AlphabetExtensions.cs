@@ -14,7 +14,7 @@ namespace LetterBoxedPuzzle.Framework.Extensions
     using LetterBoxedPuzzle.Framework.Enums;
 
     /// <summary>
-    ///     Extension methods for to convert a one-letter alphabet bit mask to and from its corresponding alphabetic index.
+    ///     Extension methods to convert a one-letter alphabet bit mask to and from its corresponding alphabetic index.
     /// </summary>
     public static class AlphabetExtensions
     {
@@ -68,16 +68,7 @@ namespace LetterBoxedPuzzle.Framework.Extensions
         /// <returns>The alphabetic index between 0 and 26 of the given one-letter alphabet bit mask.</returns>
         public static int ToAlphabeticIndex(this AlphabetBitMask alphabetBitMask)
         {
-            try
-            {
-                return AlphabeticIndexByLetter[alphabetBitMask];
-            }
-            catch (KeyNotFoundException keyNotFoundException)
-            {
-                throw new KeyNotFoundException(
-                    "Internal error (should never happen) where the given alphabet bit mask does not have an index.",
-                    keyNotFoundException);
-            }
+            return AlphabeticIndexByLetter[alphabetBitMask];
         }
     }
 }
