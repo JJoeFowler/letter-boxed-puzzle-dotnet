@@ -7,6 +7,8 @@
 
 namespace LetterBoxedPuzzle.Framework.Tests.Unit
 {
+    using System.Linq;
+
     using LetterBoxedPuzzle.Framework.Enums;
 
     /// <summary>
@@ -14,6 +16,11 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     /// </summary>
     internal static class TestCommonConstants
     {
+        /// <summary>
+        ///     Size of the alphabet.
+        /// </summary>
+        internal const int AlphabetSize = 26;
+
         /// <summary>
         ///     Simple test word.
         /// </summary>
@@ -53,6 +60,12 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
                 'U', 'V', 'W', 'X', 'Y', 'Z',
             };
+
+        /// <summary>
+        ///     The non-alphabet characters.
+        /// </summary>
+        internal static readonly char[] NonAlphabetCharacters = Enumerable.Range(0, char.MaxValue).Select(x => (char)x).ToArray()
+            .Except(LowercaseAlphabet).Except(UppercaseAlphabet).ToArray();
 
         /// <summary>
         ///     The test alphabet bit masks for the full alphabet.

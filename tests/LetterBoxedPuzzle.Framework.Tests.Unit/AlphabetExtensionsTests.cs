@@ -14,6 +14,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using static TestCommonConstants;
+
     /// <summary>
     ///     Unit tests for the alphabet extension methods class.
     /// </summary>
@@ -27,14 +29,13 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void ToAlphabetBitMask_GivenAlphabeticIndexInRange_ReturnsCorrectAlphabetBitMask()
         {
             var alphabetBitMaskValues = Enum.GetValues<AlphabetBitMask>();
-            const int alphabetSize = 26;
 
             // Explicitly check boundary cases.
             Assert.AreEqual(AlphabetBitMask.A, 1.ToAlphabetBitMask());
-            Assert.AreEqual(AlphabetBitMask.Z, alphabetSize.ToAlphabetBitMask());
+            Assert.AreEqual(AlphabetBitMask.Z, AlphabetSize.ToAlphabetBitMask());
 
             // Check all values incrementally.
-            for (var alphabeticIndex = 1; alphabeticIndex <= alphabetSize; alphabeticIndex++)
+            for (var alphabeticIndex = 1; alphabeticIndex <= AlphabetSize; alphabeticIndex++)
             {
                 var expectedAlphabetBitMask = alphabetBitMaskValues[alphabeticIndex];
                 var actualAlphabetBitMask = alphabeticIndex.ToAlphabetBitMask();
