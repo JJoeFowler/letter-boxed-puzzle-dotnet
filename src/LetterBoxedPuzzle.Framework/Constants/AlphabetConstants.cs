@@ -66,14 +66,14 @@ namespace LetterBoxedPuzzle.Framework.Constants
         public static readonly byte AsciiValueOfLowerCaseZ = GetAsciiValue(LowerCaseZ);
 
         /// <summary>
-        ///     Alphabet range text from 'a' to 'z', which is the string "abcdefghijklmnopqrstuvwxyz".
+        ///     Full lowercase alphabet as a string from 'a' to 'z', which is "abcdefghijklmnopqrstuvwxyz".
         /// </summary>
-        public static readonly string AlphabetRangeTextFromAToZ = AlphabetRangeText(LowerCaseA, EnglishAlphabetSize);
+        public static readonly string FullLowercaseAlphabetText = GenerateAlphabeticRangeAsText(LowerCaseA, EnglishAlphabetSize);
 
         /// <summary>
         ///     Lazy initializer of the alphabet bit mask set with all bits set.
         /// </summary>
-        public static readonly Lazy<AlphabetBitMask> LazyAlphabetBitMaskWithAllBitsSet = new (CalculateAlphabetBitMaskWithAllBitsSet);
+        public static readonly Lazy<AlphabetBitMask> LazyAlphabetBitMaskWithAllBitsSet = new(CalculateAlphabetBitMaskWithAllBitsSet);
 
         /// <summary>
         ///     Gets all 26 letters of the bit-wise enumerated alphabet from <see cref="Enums.AlphabetBitMask.A" /> to <see cref="Enums.AlphabetBitMask.Z" />

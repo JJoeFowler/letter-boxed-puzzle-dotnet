@@ -16,13 +16,13 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    ///     The unit tests for the letters enumeration.
+    ///     Unit tests for the alphabet extension methods class.
     /// </summary>
     [TestClass]
     public class AlphabetExtensionsTests
     {
         /// <summary>
-        ///     Checks whether the given alphabetic index between 0 to 26 is converted to the correct bit-wise enumerated letter of the alphabet.
+        ///     Verifies whether the given alphabetic index between 0 to 26 is converted to the correct bit-wise enumerated letter of the alphabet.
         /// </summary>
         [TestMethod]
         public void ToAlphabetBitMask_GivenAlphabeticIndexInRange_ReturnsCorrectAlphabetBitMask()
@@ -47,7 +47,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Checks whether the given out-of-range index, which is not between 1 to 26, is converted to '<see cref="AlphabetBitMask.None"/>'.
+        ///     Verifies whether the given out-of-range index, which is not between 1 to 26, is converted to '<see cref="AlphabetBitMask.None"/>'.
         /// </summary>
         [TestMethod]
         public void ToAlphabetBitMask_GivenIndexOutOfRange_ReturnsAlphabetBitMaskNone()
@@ -60,7 +60,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Checks whether the given bit-wise enumerated letter of the alphabet is converted to the correct alphabetic index.
+        ///     Verifies whether the given bit-wise enumerated letter of the alphabet is converted to the correct alphabetic index.
         /// </summary>
         [TestMethod]
         public void ToAlphabeticIndex_GivenAlphabetBitMask_ReturnsCorrectAlphabeticIndex()

@@ -89,7 +89,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
 
         /// <summary>
         ///     <para>
-        ///         Generates an alphabetic range character array starting with the given letter and going alphabetically to the
+        ///         Generates an alphabetic range as a sequence of characters starting with the given letter and going alphabetically to the
         ///         next letter for the specified length.
         ///     </para>
         ///     <para>
@@ -99,14 +99,14 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <param name="startingLetter">The starting letter.</param>
         /// <param name="length">The length of the range.</param>
         /// <returns>The specified alphabetic range as a <see langword="char" /> array.</returns>
-        public static char[] AlphabetRangeArray(char startingLetter, int length)
+        public static char[] GenerateAlphabeticRangeSequence(char startingLetter, int length)
         {
             return Enumerable.Range(startingLetter, length).Select(x => (char)x).ToArray();
         }
 
         /// <summary>
         ///     <para>
-        ///         Generates an alphabetic range string starting with the given letter and going alphabetically to the next letter for
+        ///         Generates an alphabetic range as a string starting with the given letter and going alphabetically to the next letter for
         ///         the specified length.
         ///     </para>
         ///     <para>
@@ -116,21 +116,21 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <param name="startingLetter">The starting letter.</param>
         /// <param name="length">The length of the range.</param>
         /// <returns>Concatenated <see langword="string" /> of the specified alphabetic range.</returns>
-        public static string AlphabetRangeText(char startingLetter, int length)
+        public static string GenerateAlphabeticRangeAsText(char startingLetter, int length)
         {
-            return string.Join(string.Empty, AlphabetRangeArray(startingLetter, length));
+            return new string(GenerateAlphabeticRangeSequence(startingLetter, length));
         }
 
         /// <summary>
-        ///     Gets all distinct two-letter pairs of letters for the given text, including the pairs of the same letter.
+        ///     Generate all distinct two-letter pairs of letters for the given text, including the pairs of the same letter.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns>All (<i>n</i> choose 2 + <i>n</i>) two-letter pairs consisting of letters of the given text of length <i>n</i>.</returns>
-        public static string[] GetAllDistinctLetterPairs(string text)
+        public static string[] GenerateAllDistinctLetterPairs(string text)
         {
             return (from firstLetter in text
-                from secondLetter in text
-                select firstLetter + secondLetter.ToString()).Distinct().ToArray();
+                    from secondLetter in text
+                    select firstLetter + secondLetter.ToString()).Distinct().ToArray();
         }
     }
 }
