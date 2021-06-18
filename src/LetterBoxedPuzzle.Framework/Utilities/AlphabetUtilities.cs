@@ -20,6 +20,11 @@ namespace LetterBoxedPuzzle.Framework.Utilities
     public static class AlphabetUtilities
     {
         /// <summary>
+        ///     The bit-wise enumerated letters of the alphabet indexed by their ASCII values.
+        /// </summary>
+        public static readonly AlphabetBitMask[] AlphabetBitMaskByAsciiValues = new AlphabetBitMask[byte.MaxValue + 1];
+
+        /// <summary>
         ///     Initializes static members of the <see cref="AlphabetUtilities" /> class.
         /// </summary>
         static AlphabetUtilities()
@@ -35,9 +40,22 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         }
 
         /// <summary>
-        ///     Gets the bit-wise enumerated letters of the alphabet indexed by their ASCII values.
+        ///     Determine whether the given character is an alphabet letter, which is either between 'a' and 'z' or between 'A' and 'Z'.
         /// </summary>
-        public static AlphabetBitMask[] AlphabetBitMaskByAsciiValues { get; } = new AlphabetBitMask[byte.MaxValue + 1];
+        /// <param name="character">The character.</param>
+        /// <returns>
+        ///     <see langword="true" /> if given character is an alphabet letter, or <see langword="false" /> otherwise.
+        /// </returns>
+        public static bool IsAlphabetLetter(char character)
+        {
+            var isAtLeastLowerCaseA = character.CompareTo(AlphabetConstants.LowerCaseA) >= 0;
+            var isAtLeastUpperCaseA = character.CompareTo(AlphabetConstants.UpperCaseA) >= 0;
+
+            var isAtMostLowerCaseZ = character.CompareTo(AlphabetConstants.LowerCaseZ) <= 0;
+            var isAtMostUpperCaseZ = character.CompareTo(AlphabetConstants.UpperCaseZ) <= 0;
+
+            return (isAtLeastLowerCaseA && isAtMostLowerCaseZ) || (isAtLeastUpperCaseA && isAtMostUpperCaseZ);
+        }
 
         /// <summary>
         ///     Gets the ASCII byte value for the given letter, assuming it can be encoded in ASCII.
@@ -101,6 +119,18 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         public static string AlphabetRangeText(char startingLetter, int length)
         {
             return string.Join(string.Empty, AlphabetRangeArray(startingLetter, length));
+        }
+
+        /// <summary>
+        ///     Gets all distinct two-letter pairs of letters for the given text, including the pairs of the same letter.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>All (<i>n</i> choose 2 + <i>n</i>) two-letter pairs consisting of letters of the given text of length <i>n</i>.</returns>
+        public static string[] GetAllDistinctLetterPairs(string text)
+        {
+            return (from firstLetter in text
+                from secondLetter in text
+                select firstLetter + secondLetter.ToString()).Distinct().ToArray();
         }
     }
 }

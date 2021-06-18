@@ -48,7 +48,7 @@ namespace LetterBoxedPuzzle.Framework.Models
 
             var candidateWords = words.Select(word => new CandidateWord(word)).Distinct().ToArray();
 
-            return candidateWords.ToDictionary(candidate => candidate.CaseInsensitiveWord, candidate => candidate);
+            return candidateWords.ToDictionary(candidate => candidate.LowercaseWord, candidate => candidate);
         }
     }
 }

@@ -36,6 +36,16 @@ namespace LetterBoxedPuzzle.Framework.Constants
         public const char UpperCaseA = 'A';
 
         /// <summary>
+        ///     The lower case letter 'z'.
+        /// </summary>
+        public const char LowerCaseZ = 'z';
+
+        /// <summary>
+        ///     The upper case letter 'Z'.
+        /// </summary>
+        public const char UpperCaseZ = 'Z';
+
+        /// <summary>
         ///     ASCII value of the upper case 'A'.
         /// </summary>
         public static readonly byte AsciiValueOfUpperCaseA = GetAsciiValue(UpperCaseA);
@@ -46,15 +56,30 @@ namespace LetterBoxedPuzzle.Framework.Constants
         public static readonly byte AsciiValueOfLowerCaseA = GetAsciiValue(LowerCaseA);
 
         /// <summary>
+        ///     ASCII value of the upper case 'Z'.
+        /// </summary>
+        public static readonly byte AsciiValueOfUpperCaseZ = GetAsciiValue(UpperCaseZ);
+
+        /// <summary>
+        ///     ASCII value of the lower case 'z'.
+        /// </summary>
+        public static readonly byte AsciiValueOfLowerCaseZ = GetAsciiValue(LowerCaseZ);
+
+        /// <summary>
         ///     Alphabet range text from 'a' to 'z', which is the string "abcdefghijklmnopqrstuvwxyz".
         /// </summary>
         public static readonly string AlphabetRangeTextFromAToZ = AlphabetRangeText(LowerCaseA, EnglishAlphabetSize);
 
         /// <summary>
-        ///     All 26 letters of the bit-wise enumerated alphabet from <see cref="Enums.AlphabetBitMask.A" /> to <see cref="Enums.AlphabetBitMask.Z" />
+        ///     Lazy initializer of the alphabet bit mask set with all bits set.
+        /// </summary>
+        public static readonly Lazy<AlphabetBitMask> LazyAlphabetBitMaskWithAllBitsSet = new (CalculateAlphabetBitMaskWithAllBitsSet);
+
+        /// <summary>
+        ///     Gets all 26 letters of the bit-wise enumerated alphabet from <see cref="Enums.AlphabetBitMask.A" /> to <see cref="Enums.AlphabetBitMask.Z" />
         ///     ORed together.
         /// </summary>
-        public static readonly Lazy<AlphabetBitMask> AlphabetBitMaskWithAllBitsSet = new (CalculateAlphabetBitMaskWithAllBitsSet);
+        public static readonly AlphabetBitMask AlphabetBitMaskWithAllBitsSet = LazyAlphabetBitMaskWithAllBitsSet.Value;
 
         /// <summary>
         ///     Calculates the alphabet bit mask with all of its bits set.

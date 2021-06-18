@@ -31,9 +31,9 @@ namespace LetterBoxedPuzzle.Framework.Models
                 throw new ArgumentException("Cannot use null, empty string, or white space to initialize a candidate word.");
             }
 
-            this.CaseInsensitiveWord = word.ToLowerInvariant();
+            this.LowercaseWord = word.ToLowerInvariant();
 
-            this.AsciiSequence = Encoding.ASCII.GetBytes(this.CaseInsensitiveWord);
+            this.AsciiSequence = Encoding.ASCII.GetBytes(this.LowercaseWord);
 
             foreach (var asciiValue in this.AsciiSequence)
             {
@@ -41,8 +41,8 @@ namespace LetterBoxedPuzzle.Framework.Models
                 this.AlphabetBitMask |= alphabetBitMaskByAsciiValue;
             }
 
-            this.FirstLetter = word[0];
-            this.LastLetter = word[^1];
+            this.FirstLetter = this.LowercaseWord[0];
+            this.LastLetter = this.LowercaseWord[^1];
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace LetterBoxedPuzzle.Framework.Models
         public char LastLetter { get; }
 
         /// <summary>
-        ///     Gets the case-insensitive word used to initialize the candidate, which is lowercased since case is irrelevant.
+        ///     Gets the lowercase word used to initialize the candidate, where lowercase was used since case is irrelevant.
         /// </summary>
-        public string CaseInsensitiveWord { get; }
+        public string LowercaseWord { get; }
 
         /// <summary>
         ///     Gets the byte values corresponding to the ASCII sequence of the word.
@@ -80,7 +80,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// </returns>
         public bool IsContainedIn(string candidateLetters)
         {
-            return (this.AlphabetBitMask & (AlphabetConstants.AlphabetBitMaskWithAllBitsSet.Value ^ GetAlphabetBitMask(candidateLetters))) == 0;
+            return (this.AlphabetBitMask & (AlphabetConstants.AlphabetBitMaskWithAllBitsSet ^ GetAlphabetBitMask(candidateLetters))) == 0;
         }
     }
 }
