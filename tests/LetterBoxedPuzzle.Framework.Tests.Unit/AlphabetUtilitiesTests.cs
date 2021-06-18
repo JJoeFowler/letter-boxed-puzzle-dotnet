@@ -26,6 +26,82 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     public class AlphabetUtilitiesTests
     {
         /// <summary>
+        ///     Verifies whether given a lowercase letter of the alphabet is determined to be a valid lowercase alphabet letter.
+        /// </summary>
+        [TestMethod]
+        public void IsLowercaseAlphabetLetter_GivenLowercaseAlphabetLetter_IsTrue()
+        {
+            // Arrange
+            var lowercaseAlphabetLetters = LowercaseAlphabet;
+
+            // Act
+            var actualValues = lowercaseAlphabetLetters.Select(character => IsLowercaseAlphabetLetter(character)).ToArray();
+
+            // Assert
+            for (var index = 0; index < lowercaseAlphabetLetters.Length; index++)
+            {
+                Assert.IsTrue(actualValues[index], $"Expected '{lowercaseAlphabetLetters[index]}' to be an lowercase alphabet letter.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given a character that is not a lowercase letter of the alphabet that it is determined not to be one.
+        /// </summary>
+        [TestMethod]
+        public void IsLowercaseAlphabetLetter_GivenNonLowercaseAlphabetLetter_IsFalse()
+        {
+            // Arrange
+            var nonLowercaseAlphabetLetters = NonAlphabetCharacters.Except(LowercaseAlphabet).ToArray();
+
+            // Act
+            var actualValues = nonLowercaseAlphabetLetters.Select(character => IsLowercaseAlphabetLetter(character)).ToArray();
+
+            // Assert
+            for (var index = 0; index < nonLowercaseAlphabetLetters.Length; index++)
+            {
+                Assert.IsFalse(actualValues[index], $"Expected '{nonLowercaseAlphabetLetters[index]}' not to be a lowercase alphabet letter.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given a uppercase letter of the alphabet is determined to be a valid uppercase alphabet letter.
+        /// </summary>
+        [TestMethod]
+        public void IsUppercaseAlphabetLetter_GivenUppercaseAlphabetLetter_IsTrue()
+        {
+            // Arrange
+            var uppercaseAlphabetLetters = UppercaseAlphabet;
+
+            // Act
+            var actualValues = uppercaseAlphabetLetters.Select(character => IsUppercaseAlphabetLetter(character)).ToArray();
+
+            // Assert
+            for (var index = 0; index < uppercaseAlphabetLetters.Length; index++)
+            {
+                Assert.IsTrue(actualValues[index], $"Expected '{uppercaseAlphabetLetters[index]}' to be an uppercase alphabet letter.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given a character that is not an uppercase letter of the alphabet that it is determined not to be one.
+        /// </summary>
+        [TestMethod]
+        public void IsUppercaseAlphabetLetter_GivenNonUppercaseAlphabetLetter_IsFalse()
+        {
+            // Arrange
+            var nonUppercaseAlphabetLetters = NonAlphabetCharacters.Except(UppercaseAlphabet).ToArray();
+
+            // Act
+            var actualValues = nonUppercaseAlphabetLetters.Select(character => IsUppercaseAlphabetLetter(character)).ToArray();
+
+            // Assert
+            for (var index = 0; index < nonUppercaseAlphabetLetters.Length; index++)
+            {
+                Assert.IsFalse(actualValues[index], $"Expected '{nonUppercaseAlphabetLetters[index]}' not to be an uppercase alphabet letter.");
+            }
+        }
+
+        /// <summary>
         ///     Verifies whether given a lowercase or uppercase letter of the alphabet is determined to be a valid alphabet letter.
         /// </summary>
         [TestMethod]
@@ -35,12 +111,12 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             var alphabetLetters = LowercaseAlphabet.Union(UppercaseAlphabet).ToArray();
 
             // Act
-            var actualIsAlphabetLetterValues = alphabetLetters.Select(character => IsAlphabetLetter(character)).ToArray();
+            var actualValues = alphabetLetters.Select(character => IsAlphabetLetter(character)).ToArray();
 
             // Assert
             for (var index = 0; index < alphabetLetters.Length; index++)
             {
-                Assert.IsTrue(actualIsAlphabetLetterValues[index], $"Expected '{alphabetLetters[index]}' to be an alphabet letter.");
+                Assert.IsTrue(actualValues[index], $"Expected '{alphabetLetters[index]}' to be an alphabet letter.");
             }
         }
 
@@ -51,16 +127,15 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void IsAlphabetLetter_GivenNonAlphabetLetter_IsTrue()
         {
             // Arrange
-            var allCharacters = Enumerable.Range(0, char.MaxValue).Select(x => (char)x).ToArray();
-            var nonAlphabetLetters = allCharacters.Except(LowercaseAlphabet).Except(UppercaseAlphabet).ToArray();
+            var nonAlphabetCharacters = NonAlphabetCharacters;
 
             // Act
-            var actualIsAlphabetLetterValues = nonAlphabetLetters.Select(character => IsAlphabetLetter(character)).ToArray();
+            var actualValues = nonAlphabetCharacters.Select(character => IsAlphabetLetter(character)).ToArray();
 
             // Assert
-            for (var index = 0; index < nonAlphabetLetters.Length; index++)
+            for (var index = 0; index < nonAlphabetCharacters.Length; index++)
             {
-                Assert.IsFalse(actualIsAlphabetLetterValues[index], $"Expected '{nonAlphabetLetters[index]}' not to be an alphabet letter.");
+                Assert.IsFalse(actualValues[index], $"Expected '{nonAlphabetCharacters[index]}' not to be an alphabet letter.");
             }
         }
 
@@ -180,6 +255,20 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
+        ///     Verifies an argument exception will be thrown when given an at-symbol character.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetAlphabetBitMask_GivenAtSymbolCharacter_ThrowsArgumentException()
+        {
+            // Arrange
+            const char atSymbol = '@';
+
+            // Act
+            _ = GetAlphabetBitMask(atSymbol);
+        }
+
+        /// <summary>
         ///     Verifies whether given the lower case letter 'a' with size of the alphabet that sequence is the lowercase alphabet.
         /// </summary>
         [TestMethod]
@@ -201,7 +290,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 Assert.AreEqual(
                     expectedCharacter,
                     actualCharacter,
-                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in sequence '{string.Join("', '", actualSequence)}'.");
+                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in the sequence '{string.Join("', '", actualSequence)}'.");
             }
         }
 
@@ -227,8 +316,232 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 Assert.AreEqual(
                     expectedCharacter,
                     actualCharacter,
-                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in sequence '{string.Join("', '", actualSequence)}'.");
+                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in the sequence '{string.Join("', '", actualSequence)}'.");
             }
+        }
+
+        /// <summary>
+        ///     Verifies an out of range exception will be thrown when be thrown when given an lowercase 'a' and a length of the alphabet size
+        ///     plus one.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeSequence_GivenLowercaseAWithAlphabetSizePlusOneLength_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int lengthOutOfRange = AlphabetSize + 1;
+
+            // Act
+            _ = GenerateAlphabeticRangeSequence('a', lengthOutOfRange);
+        }
+
+        /// <summary>
+        ///     Verifies an out of range exception will be thrown when be thrown when given an lowercase 'z' and a length of two.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeSequence_GivenLowercaseZWithLengthTwo_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int lengthOutOfRange = 2;
+
+            // Act
+            _ = GenerateAlphabeticRangeSequence('z', lengthOutOfRange);
+        }
+
+        /// <summary>
+        ///     Verifies an out of range exception will be thrown when be thrown when given an uppercase 'A' and a length of the alphabet size
+        ///     plus one.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeSequence_GivenUppercaseAWithAlphabetSizePlusOneLength_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int lengthOutOfRange = AlphabetSize + 1;
+
+            // Act
+            _ = GenerateAlphabeticRangeSequence('A', lengthOutOfRange);
+        }
+
+        /// <summary>
+        ///     Verifies an out of range exception will be thrown when be thrown when given an uppercase 'A' and a length of two.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeSequence_GivenUpperCaseZWithLengthTwo_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int lengthOutOfRange = 2;
+
+            // Act
+            _ = GenerateAlphabeticRangeSequence('Z', lengthOutOfRange);
+        }
+
+        /// <summary>
+        ///     Verifies out of range exception will be thrown when given a zero length that an argument.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeSequence_GivenZeroLength_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int zeroLength = 0;
+
+            // Act
+            _ = GenerateAlphabeticRangeSequence('A', zeroLength);
+        }
+
+        /// <summary>
+        ///     Verifies argument exception will be thrown when given an underscore character.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GenerateAlphabeticRangeSequence_GivenUnderscoreCharacter_ThrowsArgumentException()
+        {
+            // Arrange
+            const char underscore = '_';
+
+            // Act
+            _ = GenerateAlphabeticRangeSequence(underscore, 1);
+        }
+
+        /// <summary>
+        ///     Verifies whether given the lower case letter 'a' with size of the alphabet that the text is the lowercase alphabet.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAlphabeticRangeAsText_GivenLowercaseAWithAlphabetSize_ReturnsFullLowercaseAlphabet()
+        {
+            // Arrange
+            const int alphabetSize = 26;
+            var expectedText = new string(LowercaseAlphabet);
+
+            // Act
+            var actualText = GenerateAlphabeticRangeAsText('a', alphabetSize).ToArray();
+
+            // Assert
+            for (var index = 0; index < alphabetSize; index++)
+            {
+                var expectedCharacter = expectedText[index];
+                var actualCharacter = actualText[index];
+
+                Assert.AreEqual(
+                    expectedCharacter,
+                    actualCharacter,
+                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in the text '{actualText}'.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given the upper case letter 'A' with size of the alphabet that the text is the uppercase alphabet.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAlphabeticRangeAsText_GivenUppercaseAWithAlphabetSize_ReturnsFullUppercaseAlphabet()
+        {
+            // Arrange
+            const int alphabetSize = 26;
+            var expectedText = new string(UppercaseAlphabet);
+
+            // Act
+            var actualText = GenerateAlphabeticRangeAsText('A', alphabetSize).ToArray();
+
+            // Assert
+            for (var index = 0; index < alphabetSize; index++)
+            {
+                var expectedCharacter = expectedText[index];
+                var actualCharacter = actualText[index];
+
+                Assert.AreEqual(
+                    expectedCharacter,
+                    actualCharacter,
+                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in the text '{actualText}'.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies an out of range exception will be thrown when be thrown when given an lowercase 'a' and a length the size of the
+        ///     alphabet plus one.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeAsText_GivenLowercaseAWithAlphabetSizePlusOneLength_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int lengthOutOfRange = AlphabetSize + 1;
+
+            // Act
+            _ = GenerateAlphabeticRangeAsText('a', lengthOutOfRange);
+        }
+
+        /// <summary>
+        ///     Verifies an out of range exception will be thrown when be thrown when given an lowercase 'z' and a length of two.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeAsText_GivenLowercaseZWithLengthTwo_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int lengthOutOfRange = 2;
+
+            // Act
+            _ = GenerateAlphabeticRangeAsText('z', lengthOutOfRange);
+        }
+
+        /// <summary>
+        ///     Verifies an out of range exception will be thrown when be thrown when given an uppercase 'A' and a length the size of the
+        ///     alphabet plus one.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeAsText_GivenUppercaseAWithAlphabetSizePlusOneLength_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int lengthOutOfRange = AlphabetSize + 1;
+
+            // Act
+            _ = GenerateAlphabeticRangeAsText('A', lengthOutOfRange);
+        }
+
+        /// <summary>
+        ///     Verifies an out of range exception will be thrown when be thrown when given an uppercase 'A' and a length of two.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeAsText_GivenUpperCaseZWithLengthTwo_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int lengthOutOfRange = 2;
+
+            // Act
+            _ = GenerateAlphabeticRangeAsText('Z', lengthOutOfRange);
+        }
+
+        /// <summary>
+        ///     Verifies out of range exception will be thrown when given a zero length that an argument.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void GenerateAlphabeticRangeAsText_GivenZeroLength_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            const int zeroLength = 0;
+
+            // Act
+            _ = GenerateAlphabeticRangeAsText('A', zeroLength);
+        }
+
+        /// <summary>
+        ///     Verifies argument exception will be thrown when given an underscore character.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GenerateAlphabeticRangeAsText_GivenUnderscoreCharacter_ThrowsArgumentException()
+        {
+            // Arrange
+            const char underscore = '_';
+
+            // Act
+            _ = GenerateAlphabeticRangeAsText(underscore, 1);
         }
     }
 }
