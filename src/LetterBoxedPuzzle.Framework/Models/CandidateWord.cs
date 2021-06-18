@@ -25,6 +25,8 @@ namespace LetterBoxedPuzzle.Framework.Models
         ///     Initializes a new instance of the <see cref="CandidateWord" /> class.
         /// </summary>
         /// <param name="word">The word consisting of only alphabet letters.</param>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
+        /// <exception cref="ArgumentException">Thrown when given an empty string or word with non-alphabet letters.</exception>
         public CandidateWord(string word)
         {
             _ = word ?? throw new ArgumentNullException(nameof(word));
@@ -86,8 +88,17 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <returns>
         ///     <see langword="true" /> if all the letters of the candidate word are contained in the given letters, or <see langword="false" /> otherwise.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
+        /// <exception cref="ArgumentException">Thrown when given one or more non-alphabet letters.</exception>
         public bool IsContainedIn(string candidateLetters)
         {
+            _ = candidateLetters ?? throw new ArgumentNullException(nameof(candidateLetters));
+
+            if (!candidateLetters.All(IsAlphabetLetter))
+            {
+                throw new ArgumentException($"Given candidate letters {candidateLetters} are not all letters of the alphabet.");
+            }
+
             return (this.AlphabetBitMask & (AlphabetConstants.AlphabetBitMaskWithAllBitsSet ^ GetAlphabetBitMask(candidateLetters))) == 0;
         }
     }

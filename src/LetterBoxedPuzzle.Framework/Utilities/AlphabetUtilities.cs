@@ -8,6 +8,7 @@
 namespace LetterBoxedPuzzle.Framework.Utilities
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using LetterBoxedPuzzle.Framework.Constants;
@@ -22,40 +23,30 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <summary>
         ///     The bit-wise enumerated letters of the alphabet indexed by their ASCII values.
         /// </summary>
-        internal static readonly AlphabetBitMask[] AlphabetBitMaskByAsciiValues = new AlphabetBitMask[byte.MaxValue + 1];
+        internal static readonly AlphabetBitMask[] AlphabetBitMaskByAsciiValues = Enumerable.Range(1, AlphabetConstants.EnglishAlphabetSize)
+            .Aggregate(
+                new AlphabetBitMask[byte.MaxValue],
+                (current, index) =>
+                {
+                    var upperCaseLetterAsciiValue = GetExtendedAsciiValue(AlphabetConstants.UpperCaseA) + index - 1;
+                    var lowerCaseLetterAsciiValue = GetExtendedAsciiValue(AlphabetConstants.LowerCaseA) + index - 1;
+
+                    current[upperCaseLetterAsciiValue] = current[lowerCaseLetterAsciiValue] = index.ToAlphabetBitMask();
+
+                    return current;
+                }).ToArray();
 
         /// <summary>
-        ///     Initializes static members of the <see cref="AlphabetUtilities" /> class.
+        ///     Lookup Boolean dictionary keyed by characters to determine whether a given character is a letter of the alphabet.
         /// </summary>
-        static AlphabetUtilities()
-        {
-            for (var alphabeticIndex = 1; alphabeticIndex <= AlphabetConstants.EnglishAlphabetSize; alphabeticIndex++)
-            {
-                var upperCaseLetterAsciiValue = GetExtendedAsciiValue(AlphabetConstants.UpperCaseA) + alphabeticIndex - 1;
-                var lowerCaseLetterAsciiValue = GetExtendedAsciiValue(AlphabetConstants.LowerCaseA) + alphabeticIndex - 1;
-
-                AlphabetBitMaskByAsciiValues[upperCaseLetterAsciiValue] =
-                    AlphabetBitMaskByAsciiValues[lowerCaseLetterAsciiValue] = alphabeticIndex.ToAlphabetBitMask();
-            }
-        }
-
-        /// <summary>
-        ///     Determine whether the given character is an alphabet letter, which is either between 'a' and 'z' or between 'A' and 'Z'.
-        /// </summary>
-        /// <param name="character">The character.</param>
-        /// <returns>
-        ///     <see langword="true" /> if given character is an alphabet letter, or <see langword="false" /> otherwise.
-        /// </returns>
-        public static bool IsAlphabetLetter(char character)
-        {
-            var isAtLeastLowerCaseA = character.CompareTo(AlphabetConstants.LowerCaseA) >= 0;
-            var isAtLeastUpperCaseA = character.CompareTo(AlphabetConstants.UpperCaseA) >= 0;
-
-            var isAtMostLowerCaseZ = character.CompareTo(AlphabetConstants.LowerCaseZ) <= 0;
-            var isAtMostUpperCaseZ = character.CompareTo(AlphabetConstants.UpperCaseZ) <= 0;
-
-            return (isAtLeastLowerCaseA && isAtMostLowerCaseZ) || (isAtLeastUpperCaseA && isAtMostUpperCaseZ);
-        }
+        private static readonly Dictionary<char, bool> IsAlphabetLetterByLetter = Enumerable.Range(0, char.MaxValue).Select(x => (char)x)
+            .Aggregate(
+                new Dictionary<char, bool>(),
+                (current, character) =>
+                {
+                    current[character] = IsAlphabetLetterSlowMethod(character);
+                    return current;
+                });
 
         /// <summary>
         ///     Gets the extended ASCII byte value for the given letter.
@@ -71,7 +62,9 @@ namespace LetterBoxedPuzzle.Framework.Utilities
             }
             catch (OverflowException overflowException)
             {
-                throw new OverflowException("Given unicode character '{letter}' is outside of ASCII range.", overflowException);
+                throw new OverflowException(
+                    $"Given unicode character '{letter}' cannot be outside of the extended ASCII range.",
+                    overflowException);
             }
         }
 
@@ -80,8 +73,14 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </summary>
         /// <param name="alphabetLetter">The alphabet letter.</param>
         /// <returns>The bit mask of the given letter.</returns>
+        /// <exception cref="ArgumentException">Thrown when given a character not in the alphabet.</exception>
         public static AlphabetBitMask GetAlphabetBitMask(char alphabetLetter)
         {
+            if (!IsAlphabetLetterSlowMethod(alphabetLetter))
+            {
+                throw new ArgumentException($"Given character {alphabetLetter} must be an alphabet letter.");
+            }
+
             return AlphabetBitMaskByAsciiValues[GetExtendedAsciiValue(alphabetLetter)];
         }
 
@@ -90,8 +89,12 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </summary>
         /// <param name="alphabetLetters">The alphabet letters.</param>
         /// <returns>The bit mask of the given letter.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
+        /// <exception cref="ArgumentException">Thrown when given a non-alphabet letter.</exception>
         public static AlphabetBitMask GetAlphabetBitMask(string alphabetLetters)
         {
+            _ = alphabetLetters ?? throw new ArgumentNullException(nameof(alphabetLetters));
+
             return alphabetLetters.Aggregate(AlphabetBitMask.None, (current, alphabetLetter) => current | GetAlphabetBitMask(alphabetLetter));
         }
 
@@ -107,8 +110,15 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <param name="startingLetter">The starting letter.</param>
         /// <param name="length">The length of the range.</param>
         /// <returns>The specified alphabetic range as a <see langword="char" /> array.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when given a length of zero or less.</exception>
+        /// <exception cref="ArgumentException">Thrown when given a starting letter that is not in the alphabet.</exception>
         public static char[] GenerateAlphabeticRangeSequence(char startingLetter, int length)
         {
+            if (!IsAlphabetLetterSlowMethod(startingLetter))
+            {
+                throw new ArgumentException($"Given starting letter {startingLetter} must be a letter of the alphabet.");
+            }
+
             return Enumerable.Range(startingLetter, length).Select(x => (char)x).ToArray();
         }
 
@@ -124,6 +134,8 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <param name="startingLetter">The starting letter.</param>
         /// <param name="length">The length of the range.</param>
         /// <returns>Concatenated <see langword="string" /> of the specified alphabetic range.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when given a length of zero or less.</exception>
+        /// <exception cref="ArgumentException">Thrown when given a starting letter that is not in the alphabet.</exception>
         public static string GenerateAlphabeticRangeAsText(char startingLetter, int length)
         {
             return new string(GenerateAlphabeticRangeSequence(startingLetter, length));
@@ -134,11 +146,52 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns>All (<i>n</i> choose 2 + <i>n</i>) two-letter pairs consisting of letters of the given text of length <i>n</i>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
+        /// <exception cref="ArgumentException">Thrown when given text contains one or more characters not in the alphabet.</exception>
         public static string[] GenerateAllDistinctLetterPairs(string text)
         {
+            _ = text ?? throw new ArgumentNullException(nameof(text));
+
+            if (!text.All(IsAlphabetLetter))
+            {
+                throw new ArgumentException($"Given '{text}' can only contain letters in the alphabet.");
+            }
+
             return (from firstLetter in text
                     from secondLetter in text
                     select firstLetter + secondLetter.ToString()).Distinct().ToArray();
+        }
+
+        /// <summary>
+        ///     Using a fast lookup method, determine whether the given character is an alphabet letter, which is either between 'a' and 'z'
+        ///     or between 'A' and 'Z'.
+        /// </summary>
+        /// <param name="character">The character.</param>
+        /// <returns>
+        ///     <see langword="true" /> if given character is an alphabet letter, or <see langword="false" /> otherwise.
+        /// </returns>
+        public static bool IsAlphabetLetter(char character)
+        {
+            return IsAlphabetLetterByLetter[character];
+        }
+
+        /// <summary>
+        ///     Using a slow comparison method, determine whether the given character is an alphabet letter, which is either between 'a' and 'z'
+        ///     or between 'A' and 'Z'.
+        /// </summary>
+        /// <param name="character">The character.</param>
+        /// <returns>
+        ///     <see langword="true" /> if given character is an alphabet letter, or <see langword="false" /> otherwise.
+        /// </returns>
+        private static bool IsAlphabetLetterSlowMethod(char character)
+        {
+            var isAtLeastLowerCaseA = character.CompareTo(AlphabetConstants.LowerCaseA) >= 0;
+            var isAtLeastUpperCaseA = character.CompareTo(AlphabetConstants.UpperCaseA) >= 0;
+
+            var isAtMostLowerCaseZ = character.CompareTo(AlphabetConstants.LowerCaseZ) <= 0;
+            var isAtMostUpperCaseZ = character.CompareTo(AlphabetConstants.UpperCaseZ) <= 0;
+
+            return (isAtLeastLowerCaseA && isAtMostLowerCaseZ) || (isAtLeastUpperCaseA && isAtMostUpperCaseZ);
         }
     }
 }
