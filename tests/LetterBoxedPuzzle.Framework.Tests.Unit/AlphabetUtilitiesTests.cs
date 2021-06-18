@@ -7,8 +7,11 @@
 
 namespace LetterBoxedPuzzle.Framework.Tests.Unit
 {
-    using System.Collections.Generic;
+    using System;
     using System.Linq;
+
+    using LetterBoxedPuzzle.Framework.Constants;
+    using LetterBoxedPuzzle.Framework.Enums;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -38,6 +41,15 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 'U', 'V', 'W', 'X', 'Y', 'Z',
             };
 
+        public static readonly AlphabetBitMask[] AlphabetBitMasks =
+            {
+                AlphabetBitMask.A, AlphabetBitMask.B, AlphabetBitMask.C, AlphabetBitMask.D, AlphabetBitMask.E, AlphabetBitMask.F,
+                AlphabetBitMask.G, AlphabetBitMask.H, AlphabetBitMask.I, AlphabetBitMask.J, AlphabetBitMask.K, AlphabetBitMask.L,
+                AlphabetBitMask.M, AlphabetBitMask.N, AlphabetBitMask.O, AlphabetBitMask.P, AlphabetBitMask.Q, AlphabetBitMask.R,
+                AlphabetBitMask.S, AlphabetBitMask.T, AlphabetBitMask.U, AlphabetBitMask.V, AlphabetBitMask.W, AlphabetBitMask.X,
+                AlphabetBitMask.Y, AlphabetBitMask.Z,
+            };
+
         /// <summary>
         ///     Verifies whether given a lowercase or uppercase letter of the alphabet is determined to be a valid alphabet letter.
         /// </summary>
@@ -45,21 +57,15 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void IsAlphabetLetter_GivenLowercaseOrUppercaseAlphabetLetter_IsTrue()
         {
             // Arrange
-            var alphabetLetters = LowerCaseAlphabet.Union(UpperCaseAlphabet);
+            var alphabetLetters = LowerCaseAlphabet.Union(UpperCaseAlphabet).ToArray();
 
             // Act
-            var isAlphabetLetterByCharacter = alphabetLetters.Aggregate(
-                new Dictionary<char, bool>(),
-                (current, character) =>
-                {
-                    current[character] = IsAlphabetLetter(character);
-                    return current;
-                });
+            var actualIsAlphabetLetterValues = alphabetLetters.Select(character => IsAlphabetLetter(character)).ToArray();
 
             // Assert
-            foreach (var character in isAlphabetLetterByCharacter.Keys.OrderBy(x => x))
+            for (var index = 0; index < alphabetLetters.Length; index++)
             {
-                Assert.IsTrue(isAlphabetLetterByCharacter[character], $"Expected '{character}' to be an alphabet letter.");
+                Assert.IsTrue(actualIsAlphabetLetterValues[index], $"Expected '{alphabetLetters[index]}' to be an alphabet letter.");
             }
         }
 
@@ -71,22 +77,57 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var allCharacters = Enumerable.Range(0, char.MaxValue).Select(x => (char)x).ToArray();
-            var nonAlphabetLetters = allCharacters.Except(LowerCaseAlphabet).Except(UpperCaseAlphabet);
+            var nonAlphabetLetters = allCharacters.Except(LowerCaseAlphabet).Except(UpperCaseAlphabet).ToArray();
 
             // Act
-            var isAlphabetLetterByCharacter = nonAlphabetLetters.Aggregate(
-                new Dictionary<char, bool>(),
-                (current, character) =>
-                {
-                    current[character] = IsAlphabetLetter(character);
-                    return current;
-                });
+            var actualIsAlphabetLetterValues = nonAlphabetLetters.Select(character => IsAlphabetLetter(character)).ToArray();
 
             // Assert
-            foreach (var character in isAlphabetLetterByCharacter.Keys.OrderBy(x => x))
+            for (var index = 0; index < nonAlphabetLetters.Length; index++)
             {
-                Assert.IsFalse(isAlphabetLetterByCharacter[character], $"Expected '{character}' not to be an alphabet letter.");
+                Assert.IsFalse(actualIsAlphabetLetterValues[index], $"Expected '{nonAlphabetLetters[index]}' not to be an alphabet letter.");
             }
+        }
+
+        /// <summary>
+        ///     Verifies whether given an extended ASCII character that the correct extended ASCII value is returned.
+        /// </summary>
+        [TestMethod]
+        public void GetExtendedAsciiValue_GivenExtendedAsciiCharacter_ReturnsCorrectExtendedAsciiValue()
+        {
+            // Arrange
+            var extendedAsciiCharacters = Enumerable.Range(0, byte.MaxValue).Select(x => (char)x).ToArray();
+            var expectedExtendedAsciiValues = extendedAsciiCharacters.Select(character => (byte)character).ToArray();
+
+            // Act
+            var actualExtendedAsciiValues = extendedAsciiCharacters.Select(character => GetExtendedAsciiValue(character)).ToArray();
+
+            // Assert
+            for (var index = 0; index < AlphabetConstants.EnglishAlphabetSize; index++)
+            {
+                var character = extendedAsciiCharacters[index];
+                var expectedValue = expectedExtendedAsciiValues[index];
+                var actualValue = actualExtendedAsciiValues[index];
+
+                Assert.AreEqual(
+                    expectedValue,
+                    actualValue,
+                    $"Expected the extended ASCII value of '{character}' to be '{expectedValue} and not '{actualValue}'.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given the first non-extended ASCII unicode character that an overflow exception is thrown.
+        /// </summary>
+        [ExpectedException(typeof(OverflowException))]
+        [TestMethod]
+        public void GetExtendedAsciiValue_GivenNonExtendedAsciiUnicodeCharacter_ThrowsOverflowException()
+        {
+            // Arrange
+            const char firstNonExtendedAsciiCharacter = (char)(byte.MaxValue + 1);
+
+            // Act
+            _ = GetExtendedAsciiValue(firstNonExtendedAsciiCharacter);
         }
     }
 }
