@@ -51,9 +51,24 @@ namespace LetterBoxedPuzzle.Framework.Constants
         public static readonly string FullLowercaseAlphabetText = GenerateAlphabeticRangeAsText(LowerCaseA, EnglishAlphabetSize);
 
         /// <summary>
+        ///     Full lowercase alphabet as a sequence of characters from 'a' to 'z'.
+        /// </summary>
+        public static readonly char[] FullLowercaseAlphabetSequence = GenerateAlphabeticRangeSequence(LowerCaseA, EnglishAlphabetSize);
+
+        /// <summary>
+        ///     Full uppercase alphabet as a sequence of characters from 'A' to 'Z'.
+        /// </summary>
+        public static readonly char[] FullUppercaseAlphabetSequence = GenerateAlphabeticRangeSequence(UpperCaseA, EnglishAlphabetSize);
+
+        /// <summary>
+        ///     Full alphabet as a sequence of characters from 'a' to 'z' and from 'A' to 'Z'.
+        /// </summary>
+        public static readonly char[] FullAlphabetSequence = FullLowercaseAlphabetSequence.Union(FullUppercaseAlphabetSequence).ToArray();
+
+        /// <summary>
         ///     Lazy initializer of the alphabet bit mask set with all bits set.
         /// </summary>
-        public static readonly Lazy<AlphabetBitMask> LazyAlphabetBitMaskWithAllBitsSet = new(CalculateAlphabetBitMaskWithAllBitsSet);
+        public static readonly Lazy<AlphabetBitMask> LazyAlphabetBitMaskWithAllBitsSet = new (CalculateAlphabetBitMaskWithAllBitsSet);
 
         /// <summary>
         ///     Gets all 26 letters of the bit-wise enumerated alphabet from <see cref="Enums.AlphabetBitMask.A" /> to <see cref="Enums.AlphabetBitMask.Z" />
