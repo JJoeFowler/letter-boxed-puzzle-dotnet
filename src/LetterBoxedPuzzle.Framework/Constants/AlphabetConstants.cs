@@ -46,26 +46,6 @@ namespace LetterBoxedPuzzle.Framework.Constants
         public const char UpperCaseZ = 'Z';
 
         /// <summary>
-        ///     ASCII value of the upper case 'A'.
-        /// </summary>
-        public static readonly byte AsciiValueOfUpperCaseA = GetAsciiValue(UpperCaseA);
-
-        /// <summary>
-        ///     ASCII value of the lower case 'a'.
-        /// </summary>
-        public static readonly byte AsciiValueOfLowerCaseA = GetAsciiValue(LowerCaseA);
-
-        /// <summary>
-        ///     ASCII value of the upper case 'Z'.
-        /// </summary>
-        public static readonly byte AsciiValueOfUpperCaseZ = GetAsciiValue(UpperCaseZ);
-
-        /// <summary>
-        ///     ASCII value of the lower case 'z'.
-        /// </summary>
-        public static readonly byte AsciiValueOfLowerCaseZ = GetAsciiValue(LowerCaseZ);
-
-        /// <summary>
         ///     Full lowercase alphabet as a string from 'a' to 'z', which is "abcdefghijklmnopqrstuvwxyz".
         /// </summary>
         public static readonly string FullLowercaseAlphabetText = GenerateAlphabeticRangeAsText(LowerCaseA, EnglishAlphabetSize);
