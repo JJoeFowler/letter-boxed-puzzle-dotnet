@@ -8,6 +8,7 @@
 namespace LetterBoxedPuzzle.Framework.Tests.Unit
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using LetterBoxedPuzzle.Framework.Constants;
@@ -542,6 +543,74 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             // Act
             _ = GenerateAlphabeticRangeAsText(underscore, 1);
+        }
+
+        /// <summary>
+        ///     Verifies for each pair of an alphabet letter and its maximum length that the generated alphabet range as text has maximum length.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAlphabeticRangeAsText_GivenAlphabetLettersWithMaximumValidLengths_ReturnsTextOfMaximumLengths()
+        {
+            // Arrange
+            var maximumLowercaseLengthPairs = LowercaseAlphabet.Select(character => (c: character, 'a' + AlphabetSize - character));
+            var maximumUppercaseLengthPairs = UppercaseAlphabet.Select(character => (c: character, 'A' + AlphabetSize - character));
+
+            (char character, int length)[] maximumAlphabetLetterLengthPairs =
+                maximumLowercaseLengthPairs.Union(maximumUppercaseLengthPairs).ToArray();
+
+            var expectedLengths = maximumAlphabetLetterLengthPairs.Select(pair => pair.length).ToArray();
+
+            // Act
+            var actualTexts = maximumAlphabetLetterLengthPairs.Select(pair => GenerateAlphabeticRangeAsText(pair.character, pair.length))
+                .ToArray();
+
+            // Assert
+            for (var index = 0; index < 2 * AlphabetSize; index++)
+            {
+                var (character, _) = maximumAlphabetLetterLengthPairs[index];
+                var expectedLength = expectedLengths[index];
+                var actualLength = actualTexts[index].Length;
+
+                Assert.AreEqual(
+                    expectedLength,
+                    actualLength,
+                    $"Expected length {expectedLength} does not match generated text length '{actualLength}' for alphabet letter '{character}'.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies an out of range exception will be thrown when be thrown when given an lowercase 'a' and a length the size of the
+        ///     alphabet plus one.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAlphabeticRangeAsText_GivenAlphabetLetterWithInvalidLengthOutOfRange_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            var zeroLengthPair = new[] { ('A', 0) };
+            var invalidLowercaseLengthPairs = LowercaseAlphabet.Select(c => (c, 'a' + AlphabetSize + 1 - c)).ToArray();
+            var invalidUppercaseLengthPairs = UppercaseAlphabet.Select(c => (c, 'A' + AlphabetSize + 1 - c)).ToArray();
+
+            IEnumerable<(char character, int lengh)> invalidAlphabetLengthPairs =
+                zeroLengthPair.Union(invalidLowercaseLengthPairs).Union(invalidUppercaseLengthPairs);
+
+            var expectedExceptionType = typeof(ArgumentOutOfRangeException);
+
+            // Act and assert
+            foreach (var (character, length) in invalidAlphabetLengthPairs)
+            {
+                try
+                {
+                    var text = GenerateAlphabeticRangeAsText(character, length);
+                    Assert.IsNotNull(text, $"Did not throw an as {expectedExceptionType} expected for '{character}' with length {length}.");
+                }
+                catch (Exception exception)
+                {
+                    var exceptionType = exception.GetType();
+                    Assert.IsTrue(
+                        exceptionType == typeof(ArgumentOutOfRangeException),
+                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for '{character}' with length {length}.");
+                }
+            }
         }
     }
 }
