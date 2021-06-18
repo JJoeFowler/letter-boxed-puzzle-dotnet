@@ -8,6 +8,7 @@
 namespace LetterBoxedPuzzle.Framework.Tests.Unit
 {
     using System;
+    using System.Linq;
 
     using LetterBoxedPuzzle.Framework.Enums;
     using LetterBoxedPuzzle.Framework.Models;
@@ -33,6 +34,11 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         private const string AToZTestWord = "TheQuickBrownFoxJumpsOverTheLazyDog";
 
         /// <summary>
+        ///     Name of animals as test words.
+        /// </summary>
+        private static readonly string[] AnimalTestWords = new[] { "Aardvark", "BEAR", "cat", "doG", "elephant", "FoX", "GORILLA", "harE", "Zebra" };
+
+        /// <summary>
         ///     Candidate word initialized with the simple test word.
         /// </summary>
         private static readonly CandidateWord SimpleCandidateWord = new (SimpleTestWord);
@@ -43,17 +49,61 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         private static readonly CandidateWord AToZCandidateWord = new (AToZTestWord);
 
         /// <summary>
-        ///     Checks whether the word of the A-to-Z candidate word is in lowercased.
+        ///     Checks whether the first letter of the animal tests word is indeed their first letter.
         /// </summary>
         [TestMethod]
-        public void Word_GivenAToZCandidateWord_IsLowercased()
+        public void FirstLetter_GivenAnimalTestWord_IsFirstLetterOfAnimal()
+        {
+            // Arrange
+            // ReSharper disable once StringLiteralTypo
+            var expectedFirstLetters = new[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'z' };
+
+            // Act
+            var actualFirstLetters = AnimalTestWords.Select(animal => new CandidateWord(animal).FirstLetter).ToArray();
+
+            // Assert
+            for (var index = 0; index < expectedFirstLetters.Length; index++)
+            {
+                var actualFirstLetter = actualFirstLetters[index];
+                var expectedFirstLetter = expectedFirstLetters[index];
+                Assert.AreEqual(expectedFirstLetter, actualFirstLetter, $"The first letter of '{AnimalTestWords[index]}' is not '{expectedFirstLetter}'.");
+            }
+        }
+
+        /// <summary>
+        ///     Checks whether the last letter of the animal tests word is indeed their last letter.
+        /// </summary>
+        [TestMethod]
+        public void LastLetter_GivenAnimalTestWord_IsLastLetterOfAnimal()
+        {
+            // Arrange
+            // ReSharper disable once StringLiteralTypo
+            var expectedLastLetters = new[] { 'k', 'r', 't', 'g', 't', 'x', 'a', 'e', 'a' };
+
+            // Act
+            var actualLastLetters = AnimalTestWords.Select(animal => new CandidateWord(animal).LastLetter).ToArray();
+
+            // Assert
+            for (var index = 0; index < expectedLastLetters.Length; index++)
+            {
+                var actualLastLetter = actualLastLetters[index];
+                var expectedLastLetter = expectedLastLetters[index];
+                Assert.AreEqual(expectedLastLetter, actualLastLetter, $"The last letter of '{AnimalTestWords[index]}' is not '{expectedLastLetter}'.");
+            }
+        }
+
+        /// <summary>
+        ///     Checks whether the lowercase word of the A-to-Z candidate word is indeed lowercased.
+        /// </summary>
+        [TestMethod]
+        public void LowercaseWord_GivenAToZCandidateWord_IsLowercased()
         {
             // Arrange
             // ReSharper disable once StringLiteralTypo
             const string expectedWordLowercased = "thequickbrownfoxjumpsoverthelazydog";
 
             // Act
-            var actualWordLowercased = AToZCandidateWord.CaseInsensitiveWord;
+            var actualWordLowercased = AToZCandidateWord.LowercaseWord;
 
             // Assert
             Assert.AreEqual(expectedWordLowercased, actualWordLowercased);
@@ -175,7 +225,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             for (var index = 0; index < EnglishAlphabetSize; index++)
             {
                 var allCandidateLettersButOne = allCandidateLettersButOneArray[index];
-                var allCandidateLettersButOneText = allCandidateLettersButOne.CaseInsensitiveWord;
+                var allCandidateLettersButOneText = allCandidateLettersButOne.LowercaseWord;
                 var missingLetter = AlphabetRangeTextFromAToZ[index];
 
                 var messageEnd = $"'{allCandidateLettersButOneText}' missing the letter '{missingLetter}'";
