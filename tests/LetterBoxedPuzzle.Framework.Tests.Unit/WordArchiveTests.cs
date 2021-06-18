@@ -32,7 +32,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         /// <summary>
         ///     Checks whether the word archive initialized by all legal words contains the test word.
         /// </summary>
-        [TestMethod]
+        [Ignore]
         public void WordArchive_GivenLegalWordsText_ContainsTestWord()
         {
             var wordArchive = new WordArchive(WordConstants.AllLegalWordsText);
