@@ -44,7 +44,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
                 new Dictionary<char, bool>(),
                 (current, character) =>
                 {
-                    current[character] = AlphabetConstants.FullAlphabetSequence.Contains(character);
+                    current[character] = IsAlphabetLetterSlowMethod(character);
                     return current;
                 });
 
@@ -89,7 +89,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <exception cref="ArgumentException">Thrown when given a character not in the alphabet.</exception>
         public static AlphabetBitMask GetAlphabetBitMask(char alphabetLetter)
         {
-            if (!IsAlphabetLetter(alphabetLetter))
+            if (!IsAlphabetLetterSlowMethod(alphabetLetter))
             {
                 throw new ArgumentException($"Given character {alphabetLetter} must be an alphabet letter.");
             }
@@ -127,7 +127,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <exception cref="ArgumentException">Thrown when given a starting letter that is not in the alphabet.</exception>
         public static char[] GenerateAlphabeticRangeSequence(char startingLetter, int length)
         {
-            if (!IsAlphabetLetter(startingLetter))
+            if (!IsAlphabetLetterSlowMethod(startingLetter))
             {
                 throw new ArgumentException($"Given starting letter {startingLetter} must be a letter of the alphabet.");
             }
@@ -165,7 +165,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         {
             _ = text ?? throw new ArgumentNullException(nameof(text));
 
-            if (!text.All(IsAlphabetLetter))
+            if (!text.All(IsAlphabetLetterSlowMethod))
             {
                 throw new ArgumentException($"Given '{text}' can only contain letters in the alphabet.");
             }
@@ -173,6 +173,25 @@ namespace LetterBoxedPuzzle.Framework.Utilities
             return (from firstLetter in text
                     from secondLetter in text
                     select firstLetter + secondLetter.ToString()).Distinct().ToArray();
+        }
+
+        /// <summary>
+        ///     Using a slow comparison method, determine whether the given character is an alphabet letter, which is either between 'a' and 'z'
+        ///     or between 'A' and 'Z'.
+        /// </summary>
+        /// <param name="character">The character.</param>
+        /// <returns>
+        ///     <see langword="true" /> if given character is an alphabet letter, or <see langword="false" /> otherwise.
+        /// </returns>
+        private static bool IsAlphabetLetterSlowMethod(char character)
+        {
+            var isAtLeastLowerCaseA = character.CompareTo(AlphabetConstants.LowerCaseA) >= 0;
+            var isAtLeastUpperCaseA = character.CompareTo(AlphabetConstants.UpperCaseA) >= 0;
+
+            var isAtMostLowerCaseZ = character.CompareTo(AlphabetConstants.LowerCaseZ) <= 0;
+            var isAtMostUpperCaseZ = character.CompareTo(AlphabetConstants.UpperCaseZ) <= 0;
+
+            return (isAtLeastLowerCaseA && isAtMostLowerCaseZ) || (isAtLeastUpperCaseA && isAtMostUpperCaseZ);
         }
     }
 }

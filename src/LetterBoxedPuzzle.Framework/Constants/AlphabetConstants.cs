@@ -36,6 +36,16 @@ namespace LetterBoxedPuzzle.Framework.Constants
         public const char UpperCaseA = 'A';
 
         /// <summary>
+        ///     The lower case letter 'z'.
+        /// </summary>
+        public const char LowerCaseZ = 'z';
+
+        /// <summary>
+        ///     The upper case letter 'Z'.
+        /// </summary>
+        public const char UpperCaseZ = 'Z';
+
+        /// <summary>
         ///     Full lowercase alphabet as a string from 'a' to 'z', which is "abcdefghijklmnopqrstuvwxyz".
         /// </summary>
         public static readonly string FullLowercaseAlphabetText = GenerateAlphabeticRangeAsText(LowerCaseA, EnglishAlphabetSize);
