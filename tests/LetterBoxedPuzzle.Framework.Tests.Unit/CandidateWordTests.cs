@@ -17,6 +17,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
     using static Constants.AlphabetConstants;
 
+    using static TestCommonConstants;
+
     /// <summary>
     ///     Unit tests for the candidate word class.
     /// </summary>
@@ -24,24 +26,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     public class CandidateWordTests
     {
         /// <summary>
-        ///     Simple test word.
-        /// </summary>
-        private const string SimpleTestWord = nameof(SimpleTestWord);
-
-        /// <summary>
-        ///     A-to-Z test word.
-        /// </summary>
-        private const string AToZTestWord = "TheQuickBrownFoxJumpsOverTheLazyDog";
-
-        /// <summary>
-        ///     Name of animals as test words.
-        /// </summary>
-        private static readonly string[] AnimalTestWords = { "Aardvark", "BEAR", "cat", "doG", "elephant", "FoX", "GORILLA", "harE", "Zebra" };
-
-        /// <summary>
         ///     Candidate word initialized with the simple test word.
         /// </summary>
-        private static readonly CandidateWord SimpleCandidateWord = new(SimpleTestWord);
+        private static readonly CandidateWord SimpleCandidateWord = new (SimpleTestWord);
 
         /// <summary>
         ///     Candidate word initialized with the A-to-Z test word.
@@ -181,7 +168,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             var expectedAsciiSequence = new byte[]
                 {
                     116, 104, 101, 113, 117, 105, 99, 107, 98, 114, 111, 119, 110, 102, 111, 120, 106, 117, 109, 112,
-                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103
+                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103,
                 };
 
             // Act
@@ -208,9 +195,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void AlphabetBitMask_GivenSimpleCandidateWord_IsBitMaskOfSimpleTestWordLettersORedTogether()
         {
             // Arrange
-            const AlphabetBitMask expectedAlphabetBitMask = AlphabetBitMask.S | AlphabetBitMask.I | AlphabetBitMask.M | AlphabetBitMask.P
-                | AlphabetBitMask.L | AlphabetBitMask.E | AlphabetBitMask.T | AlphabetBitMask.W | AlphabetBitMask.O | AlphabetBitMask.R
-                | AlphabetBitMask.D;
+            const AlphabetBitMask expectedAlphabetBitMask = SimpleTestWordAlphabetBitMask;
 
             // Act
             var actualAlphabetBitMask = SimpleCandidateWord.AlphabetBitMask;

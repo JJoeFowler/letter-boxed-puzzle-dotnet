@@ -15,6 +15,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using static TestCommonConstants;
+
     using static Utilities.AlphabetUtilities;
 
     /// <summary>
@@ -23,33 +25,6 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     [TestClass]
     public class AlphabetUtilitiesTests
     {
-        /// <summary>
-        ///     The characters of the lowercase alphabet from 'a' to 'z'.
-        /// </summary>
-        public static readonly char[] LowerCaseAlphabet =
-            {
-                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-                'u', 'v', 'w', 'x', 'y', 'z',
-            };
-
-        /// <summary>
-        ///     The characters of the uppercase alphabet from 'A' to 'Z'.
-        /// </summary>
-        public static readonly char[] UpperCaseAlphabet =
-            {
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-                'U', 'V', 'W', 'X', 'Y', 'Z',
-            };
-
-        public static readonly AlphabetBitMask[] AlphabetBitMasks =
-            {
-                AlphabetBitMask.A, AlphabetBitMask.B, AlphabetBitMask.C, AlphabetBitMask.D, AlphabetBitMask.E, AlphabetBitMask.F,
-                AlphabetBitMask.G, AlphabetBitMask.H, AlphabetBitMask.I, AlphabetBitMask.J, AlphabetBitMask.K, AlphabetBitMask.L,
-                AlphabetBitMask.M, AlphabetBitMask.N, AlphabetBitMask.O, AlphabetBitMask.P, AlphabetBitMask.Q, AlphabetBitMask.R,
-                AlphabetBitMask.S, AlphabetBitMask.T, AlphabetBitMask.U, AlphabetBitMask.V, AlphabetBitMask.W, AlphabetBitMask.X,
-                AlphabetBitMask.Y, AlphabetBitMask.Z,
-            };
-
         /// <summary>
         ///     Verifies whether given a lowercase or uppercase letter of the alphabet is determined to be a valid alphabet letter.
         /// </summary>
@@ -128,6 +103,80 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             // Act
             _ = GetExtendedAsciiValue(firstNonExtendedAsciiCharacter);
+        }
+
+        /// <summary>
+        ///     Verifies whether given lowercase alphabet letters that the corresponding alphabet bit mask is returned.
+        /// </summary>
+        [TestMethod]
+        public void GetAlphabetBitMask_GivenLowercaseAlphabetLetter_ReturnsCorrespondingAlphabetBitMask()
+        {
+            // Arrange
+            var expectedAlphabetBitMasks = AllSingleLetterAlphabetBitMasks;
+
+            // Act
+            var actualAlphabetBitMasks = LowerCaseAlphabet.Select(character => GetAlphabetBitMask(character)).ToArray();
+
+            // Assert
+            for (var index = 0; index < AlphabetConstants.EnglishAlphabetSize; index++)
+            {
+                var character = LowerCaseAlphabet[index];
+                var expectedBitMask = expectedAlphabetBitMasks[index];
+                var actualBitMask = actualAlphabetBitMasks[index];
+
+                Assert.AreEqual(
+                    expectedBitMask,
+                    actualBitMask,
+                    $"Expected the alphabet bit mask for '{character} to be '{expectedBitMask}' instead of '{actualBitMask}'.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given the empty that the default alphabet bit mask <see cref="AlphabetBitMask.None"/> is returned.
+        /// </summary>
+        [TestMethod]
+        public void GetAlphabetBitMask_GivenEmptyString_ReturnsNoneAlphabetBitMask()
+        {
+            // Arrange
+            const AlphabetBitMask expectedAlphabetBitMask = AlphabetBitMask.None;
+
+            // Act
+            var actualAlphabetBitMask = GetAlphabetBitMask(string.Empty);
+
+            // Assert
+            Assert.AreEqual(expectedAlphabetBitMask, actualAlphabetBitMask);
+        }
+
+        /// <summary>
+        ///     Verifies whether given a-to-z test word that the alphabet bit mask with all bits set is returned.
+        /// </summary>
+        [TestMethod]
+        public void GetAlphabetBitMask_GivenAToZTestWord_ReturnsAlphabetBitMaskWithAllBitsSet()
+        {
+            // Arrange
+            var expectedAlphabetBitMask = AlphabetConstants.AlphabetBitMaskWithAllBitsSet;
+
+            // Act
+            var actualAlphabetBitMask = GetAlphabetBitMask(AToZTestWord);
+
+            // Assert
+            Assert.AreEqual(expectedAlphabetBitMask, actualAlphabetBitMask);
+        }
+
+        /// <summary>
+        ///     Verifies whether given simple test word that the corresponding alphabet bit mask with for all its letters is returned.
+        /// </summary>
+        [TestMethod]
+        public void GetAlphabetBitMask_GivenSimpleTestWord_ReturnsCorrespondingAlphabetBitMask()
+        {
+            // Arrange
+            const AlphabetBitMask expectedAlphabetBitMask = SimpleTestWordAlphabetBitMask;
+
+            // Act
+            var actualAlphabetBitMask = GetAlphabetBitMask(SimpleTestWord);
+
+            // Assert
+            Assert.AreEqual(expectedAlphabetBitMask, actualAlphabetBitMask);
         }
     }
 }

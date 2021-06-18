@@ -8,3 +8,6 @@ csharp_using_directive_placement = inside_namespace
 
 # SA1135: Using directives should be qualified
 dotnet_diagnostic.SA1135.severity = silent
+
+# SA1000: Keywords should be spaced correctly
+dotnet_diagnostic.SA1000.severity = suggestion
