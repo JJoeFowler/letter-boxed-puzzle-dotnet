@@ -59,7 +59,7 @@ namespace LetterBoxedPuzzle.Framework.Models
 
                 foreach (var sideLetterGroup in this.SideLetterGroups)
                 {
-                    pairs.AddRange(GenerateAllDistinctLetterPairs(sideLetterGroup));
+                    pairs.AddRange(GenerateAllDistinctTwoLetterPairs(sideLetterGroup));
                 }
 
                 return pairs;

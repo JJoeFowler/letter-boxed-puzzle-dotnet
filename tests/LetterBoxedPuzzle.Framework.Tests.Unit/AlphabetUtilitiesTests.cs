@@ -377,13 +377,13 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 try
                 {
                     var sequence = GenerateAlphabeticRangeSequence(character, length);
-                    Assert.IsNotNull(sequence, $"Did not throw an as {expectedExceptionType} expected for '{character}' with length {length}.");
+                    Assert.IsNotNull(sequence, $"Did not throw an {expectedExceptionType} as expected for '{character}' with length {length}.");
                 }
                 catch (Exception exception)
                 {
                     var exceptionType = exception.GetType();
                     Assert.IsTrue(
-                        exceptionType == typeof(ArgumentOutOfRangeException),
+                        exceptionType == expectedExceptionType,
                         $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for '{character}' with length {length}.");
                 }
             }
@@ -497,14 +497,121 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 try
                 {
                     var text = GenerateAlphabeticRangeAsText(character, length);
-                    Assert.IsNotNull(text, $"Did not throw an as {expectedExceptionType} expected for '{character}' with length {length}.");
+                    Assert.IsNotNull(text, $"Did not throw an {expectedExceptionType} as expected for '{character}' with length {length}.");
                 }
                 catch (Exception exception)
                 {
                     var exceptionType = exception.GetType();
                     Assert.IsTrue(
-                        exceptionType == typeof(ArgumentOutOfRangeException),
+                        exceptionType == expectedExceptionType,
                         $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for '{character}' with length {length}.");
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Verifies that when given the "AbC" as the text string that the generated distinct two-letter pairs are all nine possible
+        ///     lowercase pairs of the letters 'a', 'b', and 'c'.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAllDistinctTwoLetterPairs_GivenAbCText_ReturnAllNineTwoLetterLowercasePairs()
+        {
+            // Arrange
+            const string abcText = "AbC";
+            var expectedPairsSet = new HashSet<string>(new[] { "aa", "bb", "cc", "ab", "ba", "ac", "ca", "bc", "cb" });
+
+            // Act
+            var actualPairsSet = new HashSet<string>(GenerateAllDistinctTwoLetterPairs(abcText).ToArray());
+
+            // Assert
+            foreach (var actualPair in actualPairsSet)
+            {
+                Assert.IsTrue(expectedPairsSet.Contains(actualPair), $"For text '{abcText}' the actual pair '{actualPair}' was unexpected.");
+            }
+
+            foreach (var expectedPair in expectedPairsSet)
+            {
+                Assert.IsTrue(actualPairsSet.Contains(expectedPair), $"For text '{abcText}' the pair '{expectedPair}' was expected.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies that an argument null exception is throw if given a null value when generating all distinct two-letter pairs.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GenerateAllDistinctTwoLetterPairs_GivenNull_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string? textValue = null;
+
+            // Act
+#pragma warning disable 8604
+            _ = GenerateAllDistinctTwoLetterPairs(textValue);
+#pragma warning restore 8604
+        }
+
+        /// <summary>
+        ///     Verifies that an argument exception is throw if given either an empty string or a single-letter string when generating
+        ///     all distinct two-letter pairs.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAllDistinctTwoLetterPairs_GivenEmptyStringOrSingleLetter_ThrowsArgumentException()
+        {
+            // Arrange
+            var invalidLengthTextInputs = new[] { string.Empty }.Union(LowercaseAlphabet.Select(x => x.ToString()))
+                .Union(UppercaseAlphabet.Select(x => x.ToString()));
+
+            var expectedExceptionType = typeof(ArgumentException);
+
+            // Act and assert
+            foreach (var invalidInput in invalidLengthTextInputs)
+            {
+                var length = invalidInput.Length;
+                try
+                {
+                    var pairs = GenerateAllDistinctTwoLetterPairs(invalidInput);
+                    Assert.IsNotNull(
+                        pairs,
+                        $"Did not throw an {expectedExceptionType} as expected for input '{invalidInput}' with length {length}.");
+                }
+                catch (Exception exception)
+                {
+                    var exceptionType = exception.GetType();
+                    Assert.IsTrue(
+                        exceptionType == expectedExceptionType,
+                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for input '{invalidInput}' with length {length}.");
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Verifies that an argument exception is throw if given a text input with a non-alphabet letter when generating all distinct
+        ///     two-letter pairs.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAllDistinctTwoLetterPairs_GivenTextInputWithNonAlphabetLetter_ThrowsArgumentException()
+        {
+            // Arrange
+            var invalidNonAlphabetTextInputs = NonAlphabetCharacters.Select(c => $"A{c.ToString()}C");
+
+            var expectedExceptionType = typeof(ArgumentException);
+
+            // Act and assert
+            foreach (var invalidInput in invalidNonAlphabetTextInputs)
+            {
+                var length = invalidInput.Length;
+                try
+                {
+                    var pairs = GenerateAllDistinctTwoLetterPairs(invalidInput);
+                    Assert.IsNotNull(pairs, $"Did not throw an {expectedExceptionType} as expected for non-alphabetic input '{invalidInput}'.");
+                }
+                catch (Exception exception)
+                {
+                    var exceptionType = exception.GetType();
+                    Assert.IsTrue(
+                        exceptionType == expectedExceptionType,
+                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for non-alphabetic input '{invalidInput}'.");
                 }
             }
         }

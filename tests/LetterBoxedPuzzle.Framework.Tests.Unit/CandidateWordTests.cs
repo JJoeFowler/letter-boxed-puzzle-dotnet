@@ -46,7 +46,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             string? candidateWordLetters = null;
 
             // Act
+#pragma warning disable CS8604 // Possible null reference argument.
             _ = new CandidateWord(candidateWordLetters);
+#pragma warning restore CS8604 // Possible null reference argument.
         }
 
         /// <summary>

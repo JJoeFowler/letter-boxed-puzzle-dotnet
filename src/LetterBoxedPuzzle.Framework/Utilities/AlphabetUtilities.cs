@@ -204,17 +204,26 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <returns>All (<i>n</i> choose 2 + <i>n</i>) two-letter pairs consisting of letters of the given text of length <i>n</i>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
         /// <exception cref="ArgumentException">Thrown when given text contains one or more characters not in the alphabet.</exception>
-        public static string[] GenerateAllDistinctLetterPairs(string text)
+        public static string[] GenerateAllDistinctTwoLetterPairs(string text)
         {
             _ = text ?? throw new ArgumentNullException(nameof(text));
+
+            const int minimumLength = 2;
+
+            if (text.Length <= minimumLength)
+            {
+                throw new ArgumentException($"Given '{text}' must must have minimum length of at least {minimumLength}.");
+            }
 
             if (!text.All(IsLowercaseOrUppercaseAlphabetLetter))
             {
                 throw new ArgumentException($"Given '{text}' can only contain letters in the alphabet.");
             }
 
-            return (from firstLetter in text
-                    from secondLetter in text
+            var lowercaseText = text.ToLowerInvariant();
+
+            return (from firstLetter in lowercaseText
+                    from secondLetter in lowercaseText
                     select firstLetter + secondLetter.ToString()).Distinct().ToArray();
         }
 
