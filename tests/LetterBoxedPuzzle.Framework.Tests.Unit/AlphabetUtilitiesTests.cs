@@ -32,7 +32,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void IsAlphabetLetter_GivenLowercaseOrUppercaseAlphabetLetter_IsTrue()
         {
             // Arrange
-            var alphabetLetters = LowerCaseAlphabet.Union(UpperCaseAlphabet).ToArray();
+            var alphabetLetters = LowercaseAlphabet.Union(UppercaseAlphabet).ToArray();
 
             // Act
             var actualIsAlphabetLetterValues = alphabetLetters.Select(character => IsAlphabetLetter(character)).ToArray();
@@ -52,7 +52,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var allCharacters = Enumerable.Range(0, char.MaxValue).Select(x => (char)x).ToArray();
-            var nonAlphabetLetters = allCharacters.Except(LowerCaseAlphabet).Except(UpperCaseAlphabet).ToArray();
+            var nonAlphabetLetters = allCharacters.Except(LowercaseAlphabet).Except(UppercaseAlphabet).ToArray();
 
             // Act
             var actualIsAlphabetLetterValues = nonAlphabetLetters.Select(character => IsAlphabetLetter(character)).ToArray();
@@ -78,7 +78,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             var actualExtendedAsciiValues = extendedAsciiCharacters.Select(character => GetExtendedAsciiValue(character)).ToArray();
 
             // Assert
-            for (var index = 0; index < AlphabetConstants.EnglishAlphabetSize; index++)
+            for (var index = 0; index < extendedAsciiCharacters.Length; index++)
             {
                 var character = extendedAsciiCharacters[index];
                 var expectedValue = expectedExtendedAsciiValues[index];
@@ -115,12 +115,12 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             var expectedAlphabetBitMasks = AllSingleLetterAlphabetBitMasks;
 
             // Act
-            var actualAlphabetBitMasks = LowerCaseAlphabet.Select(character => GetAlphabetBitMask(character)).ToArray();
+            var actualAlphabetBitMasks = LowercaseAlphabet.Select(character => GetAlphabetBitMask(character)).ToArray();
 
             // Assert
-            for (var index = 0; index < AlphabetConstants.EnglishAlphabetSize; index++)
+            for (var index = 0; index < expectedAlphabetBitMasks.Length; index++)
             {
-                var character = LowerCaseAlphabet[index];
+                var character = LowercaseAlphabet[index];
                 var expectedBitMask = expectedAlphabetBitMasks[index];
                 var actualBitMask = actualAlphabetBitMasks[index];
 
@@ -132,7 +132,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given the empty that the default alphabet bit mask <see cref="AlphabetBitMask.None"/> is returned.
+        ///     Verifies whether given the empty that the default alphabet bit mask <see cref="AlphabetBitMask.None" /> is returned.
         /// </summary>
         [TestMethod]
         public void GetAlphabetBitMask_GivenEmptyString_ReturnsNoneAlphabetBitMask()
@@ -177,6 +177,58 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             // Assert
             Assert.AreEqual(expectedAlphabetBitMask, actualAlphabetBitMask);
+        }
+
+        /// <summary>
+        ///     Verifies whether given the lower case letter 'a' with size of the alphabet that sequence is the lowercase alphabet.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAlphabeticRangeSequence_GivenLowercaseAWithAlphabetSize_ReturnsFullLowercaseAlphabet()
+        {
+            // Arrange
+            const int alphabetSize = 26;
+            char[] expectedSequence = LowercaseAlphabet;
+
+            // Act
+            var actualSequence = GenerateAlphabeticRangeSequence('a', alphabetSize).ToArray();
+
+            // Assert
+            for (var index = 0; index < alphabetSize; index++)
+            {
+                var expectedCharacter = expectedSequence[index];
+                var actualCharacter = actualSequence[index];
+
+                Assert.AreEqual(
+                    expectedCharacter,
+                    actualCharacter,
+                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in sequence '{string.Join("', '", actualSequence)}'.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given the upper case letter 'A' with size of the alphabet that sequence is the uppercase alphabet.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAlphabeticRangeSequence_GivenUppercaseAWithAlphabetSize_ReturnsFullUppercaseAlphabet()
+        {
+            // Arrange
+            const int alphabetSize = 26;
+            char[] expectedSequence = UppercaseAlphabet;
+
+            // Act
+            var actualSequence = GenerateAlphabeticRangeSequence('A', alphabetSize).ToArray();
+
+            // Assert
+            for (var index = 0; index < alphabetSize; index++)
+            {
+                var expectedCharacter = expectedSequence[index];
+                var actualCharacter = actualSequence[index];
+
+                Assert.AreEqual(
+                    expectedCharacter,
+                    actualCharacter,
+                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in sequence '{string.Join("', '", actualSequence)}'.");
+            }
         }
     }
 }

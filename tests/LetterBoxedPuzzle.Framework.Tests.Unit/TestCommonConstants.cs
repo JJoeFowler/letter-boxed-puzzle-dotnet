@@ -39,7 +39,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         /// <summary>
         ///     The characters of the lowercase alphabet from 'a' to 'z'.
         /// </summary>
-        internal static readonly char[] LowerCaseAlphabet =
+        internal static readonly char[] LowercaseAlphabet =
             {
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
                 'u', 'v', 'w', 'x', 'y', 'z',
@@ -48,7 +48,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         /// <summary>
         ///     The characters of the uppercase alphabet from 'A' to 'Z'.
         /// </summary>
-        internal static readonly char[] UpperCaseAlphabet =
+        internal static readonly char[] UppercaseAlphabet =
             {
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
                 'U', 'V', 'W', 'X', 'Y', 'Z',
