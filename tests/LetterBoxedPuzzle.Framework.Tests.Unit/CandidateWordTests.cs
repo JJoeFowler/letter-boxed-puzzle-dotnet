@@ -18,7 +18,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using static Constants.AlphabetConstants;
 
     /// <summary>
-    ///     The unit tests for the letters enumeration.
+    ///     Unit tests for the candidate word class.
     /// </summary>
     [TestClass]
     public class CandidateWordTests
@@ -36,12 +36,12 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         /// <summary>
         ///     Name of animals as test words.
         /// </summary>
-        private static readonly string[] AnimalTestWords = new[] { "Aardvark", "BEAR", "cat", "doG", "elephant", "FoX", "GORILLA", "harE", "Zebra" };
+        private static readonly string[] AnimalTestWords = { "Aardvark", "BEAR", "cat", "doG", "elephant", "FoX", "GORILLA", "harE", "Zebra" };
 
         /// <summary>
         ///     Candidate word initialized with the simple test word.
         /// </summary>
-        private static readonly CandidateWord SimpleCandidateWord = new (SimpleTestWord);
+        private static readonly CandidateWord SimpleCandidateWord = new(SimpleTestWord);
 
         /// <summary>
         ///     Candidate word initialized with the A-to-Z test word.
@@ -49,7 +49,63 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         private static readonly CandidateWord AToZCandidateWord = new (AToZTestWord);
 
         /// <summary>
-        ///     Checks whether the first letter of the animal tests word is indeed their first letter.
+        ///     Verifies that an argument null exception is thrown when candidate word is initialized with a null value.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CandidateWord_GivenNull_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string? candidateWordLetters = null;
+
+            // Act
+            _ = new CandidateWord(candidateWordLetters);
+        }
+
+        /// <summary>
+        ///     Verifies that an argument exception is thrown when candidate word is initialized with an empty string.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CandidateWord_GivenEmptyString_ThrowsArgumentException()
+        {
+            // Arrange
+            var candidateWordLetters = string.Empty;
+
+            // Act
+            _ = new CandidateWord(candidateWordLetters);
+        }
+
+        /// <summary>
+        ///     Verifies that an argument exception is thrown when candidate word is initialized with a word with underscores.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CandidateWord_GivenWordWithUnderscores_ThrowsArgumentException()
+        {
+            // Arrange
+            const string candidateWordLetters = "non_alphabet_letter_word";
+
+            // Act
+            _ = new CandidateWord(candidateWordLetters);
+        }
+
+        /// <summary>
+        ///     Verifies that an argument exception is thrown when candidate word is initialized with a word with spaces.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CandidateWord_GivenWordWithSpaces_ThrowsArgumentException()
+        {
+            // Arrange
+            const string candidateWordLetters = "non alphabet letter word";
+
+            // Act
+            _ = new CandidateWord(candidateWordLetters);
+        }
+
+        /// <summary>
+        ///     Verifies whether the first letter of the animal tests word is indeed their first letter.
         /// </summary>
         [TestMethod]
         public void FirstLetter_GivenAnimalTestWord_IsFirstLetterOfAnimal()
@@ -66,12 +122,15 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             {
                 var actualFirstLetter = actualFirstLetters[index];
                 var expectedFirstLetter = expectedFirstLetters[index];
-                Assert.AreEqual(expectedFirstLetter, actualFirstLetter, $"The first letter of '{AnimalTestWords[index]}' is not '{expectedFirstLetter}'.");
+                Assert.AreEqual(
+                    expectedFirstLetter,
+                    actualFirstLetter,
+                    $"The first letter of '{AnimalTestWords[index]}' is not '{expectedFirstLetter}'.");
             }
         }
 
         /// <summary>
-        ///     Checks whether the last letter of the animal tests word is indeed their last letter.
+        ///     Verifies whether the last letter of the animal tests word is indeed their last letter.
         /// </summary>
         [TestMethod]
         public void LastLetter_GivenAnimalTestWord_IsLastLetterOfAnimal()
@@ -88,12 +147,15 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             {
                 var actualLastLetter = actualLastLetters[index];
                 var expectedLastLetter = expectedLastLetters[index];
-                Assert.AreEqual(expectedLastLetter, actualLastLetter, $"The last letter of '{AnimalTestWords[index]}' is not '{expectedLastLetter}'.");
+                Assert.AreEqual(
+                    expectedLastLetter,
+                    actualLastLetter,
+                    $"The last letter of '{AnimalTestWords[index]}' is not '{expectedLastLetter}'.");
             }
         }
 
         /// <summary>
-        ///     Checks whether the lowercase word of the A-to-Z candidate word is indeed lowercased.
+        ///     Verifies whether the lowercase word of the A-to-Z candidate word is indeed lowercased.
         /// </summary>
         [TestMethod]
         public void LowercaseWord_GivenAToZCandidateWord_IsLowercased()
@@ -110,7 +172,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Checks whether ASCII sequence of the A-to-Z candidate word is correct.
+        ///     Verifies whether ASCII sequence of the A-to-Z candidate word is correct.
         /// </summary>
         [TestMethod]
         public void AsciiSequence_GivenSimpleCandidateWord_ReturnsCorrectAsciiSequence()
@@ -119,7 +181,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             var expectedAsciiSequence = new byte[]
                 {
                     116, 104, 101, 113, 117, 105, 99, 107, 98, 114, 111, 119, 110, 102, 111, 120, 106, 117, 109, 112,
-                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103,
+                    115, 111, 118, 101, 114, 116, 104, 101, 108, 97, 122, 121, 100, 111, 103
                 };
 
             // Act
@@ -139,7 +201,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Checks whether the alphabet bit mask of the letters of the simple candidate word are the bit-wise enumerated letters of the simple
+        ///     Verifies whether the alphabet bit mask of the letters of the simple candidate word are the bit-wise enumerated letters of the simple
         ///     test word ORed together.
         /// </summary>
         [TestMethod]
@@ -158,7 +220,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Checks whether the alphabet bit mask of the letters of the A-to-Z candidate word are all bit-wise enumerated letters of the whole
+        ///     Verifies whether the alphabet bit mask of the letters of the A-to-Z candidate word are all bit-wise enumerated letters of the whole
         ///     alphabet ORed together.
         /// </summary>
         [TestMethod]
@@ -175,7 +237,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Checks whether the letters of the simple candidate word is contained within all its letters is true.
+        ///     Verifies whether the letters of the simple candidate word is contained within all its letters is true.
         /// </summary>
         [TestMethod]
         public void IsContainedIn_SimpleCandidateWordGivenOnlyItsLetters_IsTrue()
@@ -189,20 +251,20 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Checks whether the letters of the A-to-Z candidate word is contained within all letters of the alphabet is true.
+        ///     Verifies whether the letters of the A-to-Z candidate word is contained within all letters of the alphabet is true.
         /// </summary>
         [TestMethod]
         public void IsContainedIn_AtoZCandidateWordGivenAllLetters_IsTrue()
         {
             // Arrange and act
-            var actualIsContainedIn = AToZCandidateWord.IsContainedIn(AlphabetRangeTextFromAToZ);
+            var actualIsContainedIn = AToZCandidateWord.IsContainedIn(FullLowercaseAlphabetText);
 
             // Assert
             Assert.IsTrue(actualIsContainedIn);
         }
 
         /// <summary>
-        ///     Checks whether the letters of the A-to-Z candidate word are contained within all letters of the alphabet but one is false.
+        ///     Verifies whether the letters of the A-to-Z candidate word are contained within all letters of the alphabet but one is false.
         /// </summary>
         [TestMethod]
         public void IsContainedIn_AtoZCandidateWordGivenAllLettersButOne_IsFalse()
@@ -214,23 +276,23 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             for (var index = 0; index < EnglishAlphabetSize; index++)
             {
                 var alphabetRangeTextMissingOneLetter =
-                    AlphabetRangeTextFromAToZ.Replace(AlphabetRangeTextFromAToZ[index].ToString(), string.Empty);
+                    FullLowercaseAlphabetText.Replace(FullLowercaseAlphabetText[index].ToString(), string.Empty);
 
                 allCandidateLettersButOneArray[index] = new CandidateWord(alphabetRangeTextMissingOneLetter);
             }
 
             // Act and arrange
-            Console.WriteLine($"Asserting the {messageStart}:");
+            Console.WriteLine($@"Asserting the {messageStart}:");
 
             for (var index = 0; index < EnglishAlphabetSize; index++)
             {
                 var allCandidateLettersButOne = allCandidateLettersButOneArray[index];
                 var allCandidateLettersButOneText = allCandidateLettersButOne.LowercaseWord;
-                var missingLetter = AlphabetRangeTextFromAToZ[index];
+                var missingLetter = FullLowercaseAlphabetText[index];
 
                 var messageEnd = $"'{allCandidateLettersButOneText}' missing the letter '{missingLetter}'";
 
-                Console.WriteLine($"\t{messageEnd}");
+                Console.WriteLine($@"	{messageEnd}");
 
                 Assert.IsFalse(AToZCandidateWord.IsContainedIn(allCandidateLettersButOneText), $"The {messageStart} {messageEnd}.");
             }

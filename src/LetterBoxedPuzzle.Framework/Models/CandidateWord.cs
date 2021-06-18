@@ -8,6 +8,7 @@
 namespace LetterBoxedPuzzle.Framework.Models
 {
     using System;
+    using System.Linq;
     using System.Text;
 
     using LetterBoxedPuzzle.Framework.Constants;
@@ -23,12 +24,19 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <summary>
         ///     Initializes a new instance of the <see cref="CandidateWord" /> class.
         /// </summary>
-        /// <param name="word">The word.</param>
+        /// <param name="word">The word consisting of only alphabet letters.</param>
         public CandidateWord(string word)
         {
-            if (string.IsNullOrWhiteSpace(word))
+            _ = word ?? throw new ArgumentNullException(nameof(word));
+
+            if (string.IsNullOrEmpty(word))
             {
-                throw new ArgumentException("Cannot use null, empty string, or white space to initialize a candidate word.");
+                throw new ArgumentException("Cannot use empty string to initialize a candidate word.");
+            }
+
+            if (!word.All(IsAlphabetLetter))
+            {
+                throw new ArgumentException($"Cannot use '{word}' containing non-alphabet letters to initialize a candidate word.");
             }
 
             this.LowercaseWord = word.ToLowerInvariant();
