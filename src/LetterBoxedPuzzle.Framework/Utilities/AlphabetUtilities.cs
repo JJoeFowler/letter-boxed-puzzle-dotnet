@@ -37,7 +37,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
                 }).ToArray();
 
         /// <summary>
-        ///     Lookup Boolean dictionary keyed by characters to determine whether a given character is a letter of the alphabet.
+        ///     A lookup Boolean dictionary keyed by characters to determine whether a given character is a letter of the alphabet.
         /// </summary>
         private static readonly Dictionary<char, bool> IsAlphabetLetterByLetter = Enumerable.Range(0, char.MaxValue).Select(x => (char)x)
             .Aggregate(
@@ -153,10 +153,10 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <param name="startingLetter">The starting letter.</param>
         /// <param name="length">The length of the range.</param>
         /// <returns>The specified alphabetic range as a <see langword="char" /> array.</returns>
+        /// <exception cref="ArgumentException">Thrown when given a starting letter that is not in the alphabet.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown when not given a length less than 1 or a length out of range that would lead to non-alphabetic sequence.
         /// </exception>
-        /// <exception cref="ArgumentException">Thrown when given a starting letter that is not in the alphabet.</exception>
         public static char[] GenerateAlphabeticRangeSequence(char startingLetter, int length)
         {
             if (!IsLowercaseOrUppercaseAlphabetLetter(startingLetter))

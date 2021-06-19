@@ -355,6 +355,36 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
+        ///     Verifies that an argument exception is throw if given any non-alphabet character as a starting letter to generate an alphabetic
+        ///     range sequence.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAlphabeticRangeSequence_GivenAnyNonAlphabetCharacterAsStartingLetter_ThrowsArgumentException()
+        {
+            // Arrange
+            var invalidStartingLetters = NonAlphabetCharacters;
+
+            var expectedExceptionType = typeof(ArgumentException);
+
+            // Act and assert
+            foreach (var invalidStartingLetter in invalidStartingLetters)
+            {
+                try
+                {
+                    var actualSequence = GenerateAlphabeticRangeSequence(invalidStartingLetter, 1);
+                    Assert.IsNotNull(actualSequence, $"Did not throw an {expectedExceptionType} as expected for starting letter '{invalidStartingLetter}'.");
+                }
+                catch (Exception exception)
+                {
+                    var exceptionType = exception.GetType();
+                    Assert.IsTrue(
+                        exceptionType == expectedExceptionType,
+                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for stating letter '{invalidStartingLetter}'.");
+                }
+            }
+        }
+
+        /// <summary>
         ///     Verifies an out of range exception will be thrown when be thrown for each pair of an alphabet letter and an invalid length
         ///     (either zero or one more than its maximum) when generating a sequence of letters of the alphabet.
         /// </summary>
@@ -510,8 +540,38 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that when given the "AbC" as the text string that the generated distinct two-letter pairs are all nine possible
-        ///     lowercase pairs of the letters 'a', 'b', and 'c'.
+        ///     Verifies that an argument exception is throw if given any non-alphabet character as a starting letter to generate an alphabetic
+        ///     range as text.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAlphabeticRangeAsText_GivenAnyNonAlphabetCharacterAsStartingLetter_ThrowsArgumentException()
+        {
+            // Arrange
+            var invalidStartingLetters = NonAlphabetCharacters;
+
+            var expectedExceptionType = typeof(ArgumentException);
+
+            // Act and assert
+            foreach (var invalidStartingLetter in invalidStartingLetters)
+            {
+                try
+                {
+                    var actualText = GenerateAlphabeticRangeAsText(invalidStartingLetter, 1);
+                    Assert.IsNotNull(actualText, $"Did not throw an {expectedExceptionType} as expected for starting letter '{invalidStartingLetter}'.");
+                }
+                catch (Exception exception)
+                {
+                    var exceptionType = exception.GetType();
+                    Assert.IsTrue(
+                        exceptionType == expectedExceptionType,
+                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for stating letter '{invalidStartingLetter}'.");
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Verifies that when given the "AbC" as the text input that the generated distinct two-letter pairs are all nine possible
+        ///     lowercase pairs of the lowercase letters 'a', 'b', and 'c'.
         /// </summary>
         [TestMethod]
         public void GenerateAllDistinctTwoLetterPairs_GivenAbCText_ReturnAllNineTwoLetterLowercasePairs()
@@ -532,6 +592,54 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             foreach (var expectedPair in expectedPairsSet)
             {
                 Assert.IsTrue(actualPairsSet.Contains(expectedPair), $"For text '{abcText}' the pair '{expectedPair}' was expected.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies that when given the full alphabet (both lowercase and uppercase) as the input text that 26^2 = 676 distinct lowercase
+        ///     two-letter pairs are returned.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAllDistinctTwoLetterPairs_GivenLowercaseAndUppercaseAlphabet_ReturnAlphabetSizeSquaredPairs()
+        {
+            // Arrange
+            var fullAlphabet = new string(LowercaseAlphabet.Union(UppercaseAlphabet).ToArray());
+            const int expectedCount = AlphabetSize * AlphabetSize;
+
+            // Act
+            var actualCount = GenerateAllDistinctTwoLetterPairs(fullAlphabet).Length;
+
+            // Assert
+            Assert.AreEqual(expectedCount, actualCount, $"Expected '{expectedCount}' pairs for '{fullAlphabet}', not '{actualCount}' pairs.");
+        }
+
+        /// <summary>
+        ///     Verifies that when given the same lowercase and uppercase letter repeated a hundred times each as the input text that only the
+        ///     single two-letter pair of the lowercase letter is returned.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAllDistinctTwoLetterPairs_GivenSameLowercaseAndUppercaseLetterRepeatedManyTimes_ReturnsSinglePairOfLowercaseLetter()
+        {
+            // Arrange
+            const int count = 100;
+            var sameAlphabetLetters = LowercaseAlphabet.Select(letter => $"{letter}{letter.ToString().ToUpper()}");
+            var repeatedAlphabetLetters = sameAlphabetLetters.Select(letters => string.Join(string.Empty, Enumerable.Repeat(letters, count)));
+            var expectedPairs = LowercaseAlphabet.Select(letter => $"{letter}{letter}").ToArray();
+
+            // Act
+            var actualPairsForEachLetter = repeatedAlphabetLetters.Select(text => GenerateAllDistinctTwoLetterPairs(text)).ToArray();
+
+            // Assert
+            for (var index = 0; index < AlphabetSize; index++)
+            {
+                var actualPairs = actualPairsForEachLetter[index];
+                var actualLength = actualPairs.Length;
+                var quotedActualPairs = $"'{string.Join("', '", actualPairs)}'";
+                Assert.AreEqual(1, actualLength, $"Expected only one pair but the {actualLength} pairs {quotedActualPairs} were returned.");
+
+                var actualPair = actualPairs[0];
+                var expectedPair = expectedPairs[index];
+                Assert.AreEqual(expectedPair, actualPair, $"Expected the pair to be '{expectedPair}' instead of the pair '{actualPair}'");
             }
         }
 
@@ -593,7 +701,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void GenerateAllDistinctTwoLetterPairs_GivenTextInputWithNonAlphabetLetter_ThrowsArgumentException()
         {
             // Arrange
-            var invalidNonAlphabetTextInputs = NonAlphabetCharacters.Select(c => $"A{c.ToString()}C");
+            var invalidNonAlphabetTextInputs = NonAlphabetCharacters.Select(c => $"{AToZTestWord}{c.ToString()}{SimpleTestWord}");
 
             var expectedExceptionType = typeof(ArgumentException);
 

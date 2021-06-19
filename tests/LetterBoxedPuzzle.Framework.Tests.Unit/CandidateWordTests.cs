@@ -284,5 +284,50 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 Assert.IsFalse(AToZCandidateWord.IsContainedIn(allCandidateLettersButOneText), $"The {messageStart} {messageEnd}.");
             }
         }
+
+        /// <summary>
+        ///     Verifies that an argument null exception is thrown if given a null value for the candidate letters.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void IsContainedIn_GivenNullValueForCandidateLetters_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string? nullValue = null;
+
+            // Act
+#pragma warning disable 8604
+            _ = new CandidateWord("word").IsContainedIn(nullValue);
+#pragma warning restore 8604
+        }
+
+        /// <summary>
+        ///     Verifies that an argument exception is throw if given candidate letters has a non-alphabet letter.
+        /// </summary>
+        [TestMethod]
+        public void IsContainedIn_GivenCandidateLettersWithNonAlphabetLetter_ThrowsArgumentException()
+        {
+            // Arrange
+            var candidateLettersWithNonAlphabetCharacter = NonAlphabetCharacters.Select(c => $"abc{c.ToString()}xyz");
+
+            var expectedExceptionType = typeof(ArgumentException);
+
+            // Act and assert
+            foreach (var invalidLetters in candidateLettersWithNonAlphabetCharacter)
+            {
+                try
+                {
+                    var isContained = new CandidateWord("abcXyz").IsContainedIn(invalidLetters);
+                    Assert.IsTrue(isContained, $"Did not throw an {expectedExceptionType} as expected for candidate letters '{invalidLetters}'.");
+                }
+                catch (Exception exception)
+                {
+                    var exceptionType = exception.GetType();
+                    Assert.IsTrue(
+                        exceptionType == expectedExceptionType,
+                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for non-alphabetic input '{invalidLetters}'.");
+                }
+            }
+        }
     }
 }
