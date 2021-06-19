@@ -210,7 +210,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
 
             const int minimumLength = 2;
 
-            if (text.Length <= minimumLength)
+            if (text.Length < minimumLength)
             {
                 throw new ArgumentException($"Given '{text}' must must have minimum length of at least {minimumLength}.");
             }
