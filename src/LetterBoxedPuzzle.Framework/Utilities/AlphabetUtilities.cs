@@ -188,10 +188,10 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <param name="startingLetter">The starting letter.</param>
         /// <param name="length">The length of the range.</param>
         /// <returns>Concatenated <see langword="string" /> of the specified alphabetic range.</returns>
+        /// <exception cref="ArgumentException">Thrown when given a starting letter that is not in the alphabet.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown when not given a length less than 1 or a length out of range that would lead to non-alphabetic text.
         /// </exception>
-        /// <exception cref="ArgumentException">Thrown when given a starting letter that is not in the alphabet.</exception>
         public static string GenerateAlphabeticRangeAsText(char startingLetter, int length)
         {
             return new string(GenerateAlphabeticRangeSequence(startingLetter, length));

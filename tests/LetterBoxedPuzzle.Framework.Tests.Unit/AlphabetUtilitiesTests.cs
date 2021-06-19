@@ -256,17 +256,81 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies an argument exception will be thrown when given an at-symbol character.
+        ///     Verifies that an argument exception is throw if given a non-alphabet character when determining its alphabet bit mask.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GetAlphabetBitMask_GivenAtSymbolCharacter_ThrowsArgumentException()
+        public void GetAlphabetBitMask_GivenNonAlphabetLetter_ThrowsArgumentException()
         {
             // Arrange
-            const char atSymbol = '@';
+            var invalidCharacters = NonAlphabetCharacters;
+            var expectedExceptionType = typeof(ArgumentException);
+
+            // Act and assert
+            foreach (var invalidCharacter in invalidCharacters)
+            {
+                try
+                {
+                    var actualBitMask = GetAlphabetBitMask(invalidCharacter);
+                    Assert.AreNotEqual(
+                        AlphabetBitMask.None,
+                        actualBitMask,
+                        $"Did not throw an {expectedExceptionType} as expected for non-alphabet character '{invalidCharacter}'.");
+                }
+                catch (Exception exception)
+                {
+                    var exceptionType = exception.GetType();
+                    Assert.IsTrue(
+                        exceptionType == expectedExceptionType,
+                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for non-alphabet character '{invalidCharacter}'.");
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Verifies that an argument null exception is throw if given a null value for a word when determining its the alphabet bit mask.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetAlphabetBitMask_GivenNullValueForWord_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string? nullValue = null;
 
             // Act
-            _ = GetAlphabetBitMask(atSymbol);
+#pragma warning disable 8604
+            _ = GetAlphabetBitMask(nullValue);
+#pragma warning restore 8604
+        }
+
+        /// <summary>
+        ///     Verifies that an argument exception is throw if given a word with a non-alphabet letter when determining its alphabet bit mask.
+        /// </summary>
+        [TestMethod]
+        public void GetAlphabetBitMask_GivenWordWithNonAlphabetLetter_ThrowsArgumentException()
+        {
+            // Arrange
+            var invalidWords = NonAlphabetCharacters.Select(character => $"aBc{character}XyZ");
+            var expectedExceptionType = typeof(ArgumentException);
+
+            // Act and assert
+            foreach (var invalidWord in invalidWords)
+            {
+                try
+                {
+                    var actualBitMask = GetAlphabetBitMask(invalidWord);
+                    Assert.AreNotEqual(
+                        AlphabetBitMask.None,
+                        actualBitMask,
+                        $"Did not throw an {expectedExceptionType} as expected for invalid word '{invalidWord}'.");
+                }
+                catch (Exception exception)
+                {
+                    var exceptionType = exception.GetType();
+                    Assert.IsTrue(
+                        exceptionType == expectedExceptionType,
+                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for invalid word '{invalidWord}'.");
+                }
+            }
         }
 
         /// <summary>
@@ -372,7 +436,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 try
                 {
                     var actualSequence = GenerateAlphabeticRangeSequence(invalidStartingLetter, 1);
-                    Assert.IsNotNull(actualSequence, $"Did not throw an {expectedExceptionType} as expected for starting letter '{invalidStartingLetter}'.");
+                    Assert.IsNotNull(
+                        actualSequence,
+                        $"Did not throw an {expectedExceptionType} as expected for starting letter '{invalidStartingLetter}'.");
                 }
                 catch (Exception exception)
                 {
@@ -557,7 +623,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 try
                 {
                     var actualText = GenerateAlphabeticRangeAsText(invalidStartingLetter, 1);
-                    Assert.IsNotNull(actualText, $"Did not throw an {expectedExceptionType} as expected for starting letter '{invalidStartingLetter}'.");
+                    Assert.IsNotNull(
+                        actualText,
+                        $"Did not throw an {expectedExceptionType} as expected for starting letter '{invalidStartingLetter}'.");
                 }
                 catch (Exception exception)
                 {
