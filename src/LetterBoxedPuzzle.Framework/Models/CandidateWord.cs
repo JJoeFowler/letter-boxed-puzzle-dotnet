@@ -101,5 +101,32 @@ namespace LetterBoxedPuzzle.Framework.Models
 
             return (this.AlphabetBitMask & (AlphabetConstants.AlphabetBitMaskWithAllBitsSet ^ GetAlphabetBitMask(candidateLetters))) == 0;
         }
+
+        /// <summary>
+        ///     Determines whether the candidate words is an allowed letter-boxed word given its side letters, where no two adjacent letters
+        ///     in the word can be a forbidden two-letter pair.
+        /// </summary>
+        /// <param name="letterBoxedSideLetters">The side letters of a letter-boxed puzzle.</param>
+        /// <returns>
+        ///     <see langword="true" /> if this candidate word is allowed for given the side letters, or <see langword="false" /> otherwise.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value for the side letters.</exception>
+        public bool IsLetterBoxedAllowedWord(LetterBoxedSideLetters letterBoxedSideLetters)
+        {
+            _ = letterBoxedSideLetters ?? throw new ArgumentNullException(nameof(letterBoxedSideLetters));
+
+            var lastLetter = ' ';
+            foreach (var letter in this.LowercaseWord)
+            {
+                if (letterBoxedSideLetters.IsForbiddenTwoLetterPair(lastLetter + letter.ToString()))
+                {
+                    return false;
+                }
+
+                lastLetter = letter;
+            }
+
+            return true;
+        }
     }
 }
