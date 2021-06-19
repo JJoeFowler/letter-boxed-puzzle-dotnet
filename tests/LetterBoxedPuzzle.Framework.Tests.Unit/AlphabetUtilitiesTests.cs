@@ -19,6 +19,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using static TestCommonConstants;
 
     using static Utilities.AlphabetUtilities;
+    using static Utilities.StringUtilities;
 
     /// <summary>
     ///     Unit tests for the alphabet utility methods class.
@@ -355,7 +356,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 Assert.AreEqual(
                     expectedCharacter,
                     actualCharacter,
-                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in the sequence '{string.Join("', '", actualSequence)}'.");
+                    $"Expected character '{expectedCharacter}' and not '{actualCharacter}' in the sequence {QuoteJoin(actualSequence)}.");
             }
         }
 
@@ -702,8 +703,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             {
                 var actualPairs = actualPairsForEachLetter[index];
                 var actualLength = actualPairs.Length;
-                var quotedActualPairs = $"'{string.Join("', '", actualPairs)}'";
-                Assert.AreEqual(1, actualLength, $"Expected only one pair but the {actualLength} pairs {quotedActualPairs} were returned.");
+                Assert.AreEqual(1, actualLength, $"Expected only one pair but the {actualLength} pairs {QuoteJoin(actualPairs)} were returned.");
 
                 var actualPair = actualPairs[0];
                 var expectedPair = expectedPairs[index];
