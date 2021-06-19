@@ -16,6 +16,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using static TestCommonAssertions;
+
     using static TestCommonConstants;
 
     using static Utilities.AlphabetUtilities;
@@ -264,27 +266,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var invalidCharacters = NonAlphabetCharacters;
-            var expectedExceptionType = typeof(ArgumentException);
+            static void AssertFunction(AlphabetBitMask actualBitMask, string message) => Assert.AreNotEqual(AlphabetBitMask.None, actualBitMask);
 
             // Act and assert
-            foreach (var invalidCharacter in invalidCharacters)
-            {
-                try
-                {
-                    var actualBitMask = GetAlphabetBitMask(invalidCharacter);
-                    Assert.AreNotEqual(
-                        AlphabetBitMask.None,
-                        actualBitMask,
-                        $"Did not throw an {expectedExceptionType} as expected for non-alphabet character '{invalidCharacter}'.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for non-alphabet character '{invalidCharacter}'.");
-                }
-            }
+            AssertExceptionThrown(AssertFunction, GetAlphabetBitMask, typeof(ArgumentException), invalidCharacters, _ => "non-alphabet character");
         }
 
         /// <summary>
@@ -311,27 +296,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var invalidWords = NonAlphabetCharacters.Select(character => $"aBc{character}XyZ");
-            var expectedExceptionType = typeof(ArgumentException);
+            static void AssertFunction(AlphabetBitMask actualBitMask, string message) => Assert.AreNotEqual(AlphabetBitMask.None, actualBitMask);
 
             // Act and assert
-            foreach (var invalidWord in invalidWords)
-            {
-                try
-                {
-                    var actualBitMask = GetAlphabetBitMask(invalidWord);
-                    Assert.AreNotEqual(
-                        AlphabetBitMask.None,
-                        actualBitMask,
-                        $"Did not throw an {expectedExceptionType} as expected for invalid word '{invalidWord}'.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for invalid word '{invalidWord}'.");
-                }
-            }
+            AssertExceptionThrown(AssertFunction, GetAlphabetBitMask, typeof(ArgumentException), invalidWords, _ => "invalid word");
         }
 
         /// <summary>
@@ -429,26 +397,12 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // Arrange
             var invalidStartingLetters = NonAlphabetCharacters;
 
-            var expectedExceptionType = typeof(ArgumentException);
-
             // Act and assert
-            foreach (var invalidStartingLetter in invalidStartingLetters)
-            {
-                try
-                {
-                    var actualSequence = GenerateAlphabeticRangeSequence(invalidStartingLetter, 1);
-                    Assert.IsNotNull(
-                        actualSequence,
-                        $"Did not throw an {expectedExceptionType} as expected for starting letter '{invalidStartingLetter}'.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for stating letter '{invalidStartingLetter}'.");
-                }
-            }
+            AssertExceptionThrown(
+                letter => GenerateAlphabeticRangeAsText(letter, 1),
+                typeof(ArgumentException),
+                invalidStartingLetters,
+                _ => "starting letter");
         }
 
         /// <summary>
@@ -466,24 +420,12 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             IEnumerable<(char character, int lengh)> invalidAlphabetLengthPairs =
                 zeroLengthPair.Union(invalidLowercaseLengthPairs).Union(invalidUppercaseLengthPairs);
 
-            var expectedExceptionType = typeof(ArgumentOutOfRangeException);
-
             // Act and assert
-            foreach (var (character, length) in invalidAlphabetLengthPairs)
-            {
-                try
-                {
-                    var sequence = GenerateAlphabeticRangeSequence(character, length);
-                    Assert.IsNotNull(sequence, $"Did not throw an {expectedExceptionType} as expected for '{character}' with length {length}.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for '{character}' with length {length}.");
-                }
-            }
+            AssertExceptionThrown(
+                pair => GenerateAlphabeticRangeAsText(pair.character, pair.lengh),
+                typeof(ArgumentOutOfRangeException),
+                invalidAlphabetLengthPairs,
+                pair => $"character '{pair.character}' with length {pair.lengh}");
         }
 
         /// <summary>
@@ -586,24 +528,12 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             IEnumerable<(char character, int lengh)> invalidAlphabetLengthPairs =
                 zeroLengthPair.Union(invalidLowercaseLengthPairs).Union(invalidUppercaseLengthPairs);
 
-            var expectedExceptionType = typeof(ArgumentOutOfRangeException);
-
             // Act and assert
-            foreach (var (character, length) in invalidAlphabetLengthPairs)
-            {
-                try
-                {
-                    var text = GenerateAlphabeticRangeAsText(character, length);
-                    Assert.IsNotNull(text, $"Did not throw an {expectedExceptionType} as expected for '{character}' with length {length}.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for '{character}' with length {length}.");
-                }
-            }
+            AssertExceptionThrown(
+                pair => GenerateAlphabeticRangeAsText(pair.character, pair.lengh),
+                typeof(ArgumentOutOfRangeException),
+                invalidAlphabetLengthPairs,
+                pair => $"character '{pair.character}' with length {pair.lengh}");
         }
 
         /// <summary>
@@ -616,26 +546,12 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // Arrange
             var invalidStartingLetters = NonAlphabetCharacters;
 
-            var expectedExceptionType = typeof(ArgumentException);
-
             // Act and assert
-            foreach (var invalidStartingLetter in invalidStartingLetters)
-            {
-                try
-                {
-                    var actualText = GenerateAlphabeticRangeAsText(invalidStartingLetter, 1);
-                    Assert.IsNotNull(
-                        actualText,
-                        $"Did not throw an {expectedExceptionType} as expected for starting letter '{invalidStartingLetter}'.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for stating letter '{invalidStartingLetter}'.");
-                }
-            }
+            AssertExceptionThrown(
+                character => GenerateAlphabeticRangeAsText(character, 1),
+                typeof(ArgumentException),
+                invalidStartingLetters,
+                _ => "starting letter");
         }
 
         /// <summary>
@@ -735,30 +651,11 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void GenerateAllDistinctTwoLetterPairs_GivenEmptyStringOrSingleLetter_ThrowsArgumentException()
         {
             // Arrange
-            var invalidLengthTextInputs = new[] { string.Empty }.Union(LowercaseAlphabet.Select(x => x.ToString()))
+            var invalidLengthInputs = new[] { string.Empty }.Union(LowercaseAlphabet.Select(x => x.ToString()))
                 .Union(UppercaseAlphabet.Select(x => x.ToString()));
 
-            var expectedExceptionType = typeof(ArgumentException);
-
             // Act and assert
-            foreach (var invalidInput in invalidLengthTextInputs)
-            {
-                var length = invalidInput.Length;
-                try
-                {
-                    var pairs = GenerateAllDistinctTwoLetterPairs(invalidInput);
-                    Assert.IsNotNull(
-                        pairs,
-                        $"Did not throw an {expectedExceptionType} as expected for input '{invalidInput}' with length {length}.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for input '{invalidInput}' with length {length}.");
-                }
-            }
+            AssertExceptionThrown(GenerateAllDistinctTwoLetterPairs, typeof(ArgumentException), invalidLengthInputs, x => $"length of {x.Length}");
         }
 
         /// <summary>
@@ -769,27 +666,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void GenerateAllDistinctTwoLetterPairs_GivenTextInputWithNonAlphabetLetter_ThrowsArgumentException()
         {
             // Arrange
-            var invalidNonAlphabetTextInputs = NonAlphabetCharacters.Select(c => $"{AToZTestWord}{c.ToString()}{SimpleTestWord}");
-
-            var expectedExceptionType = typeof(ArgumentException);
+            var invalidNonAlphabeticInputs = NonAlphabetCharacters.Select(c => $"{AToZTestWord}{c.ToString()}{SimpleTestWord}");
 
             // Act and assert
-            foreach (var invalidInput in invalidNonAlphabetTextInputs)
-            {
-                var length = invalidInput.Length;
-                try
-                {
-                    var pairs = GenerateAllDistinctTwoLetterPairs(invalidInput);
-                    Assert.IsNotNull(pairs, $"Did not throw an {expectedExceptionType} as expected for non-alphabetic input '{invalidInput}'.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for non-alphabetic input '{invalidInput}'.");
-                }
-            }
+            AssertExceptionThrown(GenerateAllDistinctTwoLetterPairs, typeof(ArgumentException), invalidNonAlphabeticInputs, _ => "non-alphabetic");
         }
     }
 }
