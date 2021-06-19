@@ -103,22 +103,22 @@ namespace LetterBoxedPuzzle.Framework.Models
         }
 
         /// <summary>
-        ///     Determines whether the candidate words is an allowed letter-boxed word given its side letters, where no two adjacent letters
-        ///     in the word can be a forbidden two-letter pair.
+        ///     Determines whether the candidate words is an allowed word for a letter-boxed puzzle given its side letters, where no two
+        ///     adjacent letters in the word can be a forbidden two-letter pair.
         /// </summary>
-        /// <param name="letterBoxedSideLetters">The side letters of a letter-boxed puzzle.</param>
+        /// <param name="sideLetters">The side letters of a letter-boxed puzzle.</param>
         /// <returns>
         ///     <see langword="true" /> if this candidate word is allowed for given the side letters, or <see langword="false" /> otherwise.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown when given a null value for the side letters.</exception>
-        public bool IsLetterBoxedAllowedWord(LetterBoxedSideLetters letterBoxedSideLetters)
+        public bool IsAllowed(SideLetters sideLetters)
         {
-            _ = letterBoxedSideLetters ?? throw new ArgumentNullException(nameof(letterBoxedSideLetters));
+            _ = sideLetters ?? throw new ArgumentNullException(nameof(sideLetters));
 
             var lastLetter = ' ';
             foreach (var letter in this.LowercaseWord)
             {
-                if (letterBoxedSideLetters.IsForbiddenTwoLetterPair(lastLetter + letter.ToString()))
+                if (sideLetters.IsForbiddenTwoLetterPair(lastLetter + letter.ToString()))
                 {
                     return false;
                 }

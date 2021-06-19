@@ -1,5 +1,5 @@
 ﻿// ===============================================================================================================================================
-// <copyright file="LetterBoxedSideLetters.cs" company="Joe Fowler">
+// <copyright file="SideLetters.cs" company="Joe Fowler">
 // Copyright (c) 2021 Joe Fowler.
 // Licensed under the GNU Affero General Public License v3. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -14,15 +14,15 @@ namespace LetterBoxedPuzzle.Framework.Models
     using static Utilities.AlphabetUtilities;
 
     /// <summary>
-    ///     Class for the groups of letters along each side of a letter boxed puzzle.
+    ///     Class for the groups of letters along each side of a letter-boxed puzzle.
     /// </summary>
-    public class LetterBoxedSideLetters
+    public class SideLetters
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="LetterBoxedSideLetters" /> class.
+        ///     Initializes a new instance of the <see cref="SideLetters" /> class.
         /// </summary>
         /// <param name="sideLetterGroups">The groups of letters along each side of a letter-boxed puzzle.</param>
-        public LetterBoxedSideLetters(params string[] sideLetterGroups)
+        public SideLetters(params string[] sideLetterGroups)
         {
             _ = sideLetterGroups ?? throw new ArgumentNullException(nameof(sideLetterGroups));
 
@@ -35,7 +35,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         }
 
         /// <summary>
-        ///     Gets the letters along each side of a letter-boxed puzzle.
+        ///     Gets groups of letters along each side of a letter-boxed puzzle.
         /// </summary>
         public string[] SideLetterGroups { get; }
 
