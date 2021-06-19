@@ -12,6 +12,7 @@ namespace LetterBoxedPuzzle.Framework.Models
     using System.Linq;
 
     using static Utilities.AlphabetUtilities;
+    using static Utilities.StringUtilities;
 
     /// <summary>
     ///     Class for the groups of letters along each side of a letter-boxed puzzle.
@@ -19,16 +20,31 @@ namespace LetterBoxedPuzzle.Framework.Models
     public class SideLetters
     {
         /// <summary>
+        /// The minimum number of sides for letter-boxed puzzle, which is two here since only two sides are required to construct words.
+        /// </summary>
+        public const int MinimumLetterBoxedSides = 2;
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="SideLetters" /> class.
         /// </summary>
         /// <param name="sideLetterGroups">The groups of letters along each side of a letter-boxed puzzle.</param>
         public SideLetters(params string[] sideLetterGroups)
         {
-            _ = sideLetterGroups ?? throw new ArgumentNullException(nameof(sideLetterGroups));
+            var sideCount = sideLetterGroups.Length;
+
+            if (sideLetterGroups.Any(string.IsNullOrEmpty))
+            {
+                throw new ArgumentException($"One or more of the given groups of letters {QuoteJoin(sideLetterGroups)}' is null or empty.");
+            }
+
+            if (sideCount < MinimumLetterBoxedSides)
+            {
+                throw new ArgumentException($"Must provide at least {MinimumLetterBoxedSides} groups of letters rather than {sideCount}.");
+            }
 
             if (sideLetterGroups.All(letters => letters.All(IsAlphabetLetter)) != true)
             {
-                throw new ArgumentException($"Given side letters '{sideLetterGroups}' cannot be empty or contain non-alphabet letters.");
+                throw new ArgumentException($"Given side letters {QuoteJoin(sideLetterGroups)}' cannot contain non-alphabet letters.");
             }
 
             this.SideLetterGroups = sideLetterGroups.Select(group => group.ToLowerInvariant()).ToArray();
