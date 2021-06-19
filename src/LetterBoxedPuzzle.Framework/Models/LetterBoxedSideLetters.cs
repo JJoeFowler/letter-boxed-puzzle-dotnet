@@ -32,14 +32,6 @@ namespace LetterBoxedPuzzle.Framework.Models
             }
 
             this.SideLetterGroups = sideLetterGroups.Select(group => group.ToLowerInvariant()).ToArray();
-
-            this.ForbiddenTwoLetterPairSet = this.ForbiddenTwoLetterPairs.Aggregate(
-                new HashSet<string>(),
-                (current, pair) =>
-                {
-                    current.Add(pair);
-                    return current;
-                });
         }
 
         /// <summary>
@@ -51,25 +43,26 @@ namespace LetterBoxedPuzzle.Framework.Models
         ///     Gets the forbidden two-letter pairs that cannot be contained in a solution of a letter-boxed puzzle.
         /// </summary>
         /// <returns>The forbidden two-letter pairs of letters.</returns>
-        public IEnumerable<string> ForbiddenTwoLetterPairs
-        {
-            get
-            {
-                var pairs = new List<string>();
-
-                foreach (var sideLetterGroup in this.SideLetterGroups)
+        public IEnumerable<string> ForbiddenTwoLetterPairs =>
+            this.SideLetterGroups.Aggregate(
+                new List<string>(),
+                (current, group) =>
                 {
-                    pairs.AddRange(GenerateAllDistinctTwoLetterPairs(sideLetterGroup));
-                }
-
-                return pairs;
-            }
-        }
+                    current.AddRange(GenerateAllDistinctTwoLetterPairs(group));
+                    return current;
+                }).Distinct();
 
         /// <summary>
         ///     Gets the set of forbidden two-letter pairs.
         /// </summary>
-        public IReadOnlyCollection<string> ForbiddenTwoLetterPairSet { get; }
+        private ISet<string> ForbiddenTwoLetterPairSet =>
+            this.ForbiddenTwoLetterPairs.Aggregate(
+                new HashSet<string>(),
+                (current, pair) =>
+                {
+                    current.Add(pair);
+                    return current;
+                });
 
         /// <summary>
         ///     Determines whether the given pair of two letters is forbidden and cannot be contained in any solution to the letter-boxed puzzle.
@@ -85,12 +78,12 @@ namespace LetterBoxedPuzzle.Framework.Models
                 throw new ArgumentException($"Given letters '{twoLetterPair}' do not have length 2.");
             }
 
-            if (twoLetterPair.All(IsAlphabetLetter))
+            if (!twoLetterPair.All(IsAlphabetLetter))
             {
                 throw new ArgumentException($"Given two letters '{twoLetterPair}' are not both letters of the alphabet.");
             }
 
-            return this.ForbiddenTwoLetterPairSet.Contains(twoLetterPair);
+            return this.ForbiddenTwoLetterPairSet.Contains(twoLetterPair.ToLowerInvariant());
         }
     }
 }
