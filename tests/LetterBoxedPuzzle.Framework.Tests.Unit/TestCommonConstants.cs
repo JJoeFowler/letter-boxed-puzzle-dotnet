@@ -78,5 +78,15 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 AlphabetBitMask.S, AlphabetBitMask.T, AlphabetBitMask.U, AlphabetBitMask.V, AlphabetBitMask.W, AlphabetBitMask.X,
                 AlphabetBitMask.Y, AlphabetBitMask.Z,
             };
+
+        /// <summary>
+        ///     Test letter groups for three sides.
+        /// </summary>
+        internal static readonly string[] TestLetterGroupsForThreeSides = { "abc", "DEF", "gHi" };
+
+        /// <summary>
+        ///     Test letter groups for nine sides.
+        /// </summary>
+        internal static readonly string[] TestLetterGroupsForNineSides = { "abc", "Def", "gHi", "jkL", "LMn", "PqR", "sTU", "UVW", "yZ" };
     }
 }

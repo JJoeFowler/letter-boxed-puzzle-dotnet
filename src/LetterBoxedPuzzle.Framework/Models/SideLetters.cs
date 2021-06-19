@@ -15,26 +15,30 @@ namespace LetterBoxedPuzzle.Framework.Models
     using static Utilities.StringUtilities;
 
     /// <summary>
-    ///     Class for the groups of letters along each side of a letter-boxed puzzle.
+    ///     Class for the groups of letters along the sides of a letter-boxed puzzle.
     /// </summary>
     public class SideLetters
     {
         /// <summary>
-        /// The minimum number of sides for letter-boxed puzzle, which is two here since only two sides are required to construct words.
+        ///     The minimum number of sides for letter-boxed puzzle, which is two here since only two sides are required to construct words.
         /// </summary>
         public const int MinimumLetterBoxedSides = 2;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SideLetters" /> class.
         /// </summary>
-        /// <param name="sideLetterGroups">The groups of letters along each side of a letter-boxed puzzle.</param>
-        public SideLetters(params string[] sideLetterGroups)
+        /// <param name="letterGroups">The groups of letters along the sides of a letter-boxed puzzle.</param>
+        /// <exception cref="ArgumentException">
+        ///     Thrown when any letter group is null, empty, or contains a non-alphabet letter or when there are fewer than two groups.
+        /// </exception>
+        public SideLetters(params string[] letterGroups)
         {
-            var sideCount = sideLetterGroups.Length;
+            var sideCount = letterGroups.Length;
 
-            if (sideLetterGroups.Any(string.IsNullOrEmpty))
+            if (letterGroups.Any(string.IsNullOrEmpty))
             {
-                throw new ArgumentException($"One or more of the given groups of letters {QuoteJoin(sideLetterGroups)}' is null or empty.");
+                throw new ArgumentException(
+                    $"One or more of the given groups of letters along the sides {QuoteJoin(letterGroups)}' is null or empty.");
             }
 
             if (sideCount < MinimumLetterBoxedSides)
@@ -42,25 +46,26 @@ namespace LetterBoxedPuzzle.Framework.Models
                 throw new ArgumentException($"Must provide at least {MinimumLetterBoxedSides} groups of letters rather than {sideCount}.");
             }
 
-            if (sideLetterGroups.All(letters => letters.All(IsAlphabetLetter)) != true)
+            if (letterGroups.All(letters => letters.All(IsAlphabetLetter)) != true)
             {
-                throw new ArgumentException($"Given side letters {QuoteJoin(sideLetterGroups)}' cannot contain non-alphabet letters.");
+                throw new ArgumentException(
+                    $"Given groups of letters along the sides {QuoteJoin(letterGroups)}' cannot contain non-alphabet characters.");
             }
 
-            this.SideLetterGroups = sideLetterGroups.Select(group => group.ToLowerInvariant()).ToArray();
+            this.LetterGroups = letterGroups.Select(group => group.ToLowerInvariant()).ToArray();
         }
 
         /// <summary>
-        ///     Gets groups of letters along each side of a letter-boxed puzzle.
+        ///     Gets group of letters along the sides of a letter-boxed puzzle.
         /// </summary>
-        public string[] SideLetterGroups { get; }
+        public string[] LetterGroups { get; }
 
         /// <summary>
         ///     Gets the forbidden two-letter pairs that cannot be contained in a solution of a letter-boxed puzzle.
         /// </summary>
         /// <returns>The forbidden two-letter pairs of letters.</returns>
-        public IEnumerable<string> ForbiddenTwoLetterPairs =>
-            this.SideLetterGroups.Aggregate(
+        private IEnumerable<string> ForbiddenTwoLetterPairs =>
+            this.LetterGroups.Aggregate(
                 new List<string>(),
                 (current, group) =>
                 {
