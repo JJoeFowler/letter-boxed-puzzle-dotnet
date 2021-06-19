@@ -42,22 +42,22 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception is thrown if given no letters along each side to instantiate the class.
+        ///     Verifies whether an argument exception is thrown if given no letter groups used to instantiate the class.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void SideLetters_GivenNoLettersAlongEachSide_ThrowsArgumentException()
+        public void SideLetters_GivenNoLetterGroups_ThrowsArgumentException()
         {
             // Act
             _ = new SideLetters();
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception is thrown if given an empty array for the letters along each side to instantiate the class.
+        ///     Verifies whether an argument exception is thrown if given an empty array for the letter groups used to instantiate the class.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void SideLetters_GivenEmptyArrayForLettersAlongEachSide_ThrowsArgumentException()
+        public void SideLetters_GivenEmptyArrayForLetterGroups_ThrowsArgumentException()
         {
             // Arrange
             var emptyArray = Array.Empty<string>();
@@ -67,17 +67,50 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception is thrown if given an empty array for the letters along each side to instantiate the class.
+        ///     Verifies whether an argument exception is thrown if given an one-element array for the letter groups used to instantiate
+        ///     the class.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void SideLetters_GivenOneElementArrayForLettersAlongEachSide_ThrowsArgumentException()
+        public void SideLetters_GivenOneElementArrayForLetterGroups_ThrowsArgumentException()
         {
             // Arrange
             var oneElementSideElementGroup = new[] { "abc" };
 
             // Act
             _ = new SideLetters(oneElementSideElementGroup);
+        }
+
+        /// <summary>
+        ///     Verifies whether an argument exception is thrown if given a two-element array with a null value for the letter groups used
+        ///     to instantiate the class.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void SideLetters_GivenTwoElementArrayWithANullValueForLetterGroups_ThrowsArgumentException()
+        {
+            // Arrange
+            var twoElementSideElementGroup = new[] { "abc", null };
+
+            // Act
+#pragma warning disable 8620
+            _ = new SideLetters(twoElementSideElementGroup);
+#pragma warning restore 8620
+        }
+
+        /// <summary>
+        ///     Verifies whether an argument exception is thrown if given a two-element array with an empty string for the letter groups used
+        ///     to instantiate the class.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void SideLetters_GivenTwoElementArrayWithAnEmptyStringForLetterGroups_ThrowsArgumentException()
+        {
+            // Arrange
+            var twoElementSideElementGroup = new[] { "abc", string.Empty };
+
+            // Act
+            _ = new SideLetters(twoElementSideElementGroup);
         }
 
         /// <summary>
@@ -202,6 +235,34 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 Assert.IsFalse(
                     actualValues[index],
                     $"Expected the pair '{differentSideLetterPairs[index]}' not to be forbidden for the letter groups {QuoteJoin(testLetterGroups)}.");
+            }
+        }
+
+        /// <summary>
+        ///     Verify whether throw an argument exception when given a string not of length two for the two-letter pair.
+        /// </summary>
+        [TestMethod]
+        public void IsForbiddenTwoLetterPair_GivenStringNotOfLengthTwo_ThrowsArgumentException()
+        {
+            // Arrange
+            var testSideLettersForThreeSides = new SideLetters(TestLetterGroupsForThreeSides);
+
+            var sameSideLetterPairs = new[]
+                {
+                    "aa", "ab", "ac", "ba", "bb", "bc", "ca", "cb", "cc", "dd", "de", "df", "ed", "ee", "ef", "fd", "fe", "ff", "gg", "gh",
+                    "gi", "hg", "hh", "hi", "ig", "ih", "ii",
+                };
+
+            // Act
+            var actualValues = sameSideLetterPairs.Select(pair => testSideLettersForThreeSides.IsForbiddenTwoLetterPair(pair)).ToArray();
+
+            // Assert
+            for (var index = 0; index < sameSideLetterPairs.Length; index++)
+            {
+                var testLetterGroups = testSideLettersForThreeSides.LetterGroups;
+                Assert.IsTrue(
+                    actualValues[index],
+                    $"Expected the pair '{sameSideLetterPairs[index]}' to be forbidden for the letter groups {QuoteJoin(testLetterGroups)}.");
             }
         }
     }

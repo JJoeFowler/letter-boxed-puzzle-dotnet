@@ -90,6 +90,10 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// </summary>
         /// <param name="twoLetterPair">The two-letter pair.</param>
         /// <returns><see langword="true" /> if the given two-letter is forbidden, of <see langword="false" /> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value for the two-letter pair.</exception>
+        /// <exception cref="ArgumentException">
+        ///     Thrown when given a string not of length two or when given a two-letter pair with a non-alphabet character.
+        /// </exception>
         public bool IsForbiddenTwoLetterPair(string twoLetterPair)
         {
             _ = twoLetterPair ?? throw new ArgumentNullException(nameof(twoLetterPair));
