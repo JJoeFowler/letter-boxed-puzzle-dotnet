@@ -15,6 +15,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using static TestCommonAssertions;
+
     using static TestCommonConstants;
 
     using static Utilities.StringUtilities;
@@ -25,6 +27,11 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     [TestClass]
     public class SideLettersTests
     {
+        /// <summary>
+        ///     The test side letters for threes sides.
+        /// </summary>
+        internal static readonly SideLetters TestSideLettersForThreeSides = new (TestLetterGroupsForThreeSides);
+
         /// <summary>
         ///     Verifies whether a null reference exception is thrown if given a null value to instantiate the class.
         /// </summary>
@@ -122,33 +129,18 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var testLetterGroup = TestLetterGroupsForThreeSides;
-            var groupIndices = new[] { 0, 1, 2 };
-
             var invalidLetters = NonAlphabetCharacters.Select(character => $"abc{character.ToString()}XYZ").ToArray();
 
+            var groupIndices = new[] { 0, 1, 2 };
             var invalidLetterGroups = from invalidGroup in invalidLetters
                                       from groupIndex in groupIndices
                                       select new List<string>(testLetterGroup) { [groupIndex] = invalidGroup }.ToArray();
 
-            var expectedExceptionType = typeof(ArgumentException);
-
-            // Act and assert
-            foreach (var invalidLetterGroup in invalidLetterGroups)
-            {
-                var messageEnd = $" as expected for invalid letter group {QuoteJoin(invalidLetterGroup)}'";
-                try
-                {
-                    var sideLetters = new SideLetters(invalidLetterGroup);
-                    Assert.IsNotNull(sideLetters, $"Did not throw an {expectedExceptionType} {messageEnd}.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' {messageEnd}.");
-                }
-            }
+            AssertExceptionThrown(
+                letterGroups => new SideLetters(letterGroups),
+                typeof(ArgumentException),
+                invalidLetterGroups,
+                groups => $"invalid letter groups {QuoteJoin(groups)}");
         }
 
         /// <summary>
@@ -264,6 +256,53 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                     actualValues[index],
                     $"Expected the pair '{sameSideLetterPairs[index]}' to be forbidden for the letter groups {QuoteJoin(testLetterGroups)}.");
             }
+        }
+
+        /// <summary>
+        ///     Verifies whether an argument exception was thrown if given null value when determining if the pair is forbidden.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void IsForbiddenTwoLetterPair_GivenNullValue_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string? nullValue = null;
+
+            // Act
+#pragma warning disable CS8604 // Possible null reference argument.
+            _ = TestSideLettersForThreeSides.IsForbiddenTwoLetterPair(nullValue);
+#pragma warning restore CS8604 // Possible null reference argument.
+        }
+
+        /// <summary>
+        ///     Verifies whether an argument exception was thrown if given two letter pair that does not have length 2 when determining if
+        ///     the pair is forbidden.
+        /// </summary>
+        [TestMethod]
+        public void IsForbiddenTwoLetterPair_GivenTwoLetterPairsNotOfLengthTwo_ThrowsArgumentException()
+        {
+            var invalidLengths = new[] { 0, 1 }.Union(Enumerable.Range(3, 100));
+            var invalidLengthInputs = invalidLengths.Select(length => new string('a', length));
+
+            static bool TestFunction(string twoLetterPair) =>
+                new SideLetters(TestLetterGroupsForThreeSides).IsForbiddenTwoLetterPair(twoLetterPair);
+
+            AssertExceptionThrown(TestFunction, typeof(ArgumentException), invalidLengthInputs, x => $"invalid length {x.Length}");
+        }
+
+        /// <summary>
+        ///     Verifies whether an argument exception was thrown if given two letter pair with non-alphabet character when determining if
+        ///     the pair is forbidden.
+        /// </summary>
+        [TestMethod]
+        public void IsForbiddenTwoLetterPair_GivenTwoLetterPairsWithNonAlphabetCharacter_ThrowsArgumentException()
+        {
+            var invalidTwoLetterPairs = NonAlphabetCharacters.Select(character => "a" + character);
+
+            static bool TestFunction(string twoLetterPair) =>
+                new SideLetters(TestLetterGroupsForThreeSides).IsForbiddenTwoLetterPair(twoLetterPair);
+
+            AssertExceptionThrown(TestFunction, typeof(ArgumentException), invalidTwoLetterPairs, x => "invalid two-letter pair");
         }
     }
 }

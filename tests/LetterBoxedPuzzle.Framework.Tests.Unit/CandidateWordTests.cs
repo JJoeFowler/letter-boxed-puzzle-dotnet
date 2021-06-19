@@ -17,6 +17,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
     using static Constants.AlphabetConstants;
 
+    using static TestCommonAssertions;
+
     using static TestCommonConstants;
 
     /// <summary>
@@ -310,24 +312,13 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // Arrange
             var candidateLettersWithNonAlphabetCharacter = NonAlphabetCharacters.Select(c => $"abc{c.ToString()}xyz");
 
-            var expectedExceptionType = typeof(ArgumentException);
+            static bool TestCandidateWordFunction(string invalidLetters) => new CandidateWord("abcXyz").IsContainedIn(invalidLetters);
 
-            // Act and assert
-            foreach (var invalidLetters in candidateLettersWithNonAlphabetCharacter)
-            {
-                try
-                {
-                    var isContained = new CandidateWord("abcXyz").IsContainedIn(invalidLetters);
-                    Assert.IsTrue(isContained, $"Did not throw an {expectedExceptionType} as expected for candidate letters '{invalidLetters}'.");
-                }
-                catch (Exception exception)
-                {
-                    var exceptionType = exception.GetType();
-                    Assert.IsTrue(
-                        exceptionType == expectedExceptionType,
-                        $"Threw an '{exceptionType}' instead of '{expectedExceptionType}' as expected for non-alphabetic input '{invalidLetters}'.");
-                }
-            }
+            AssertExceptionThrown(
+                TestCandidateWordFunction,
+                typeof(ArgumentException),
+                candidateLettersWithNonAlphabetCharacter,
+                _ => "candidate letters");
         }
     }
 }

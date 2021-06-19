@@ -32,7 +32,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         /// <summary>
         ///     Checks whether the word archive initialized by all legal words contains the test word.
         /// </summary>
-        [Ignore]
+        [TestMethod]
         public void WordArchive_GivenLegalWordsText_ContainsTestWord()
         {
             var wordArchive = new WordArchive(WordConstants.AllLegalWordsText);
@@ -44,7 +44,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // var letterBoxedLetterGroups = new[] { "hap", "oil", "sew", "nzr" };
             // var letterBoxedLetterGroups = new[] { "ayg", "ocb", "rif", "tln" };
             // var letterBoxedLetterGroups = new[] { "aik", "buo", "fmt", "rcj" };
-            var letterBoxedLetterGroups = new[] { "nby", "aoh", "itu", "slm" };
+            // var letterBoxedLetterGroups = new[] { "nby", "aoh", "itu", "slm" };
+            var letterBoxedLetterGroups = new[] { "koz", "egb", "cnm", "iar" };
 
             void OutputDuplicateWords(IEnumerable<string> words, string description)
             {

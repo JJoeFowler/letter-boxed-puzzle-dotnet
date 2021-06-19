@@ -266,10 +266,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var invalidCharacters = NonAlphabetCharacters;
-            static void AssertFunction(AlphabetBitMask actualBitMask, string message) => Assert.AreNotEqual(AlphabetBitMask.None, actualBitMask);
 
             // Act and assert
-            AssertExceptionThrown(AssertFunction, GetAlphabetBitMask, typeof(ArgumentException), invalidCharacters, _ => "non-alphabet character");
+            AssertExceptionThrown(GetAlphabetBitMask, typeof(ArgumentException), invalidCharacters, _ => "non-alphabet character");
         }
 
         /// <summary>
@@ -296,10 +295,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var invalidWords = NonAlphabetCharacters.Select(character => $"aBc{character}XyZ");
-            static void AssertFunction(AlphabetBitMask actualBitMask, string message) => Assert.AreNotEqual(AlphabetBitMask.None, actualBitMask);
 
             // Act and assert
-            AssertExceptionThrown(AssertFunction, GetAlphabetBitMask, typeof(ArgumentException), invalidWords, _ => "invalid word");
+            AssertExceptionThrown(GetAlphabetBitMask, typeof(ArgumentException), invalidWords, _ => "invalid word");
         }
 
         /// <summary>
@@ -551,7 +549,33 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 character => GenerateAlphabeticRangeAsText(character, 1),
                 typeof(ArgumentException),
                 invalidStartingLetters,
-                _ => "starting letter");
+                _ => "starting non-alphabet character");
+        }
+
+        /// <summary>
+        ///     Verifies that when given the "xY" as the text input that the generated distinct two-letter pairs are all four possible
+        ///     lowercase pairs of the lowercase letters 'x' and 'y'.
+        /// </summary>
+        [TestMethod]
+        public void GenerateAllDistinctTwoLetterPairs_GivenXyText_ReturnAllFourTwoLetterLowercasePairs()
+        {
+            // Arrange
+            const string abcText = "xY";
+            var expectedPairsSet = new HashSet<string>(new[] { "xx", "yy", "xy", "yx" });
+
+            // Act
+            var actualPairsSet = new HashSet<string>(GenerateAllDistinctTwoLetterPairs(abcText).ToArray());
+
+            // Assert
+            foreach (var actualPair in actualPairsSet)
+            {
+                Assert.IsTrue(expectedPairsSet.Contains(actualPair), $"For text '{abcText}' the actual pair '{actualPair}' was unexpected.");
+            }
+
+            foreach (var expectedPair in expectedPairsSet)
+            {
+                Assert.IsTrue(actualPairsSet.Contains(expectedPair), $"For text '{abcText}' the pair '{expectedPair}' was expected.");
+            }
         }
 
         /// <summary>
@@ -607,7 +631,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             const int count = 100;
-            var sameAlphabetLetters = LowercaseAlphabet.Select(letter => $"{letter}{letter.ToString().ToUpper()}");
+            var sameAlphabetLetters = LowercaseAlphabet.Select(letter => letter + letter.ToString().ToUpper());
             var repeatedAlphabetLetters = sameAlphabetLetters.Select(letters => string.Join(string.Empty, Enumerable.Repeat(letters, count)));
             var expectedPairs = LowercaseAlphabet.Select(letter => $"{letter}{letter}").ToArray();
 
