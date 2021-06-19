@@ -40,7 +40,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void SideLetters_GivenNullValue_ThrowsNullReferenceException()
         {
             // Arrange
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
             string[]? nullValue = null;
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
 
             // Act
 #pragma warning disable 8604
@@ -302,7 +304,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             static bool TestFunction(string twoLetterPair) =>
                 new SideLetters(TestLetterGroupsForThreeSides).IsForbiddenTwoLetterPair(twoLetterPair);
 
-            AssertExceptionThrown(TestFunction, typeof(ArgumentException), invalidTwoLetterPairs, x => "invalid two-letter pair");
+            AssertExceptionThrown(TestFunction, typeof(ArgumentException), invalidTwoLetterPairs, _ => "invalid two-letter pair");
         }
     }
 }
