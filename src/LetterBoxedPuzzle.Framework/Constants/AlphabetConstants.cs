@@ -13,8 +13,6 @@ namespace LetterBoxedPuzzle.Framework.Constants
     using LetterBoxedPuzzle.Framework.Enums;
     using LetterBoxedPuzzle.Framework.Extensions;
 
-    using static Utilities.AlphabetUtilities;
-
     /// <summary>
     ///     Class of constants related to the alphabet.
     /// </summary>
@@ -46,24 +44,32 @@ namespace LetterBoxedPuzzle.Framework.Constants
         public const char UpperCaseZ = 'Z';
 
         /// <summary>
-        ///     Full lowercase alphabet as a string from 'a' to 'z', which is "abcdefghijklmnopqrstuvwxyz".
+        ///     The characters of the lowercase alphabet from 'a' to 'z'.
         /// </summary>
-        public static readonly string FullLowercaseAlphabetText = GenerateAlphabeticRangeAsText(LowerCaseA, EnglishAlphabetSize);
+        public static readonly char[] LowercaseAlphabet =
+            {
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                'u', 'v', 'w', 'x', 'y', 'z',
+            };
 
         /// <summary>
-        ///     Full lowercase alphabet as a sequence of characters from 'a' to 'z'.
+        ///     The characters of the uppercase alphabet from 'A' to 'Z'.
         /// </summary>
-        public static readonly char[] FullLowercaseAlphabetSequence = GenerateAlphabeticRangeSequence(LowerCaseA, EnglishAlphabetSize);
+        public static readonly char[] UppercaseAlphabet =
+            {
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+                'U', 'V', 'W', 'X', 'Y', 'Z',
+            };
 
         /// <summary>
-        ///     Full uppercase alphabet as a sequence of characters from 'A' to 'Z'.
+        ///     Lowercase alphabet as a string from 'a' to 'z'.
         /// </summary>
-        public static readonly char[] FullUppercaseAlphabetSequence = GenerateAlphabeticRangeSequence(UpperCaseA, EnglishAlphabetSize);
+        public static readonly string LowercaseAlphabetText = new (LowercaseAlphabet);
 
         /// <summary>
-        ///     Full alphabet as a sequence of characters from 'a' to 'z' and from 'A' to 'Z'.
+        ///     Uppercase alphabet as a string from 'A' to 'Z'.
         /// </summary>
-        public static readonly char[] FullAlphabetSequence = FullLowercaseAlphabetSequence.Union(FullUppercaseAlphabetSequence).ToArray();
+        public static readonly string UppercaseAlphabetText = new (UppercaseAlphabet);
 
         /// <summary>
         ///     Lazy initializer of the alphabet bit mask set with all bits set.

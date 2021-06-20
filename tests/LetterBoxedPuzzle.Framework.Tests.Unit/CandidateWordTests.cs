@@ -309,7 +309,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void IsContainedIn_AtoZCandidateWordGivenAllLetters_IsTrue()
         {
             // Arrange and act
-            var actualIsContainedIn = AToZCandidateWord.IsContainedIn(FullLowercaseAlphabetText);
+            var actualIsContainedIn = AToZCandidateWord.IsContainedIn(LowercaseAlphabetText);
 
             // Assert
             Assert.IsTrue(actualIsContainedIn);
@@ -328,7 +328,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             for (var index = 0; index < EnglishAlphabetSize; index++)
             {
                 var alphabetRangeTextMissingOneLetter =
-                    FullLowercaseAlphabetText.Replace(FullLowercaseAlphabetText[index].ToString(), string.Empty);
+                    LowercaseAlphabetText.Replace(LowercaseAlphabetText[index].ToString(), string.Empty);
 
                 allCandidateLettersButOneArray[index] = new CandidateWord(alphabetRangeTextMissingOneLetter);
             }
@@ -340,7 +340,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             {
                 var allCandidateLettersButOne = allCandidateLettersButOneArray[index];
                 var allCandidateLettersButOneText = allCandidateLettersButOne.LowercaseWord;
-                var missingLetter = FullLowercaseAlphabetText[index];
+                var missingLetter = LowercaseAlphabetText[index];
 
                 var messageEnd = $"\"{allCandidateLettersButOneText}\" missing the letter '{missingLetter}'";
 

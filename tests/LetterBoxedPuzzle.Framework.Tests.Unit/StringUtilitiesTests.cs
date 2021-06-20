@@ -12,6 +12,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using static Constants.AlphabetConstants;
+
     using static TestCommonConstants;
 
     using static Utilities.StringUtilities;
@@ -23,11 +25,14 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     public class StringUtilitiesTests
     {
         /// <summary>
-        ///     The single quoted lowercase alphabet delimited by commas with a space.
+        ///     The single-quoted lowercase alphabet delimited by commas with a space.
         /// </summary>
         internal const string SingleQuotedLowercaseAlphabet = "'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', "
             + "'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'";
 
+        /// <summary>
+        ///     The double-quoted lowercase alphabet delimited by commas with a space.
+        /// </summary>
         internal const string DoubleQuotedLowercaseAlphabet = @"""a"", ""b"", ""c"", ""d"", ""e"", ""f"", ""g"", ""h"", ""i"", ""j"", ""k"", "
             + @"""l"", ""m"", ""n"", ""o"", ""p"", ""q"", ""r"", ""s"", ""t"", ""u"", ""v"", ""w"", ""x"", ""y"", ""z""";
 

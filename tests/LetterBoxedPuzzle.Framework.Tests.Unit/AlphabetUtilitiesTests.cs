@@ -11,10 +11,11 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using System.Collections.Generic;
     using System.Linq;
 
-    using LetterBoxedPuzzle.Framework.Constants;
     using LetterBoxedPuzzle.Framework.Enums;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using static Constants.AlphabetConstants;
 
     using static TestCommonAssertions;
 
@@ -233,7 +234,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void GetAlphabetBitMask_GivenAToZTestWord_ReturnsAlphabetBitMaskWithAllBitsSet()
         {
             // Arrange
-            var expectedAlphabetBitMask = AlphabetConstants.AlphabetBitMaskWithAllBitsSet;
+            var expectedAlphabetBitMask = AlphabetBitMaskWithAllBitsSet;
 
             // Act
             var actualAlphabetBitMask = GetAlphabetBitMask(AToZTestWord);
