@@ -15,10 +15,13 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+    using static Constants.AlphabetConstants;
+
     using static TestCommonAssertions;
 
     using static TestCommonConstants;
 
+    using static Utilities.AlphabetUtilities;
     using static Utilities.StringUtilities;
 
     /// <summary>
@@ -170,6 +173,32 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                     actualLetterGroup,
                     $"Expected letter group '{expectedLetterGroup}' for group {index + 1} instead of '{actualLetterGroup}'.");
             }
+        }
+
+        /// <summary>
+        ///     Verify whether given the letter groups consist of all three-letter alphabetic ranges as texts, i.e., "abc", "bcd", ..., "xyz"
+        ///     that the lowercase alphabet is returned for the distinct letters.
+        /// </summary>
+        [TestMethod]
+        public void DistinctLetters_GivenLetterGroupsConsistingOfAllThreeLetterAlphabeticRangesAsText_ReturnsLowercaseAlphabet()
+        {
+            // Arrange
+            var testLetterGroups = Enumerable.Range(LowercaseA, EnglishAlphabetSize - 2)
+                .Select(startingLetter => GenerateAlphabeticRangeAsText((char)startingLetter, 3)).ToArray();
+
+            var testSideLetter = new SideLetters(testLetterGroups);
+            var expectedLetters = LowercaseAlphabetText;
+
+            // Act
+            var actualLetters = testSideLetter.DistinctLetters;
+
+            // Assert
+            var quotedLetterGroups = QuoteJoin(testLetterGroups);
+
+            Assert.AreEqual(
+                expectedLetters,
+                actualLetters,
+                $"Expected the distinct letters \"{expectedLetters}\" and not \"{actualLetters}\" for the letter groups {quotedLetterGroups}).");
         }
 
         /// <summary>

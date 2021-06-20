@@ -53,12 +53,19 @@ namespace LetterBoxedPuzzle.Framework.Models
             }
 
             this.LetterGroups = letterGroups.Select(group => group.ToLowerInvariant()).ToArray();
+
+            this.DistinctLetters = new string(this.LetterGroups.SelectMany(x => x).Distinct().ToArray());
         }
 
         /// <summary>
         ///     Gets group of letters along the sides of a letter-boxed puzzle.
         /// </summary>
         public string[] LetterGroups { get; }
+
+        /// <summary>
+        ///     Gets the distinct letters among all the letter groups.
+        /// </summary>
+        public string DistinctLetters { get; }
 
         /// <summary>
         ///     Gets the forbidden two-letter pairs that cannot be contained in a solution of a letter-boxed puzzle.
