@@ -8,8 +8,8 @@
 namespace LetterBoxedPuzzle.Framework.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     using LetterBoxedPuzzle.Framework.Constants;
     using LetterBoxedPuzzle.Framework.Enums;
@@ -42,17 +42,23 @@ namespace LetterBoxedPuzzle.Framework.Models
             }
 
             this.LowercaseWord = word.ToLowerInvariant();
-
-            this.AsciiSequence = Encoding.ASCII.GetBytes(this.LowercaseWord);
-
-            foreach (var asciiValue in this.AsciiSequence)
-            {
-                var alphabetBitMaskByAsciiValue = AlphabetBitMaskByAsciiValues[asciiValue];
-                this.AlphabetBitMask |= alphabetBitMaskByAsciiValue;
-            }
-
             this.FirstLetter = this.LowercaseWord[0];
             this.LastLetter = this.LowercaseWord[^1];
+
+            var lowercaseCharacters = this.LowercaseCharacters = this.LowercaseWord.ToCharArray();
+            this.SequentialLetters = Enumerable.Range(0, lowercaseCharacters.Length - 1).Aggregate(
+                new List<string>(),
+                (current, index) =>
+                {
+                    current.Add(lowercaseCharacters[index].ToString() + lowercaseCharacters[index + 1]);
+                    return current;
+                }).ToArray();
+
+            this.ByteSequence = this.LowercaseWord.Select(x => (byte)x).ToArray();
+
+            this.AlphabetBitMask = this.ByteSequence.Aggregate(
+                AlphabetBitMask.None,
+                (currentBitMask, byteValue) => currentBitMask | AlphabetBitMaskByByteValue[byteValue]);
         }
 
         /// <summary>
@@ -71,9 +77,19 @@ namespace LetterBoxedPuzzle.Framework.Models
         public string LowercaseWord { get; }
 
         /// <summary>
-        ///     Gets the byte values corresponding to the ASCII sequence of the word.
+        ///     Gets the lowercase characters of the word used to initialize the candidate.
         /// </summary>
-        public byte[] AsciiSequence { get; }
+        public char[] LowercaseCharacters { get; }
+
+        /// <summary>
+        ///     Gets the byte values corresponding of the word.
+        /// </summary>
+        public byte[] ByteSequence { get; }
+
+        /// <summary>
+        ///     Gets the sequential letters of the candidate word.
+        /// </summary>
+        public string[] SequentialLetters { get; }
 
         /// <summary>
         ///     Gets the alphabet bit mask of the word where '<see cref="Enums.AlphabetBitMask.A" />', ..., <see cref="Enums.AlphabetBitMask.Z" />
@@ -115,18 +131,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         {
             _ = sideLetters ?? throw new ArgumentNullException(nameof(sideLetters));
 
-            var lastLetter = ' ';
-            foreach (var letter in this.LowercaseWord)
-            {
-                if (sideLetters.IsForbiddenTwoLetterPair(lastLetter + letter.ToString()))
-                {
-                    return false;
-                }
-
-                lastLetter = letter;
-            }
-
-            return true;
+            return !this.SequentialLetters.Any(letters => sideLetters.IsForbiddenTwoLetterPair(letters));
         }
     }
 }

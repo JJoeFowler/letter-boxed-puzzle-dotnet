@@ -144,24 +144,24 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given an extended ASCII character that the correct extended ASCII value is returned.
+        ///     Verifies whether given a byte-sized character (whose value is between 0 and 255) that the converted byte value is returned.
         /// </summary>
         [TestMethod]
-        public void GetExtendedAsciiValue_GivenExtendedAsciiCharacter_ReturnsCorrectExtendedAsciiValue()
+        public void GetByteValue_GivenByteSizedCharacter_ReturnsCorrectByteValue()
         {
             // Arrange
-            var extendedAsciiCharacters = Enumerable.Range(0, byte.MaxValue).Select(x => (char)x).ToArray();
-            var expectedExtendedAsciiValues = extendedAsciiCharacters.Select(character => (byte)character).ToArray();
+            var byteCharacters = Enumerable.Range(0, byte.MaxValue).Select(x => (char)x).ToArray();
+            var expectedByteValues = byteCharacters.Select(character => (byte)character).ToArray();
 
             // Act
-            var actualExtendedAsciiValues = extendedAsciiCharacters.Select(character => GetExtendedAsciiValue(character)).ToArray();
+            var actualByteValues = byteCharacters.Select(character => GetByteValue(character)).ToArray();
 
             // Assert
-            for (var index = 0; index < extendedAsciiCharacters.Length; index++)
+            for (var index = 0; index < byteCharacters.Length; index++)
             {
-                var character = extendedAsciiCharacters[index];
-                var expectedValue = expectedExtendedAsciiValues[index];
-                var actualValue = actualExtendedAsciiValues[index];
+                var character = byteCharacters[index];
+                var expectedValue = expectedByteValues[index];
+                var actualValue = actualByteValues[index];
 
                 Assert.AreEqual(
                     expectedValue,
@@ -171,17 +171,17 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given the first non-extended ASCII unicode character that an overflow exception is thrown.
+        ///     Verifies whether given the first non-byte sized unicode character that an overflow exception is thrown.
         /// </summary>
         [ExpectedException(typeof(OverflowException))]
         [TestMethod]
-        public void GetExtendedAsciiValue_GivenNonExtendedAsciiUnicodeCharacter_ThrowsOverflowException()
+        public void GetByteValue_GivenNonByteSizedUnicodeCharacter_ThrowsOverflowException()
         {
             // Arrange
-            const char firstNonExtendedAsciiCharacter = (char)(byte.MaxValue + 1);
+            const char firstNonByteSizedCharacter = (char)(byte.MaxValue + 1);
 
             // Act
-            _ = GetExtendedAsciiValue(firstNonExtendedAsciiCharacter);
+            _ = GetByteValue(firstNonByteSizedCharacter);
         }
 
         /// <summary>
