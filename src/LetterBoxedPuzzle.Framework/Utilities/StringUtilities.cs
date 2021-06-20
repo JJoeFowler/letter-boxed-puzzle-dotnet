@@ -15,15 +15,15 @@ namespace LetterBoxedPuzzle.Framework.Utilities
     public static class StringUtilities
     {
         /// <summary>
-        ///     Single quote and join the given text values with a comma and space, where given array [ text1, text2, ..., text<i>N</i>
+        ///     Double quote and join the given text values with a comma and space, where given array [ text1, text2, ..., text<i>N</i>
         ///     of length <i>N</i> ] would yield "'text1', 'text2', ..., 'text<i>N</i>'", where <see langword="null " /> values are replaced
         ///     by the word "null".
         /// </summary>
         /// <param name="textValues">The text values.</param>
-        /// <returns>The join of each text value single-quoted and separated by a comma and a space.</returns>
+        /// <returns>The join of each text value double-quoted and separated by a comma and a space.</returns>
         public static string QuoteJoin(params string[] textValues)
         {
-            return $"'{string.Join("', '", textValues.Select(value => value ?? "null"))}'";
+            return $"\"{string.Join("\", \"", textValues.Select(value => value ?? "null"))}\"";
         }
 
         /// <summary>

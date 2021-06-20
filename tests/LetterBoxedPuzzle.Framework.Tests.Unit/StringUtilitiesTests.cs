@@ -28,11 +28,14 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         internal const string SingleQuotedLowercaseAlphabet = "'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', "
             + "'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'";
 
+        internal const string DoubleQuotedLowercaseAlphabet = @"""a"", ""b"", ""c"", ""d"", ""e"", ""f"", ""g"", ""h"", ""i"", ""j"", ""k"", "
+            + @"""l"", ""m"", ""n"", ""o"", ""p"", ""q"", ""r"", ""s"", ""t"", ""u"", ""v"", ""w"", ""x"", ""y"", ""z""";
+
         /// <summary>
-        ///     Verifies whether the given an empty character array that the string "''" is returned.
+        ///     Verifies whether the given an empty character array that the single-quoted empty string '' is returned.
         /// </summary>
         [TestMethod]
-        public void QuoteJoin_GivenEmptyCharacterArray_ReturnsEmptyStringQuoted()
+        public void QuoteJoin_GivenEmptyCharacterArray_ReturnsSingleQuotedEmptyString()
         {
             // Arrange
             const string expectedEmptyQuotes = "''";
@@ -45,13 +48,13 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the given an empty string array that the string "''" is returned.
+        ///     Verifies whether the given an empty string array that the double-quoted empty string "" is returned.
         /// </summary>
         [TestMethod]
         public void QuoteJoin_GivenEmptyStringArray_ReturnsEmptyStringQuoted()
         {
             // Arrange
-            const string expectedEmptyQuotes = "''";
+            const string expectedEmptyQuotes = @"""""";
 
             // Act
             var actualEmptyQuotes = QuoteJoin(Array.Empty<string>());
@@ -85,7 +88,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             const string textInput = SimpleTestWord;
-            const string expectedQuotedTestInput = "'" + SimpleTestWord + "'";
+            const string expectedQuotedTestInput = "\"" + SimpleTestWord + "\"";
 
             // Act
             var actualQuotedTestInput = QuoteJoin(textInput);
@@ -95,11 +98,11 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the given the character array of lowercase alphabet letters that a string of them quoted delimited by a
+        ///     Verifies whether the given the character array of lowercase alphabet letters that a string of them single-quoted delimited by a
         ///     comma and a space is returned.
         /// </summary>
         [TestMethod]
-        public void QuoteJoin_GivenLowercaseAlphabetCharacterArray_ReturnsStringOfEachCharacterQuotedDelimitedByCommaAndSpace()
+        public void QuoteJoin_GivenLowercaseAlphabetCharacterArray_ReturnsStringOfEachCharacterSingleQuotedDelimitedByCommaAndSpace()
         {
             // Arrange
             var lowercaseAlphabetCharacterArray = LowercaseAlphabet;
@@ -113,18 +116,18 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the given the string array of lowercase alphabet letters that a string of them quoted delimited by a
+        ///     Verifies whether the given the string array of lowercase alphabet letters that a string of them double-quoted delimited by a
         ///     comma and a space is returned.
         /// </summary>
         [TestMethod]
-        public void QuoteJoin_GivenLowercaseAlphabetStringArray_ReturnsStringOfEachCharacterQuotedDelimitedByCommaAndSpace()
+        public void QuoteJoin_GivenLowercaseAlphabetStringArray_ReturnsStringOfEachCharacterDoubleQuotedDelimitedByCommaAndSpace()
         {
             // Arrange
-            var lowercaseAlphabetCharacterArray = LowercaseAlphabet.Select(character => character.ToString()).ToArray();
-            const string expectedQuotedLowercaseAlphabet = SingleQuotedLowercaseAlphabet;
+            var lowercaseAlphabetStringArray = LowercaseAlphabet.Select(character => character.ToString()).ToArray();
+            const string expectedQuotedLowercaseAlphabet = DoubleQuotedLowercaseAlphabet;
 
             // Act
-            var actualQuotedLowercaseAlphabet = QuoteJoin(lowercaseAlphabetCharacterArray);
+            var actualQuotedLowercaseAlphabet = QuoteJoin(lowercaseAlphabetStringArray);
 
             // Assert
             Assert.AreEqual(expectedQuotedLowercaseAlphabet, actualQuotedLowercaseAlphabet);
