@@ -131,7 +131,8 @@ namespace LetterBoxedPuzzle.Framework.Models
         {
             _ = sideLetters ?? throw new ArgumentNullException(nameof(sideLetters));
 
-            return !this.SequentialLetters.Any(letters => sideLetters.IsForbiddenTwoLetterPair(letters));
+            return this.IsContainedIn(sideLetters.DistinctLetters)
+                && !this.SequentialLetters.Any(letters => sideLetters.IsForbiddenTwoLetterPair(letters));
         }
     }
 }

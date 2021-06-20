@@ -19,8 +19,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using static Constants.AlphabetConstants;
 
     using static TestCommonAssertions;
+
     using static TestCommonConstants;
 
+    using static Utilities.AlphabetUtilities;
     using static Utilities.StringUtilities;
 
     /// <summary>
@@ -29,12 +31,6 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     [TestClass]
     public class CandidateWordTests
     {
-        /// <summary>
-        ///     The candidate word allowed test pattern for the side letters with the test letter groups for three sides, which are the
-        ///     letter groups "abc", "def", and "ghi".
-        /// </summary>
-        internal const string CandidateWordAllowedTestPatternForSideLettersWithTestLetterGroupsForThreeSides =
-            "^[abcABC][defDEF][ghiGHI][abcABC]$";
 
         /// <summary>
         ///     Candidate word initialized with the simple test word.
@@ -47,7 +43,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         internal static readonly CandidateWord AToZCandidateWord = new (AToZTestWord);
 
         /// <summary>
-        ///     Verifies that an argument null exception is thrown when candidate word is initialized with a null value.
+        ///     Verify whether an argument null exception is thrown when candidate word is initialized with a null value.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -63,7 +59,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is thrown when candidate word is initialized with an empty string.
+        ///     Verify whether an argument exception is thrown when candidate word is initialized with an empty string.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -77,7 +73,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is thrown when candidate word is initialized with a word with underscores.
+        ///     Verify whether an argument exception is thrown when candidate word is initialized with a word with underscores.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -91,7 +87,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is thrown when candidate word is initialized with a word with spaces.
+        ///     Verify whether an argument exception is thrown when candidate word is initialized with a word with spaces.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -105,7 +101,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the first letter of the animal tests word is indeed their first letter.
+        ///     Verify whether the first letter of the animal tests word is indeed their first letter.
         /// </summary>
         [TestMethod]
         public void FirstLetter_GivenAnimalTestWord_IsFirstLetterOfAnimal()
@@ -130,7 +126,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the last letter of the animal tests word is indeed their last letter.
+        ///     Verify whether the last letter of the animal tests word is indeed their last letter.
         /// </summary>
         [TestMethod]
         public void LastLetter_GivenAnimalTestWord_IsLastLetterOfAnimal()
@@ -155,7 +151,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the lowercase word of the A-to-Z candidate word is indeed lowercased.
+        ///     Verify whether the lowercase word of the A-to-Z candidate word is indeed lowercased.
         /// </summary>
         [TestMethod]
         public void LowercaseWord_GivenAToZCandidateWord_IsLowercased()
@@ -172,7 +168,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the lowercase characters of the candidate word instantiated with lowercase alphabet as a single word
+        ///     Verify whether the lowercase characters of the candidate word instantiated with lowercase alphabet as a single word
         ///     are the characters of the lowercase alphabet.
         /// </summary>
         [TestMethod]
@@ -198,13 +194,13 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the lowercase word of the A-to-Z candidate word is indeed lowercased.
+        ///     Verify whether the lowercase word of the A-to-Z candidate word is indeed lowercased.
         /// </summary>
         [TestMethod]
         public void SequentialLetters_GivenAToZCandidateWord_HasAllSequentialLetters()
         {
             // Arrange
-            var expectedSequentialLetters = new string[]
+            var expectedSequentialLetters = new[]
                 {
                     "th", "he", "eq", "qu", "ui", "ic", "ck", "kb", "br", "ro", "ow", "wn", "nf", "fo", "ox", "xj", "ju", "um", "mp", "ps",
                     "so", "ov", "ve", "er", "rt", "th", "he", "el", "la", "az", "zy", "yd", "do", "og",
@@ -226,7 +222,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether byte sequence of the A-to-Z candidate word is correct.
+        ///     Verify whether byte sequence of the A-to-Z candidate word is correct.
         /// </summary>
         [TestMethod]
         public void ByteSequence_GivenSimpleCandidateWord_ReturnsCorrectByteSequence()
@@ -255,7 +251,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the alphabet bit mask of the letters of the simple candidate word are the bit-wise enumerated letters of the simple
+        ///     Verify whether the alphabet bit mask of the letters of the simple candidate word are the bit-wise enumerated letters of the simple
         ///     test word ORed together.
         /// </summary>
         [TestMethod]
@@ -272,7 +268,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the alphabet bit mask of the letters of the A-to-Z candidate word are all bit-wise enumerated letters of the whole
+        ///     Verify whether the alphabet bit mask of the letters of the A-to-Z candidate word are all bit-wise enumerated letters of the whole
         ///     alphabet ORed together.
         /// </summary>
         [TestMethod]
@@ -289,7 +285,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the letters of the simple candidate word is contained within all its letters is true.
+        ///     Verify whether the letters of the simple candidate word is contained within all its letters is true.
         /// </summary>
         [TestMethod]
         public void IsContainedIn_SimpleCandidateWordGivenOnlyItsLetters_IsTrue()
@@ -303,7 +299,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the letters of the A-to-Z candidate word is contained within all letters of the alphabet is true.
+        ///     Verify whether the letters of the A-to-Z candidate word is contained within all letters of the alphabet is true.
         /// </summary>
         [TestMethod]
         public void IsContainedIn_AtoZCandidateWordGivenAllLetters_IsTrue()
@@ -316,7 +312,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the letters of the A-to-Z candidate word are contained within all letters of the alphabet but one is false.
+        ///     Verify whether the letters of the A-to-Z candidate word are contained within all letters of the alphabet but one is false.
         /// </summary>
         [TestMethod]
         public void IsContainedIn_AtoZCandidateWordGivenAllLettersButOne_IsFalse()
@@ -327,8 +323,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             for (var index = 0; index < EnglishAlphabetSize; index++)
             {
-                var alphabetRangeTextMissingOneLetter =
-                    LowercaseAlphabetText.Replace(LowercaseAlphabetText[index].ToString(), string.Empty);
+                var alphabetRangeTextMissingOneLetter = LowercaseAlphabetText.Replace(LowercaseAlphabetText[index].ToString(), string.Empty);
 
                 allCandidateLettersButOneArray[index] = new CandidateWord(alphabetRangeTextMissingOneLetter);
             }
@@ -351,7 +346,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument null exception is thrown if given a null value for the candidate letters.
+        ///     Verify whether an argument null exception is thrown if given a null value for the candidate letters.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -367,7 +362,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is throw if given candidate letters has a non-alphabet letter.
+        ///     Verify whether an argument exception is throw if given candidate letters has a non-alphabet letter.
         /// </summary>
         [TestMethod]
         public void IsContainedIn_GivenCandidateLettersWithNonAlphabetLetter_ThrowsArgumentException()
@@ -385,7 +380,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument null exception is thrown when given a null value for the side letters.
+        ///     Verify whether an argument null exception is thrown when given a null value for the side letters.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -401,7 +396,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given side letters with the three letter groups "abc", "def", "ghi" that any candidate word with
+        ///     Verify whether given side letters with the three letter groups "abc", "def", "ghi" that any candidate word with
         ///     double letters from the first nine letters of the alphabet is not allowed.
         /// </summary>
         [TestMethod]
@@ -428,23 +423,25 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given side letters with the three letter groups "abc", "def", "ghi" that any three-letter candidate word
-        ///     matching the pattern "[abc][def][ghi]" is allowed .
+        ///     Verify whether given side letters with the three letter groups "abc", "def", "ghi" that any six-letter candidate word
+        ///     matching the pattern "([abcABC][defDEF][ghiGHI]){2}" is allowed .
         /// </summary>
         [TestMethod]
-        public void IsAllowed_GivenCandidateWordsMatchingTestPatternWithSideLettersUsingTestLetterGroupsForThreeSides_IsTrue()
+        public void IsAllowed_GivenCandidateWordsMatchingAllowedWordPatternForTestLetterGroups_IsTrue()
         {
             // Arrange
-            var testLetterGroups = TestLetterGroupsForThreeSides;
+            var testLetterGroups = new[] { "abc", "def", "ghi" };
             var testSideLetters = new SideLetters(testLetterGroups);
 
-            var expectedAllowedWords = (from firstCharacter in testLetterGroups[0]
-                                        from secondCharacter in testLetterGroups[1]
-                                        from thirdCharacter in testLetterGroups[2]
-                                        from fourthCharacter in testLetterGroups[0]
-                                        select firstCharacter.ToString() + secondCharacter + thirdCharacter + fourthCharacter).ToArray();
+            var expectedAllowedWords = (from first in testLetterGroups[0]
+                                        from second in testLetterGroups[1].ToUpperInvariant()
+                                        from third in testLetterGroups[2]
+                                        from fourth in testLetterGroups[0].ToUpperInvariant()
+                                        from fifth in testLetterGroups[1]
+                                        from sixth in testLetterGroups[2].ToUpperInvariant()
+                                        select first.ToString() + second + third + fourth + fifth + sixth).ToArray();
 
-            const string allowedWordPattern = CandidateWordAllowedTestPatternForSideLettersWithTestLetterGroupsForThreeSides;
+            const string allowedWordPattern = "^([abcABC][defDEF][ghiGHI]){2}$";
             var allowedWordRegex = new Regex(allowedWordPattern);
 
             // Act
@@ -462,6 +459,36 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 Assert.IsTrue(
                     actualIsAllowed[index],
                     $"Expected  \"{allowedWord}\" to be allowed for side letter with letter groups {QuoteJoin(testLetterGroups)}.");
+            }
+        }
+
+        /// <summary>
+        ///     Verify
+        /// </summary>
+        [TestMethod]
+        public void IsAllowed_GivenCandidateWordNotContainedInSideLetters_IsFalse()
+        {
+            // Arrange
+            var testLetterGroups = new[] { "abc", "def", "ghi" };
+            var otherLetters = GenerateAlphabeticRangeAsText('j', 17);
+
+            var testSideLetters = new SideLetters(testLetterGroups);
+
+            var invalidWords = (from firstCharacter in testLetterGroups[0]
+                                from secondCharacter in testLetterGroups[1]
+                                from thirdCharacter in testLetterGroups[2]
+                                from fourthCharacter in otherLetters
+                                select firstCharacter.ToString() + secondCharacter + thirdCharacter + fourthCharacter).ToArray();
+
+            // Act
+            var actualIsAllowed = invalidWords.Select(word => new CandidateWord(word).IsAllowed(testSideLetters)).ToArray();
+
+            // Asset
+            for (var index = 0; index < invalidWords.Length; index++)
+            {
+                Assert.IsFalse(
+                    actualIsAllowed[index],
+                    $"Expected  \"{invalidWords[index]}\" not to be allowed for side letter with letter groups {QuoteJoin(testLetterGroups)}.");
             }
         }
     }
