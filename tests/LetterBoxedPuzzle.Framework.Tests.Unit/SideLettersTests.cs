@@ -36,7 +36,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         internal static readonly SideLetters TestSideLettersForThreeSides = new (TestLetterGroupsForThreeSides);
 
         /// <summary>
-        ///     Verifies whether a null reference exception is thrown if given a null value to instantiate the class.
+        ///     Verify whether a null reference exception is thrown if given a null value to instantiate the class.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(NullReferenceException))]
@@ -54,7 +54,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception is thrown if given no letter groups used to instantiate the class.
+        ///     Verify whether an argument exception is thrown if given no letter groups used to instantiate the class.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -65,7 +65,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception is thrown if given an empty array for the letter groups used to instantiate the class.
+        ///     Verify whether an argument exception is thrown if given an empty array for the letter groups used to instantiate the class.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -79,7 +79,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception is thrown if given an one-element array for the letter groups used to instantiate
+        ///     Verify whether an argument exception is thrown if given an one-element array for the letter groups used to instantiate
         ///     the class.
         /// </summary>
         [TestMethod]
@@ -94,7 +94,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception is thrown if given a two-element array with a null value for the letter groups used
+        ///     Verify whether an argument exception is thrown if given a two-element array with a null value for the letter groups used
         ///     to instantiate the class.
         /// </summary>
         [TestMethod]
@@ -111,7 +111,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception is thrown if given a two-element array with an empty string for the letter groups used
+        ///     Verify whether an argument exception is thrown if given a two-element array with an empty string for the letter groups used
         ///     to instantiate the class.
         /// </summary>
         [TestMethod]
@@ -126,7 +126,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is throw if any of given letter groups contain a non-alphabet character when instantiating
+        ///     Verify whether an argument exception is throw if any of given letter groups contain a non-alphabet character when instantiating
         ///     the class.
         /// </summary>
         [TestMethod]
@@ -290,7 +290,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception was thrown if given null value when determining if the pair is forbidden.
+        ///     Verify whether an argument exception was thrown if given null value when determining if the pair is forbidden.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -306,7 +306,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception was thrown if given two letter pair that does not have length 2 when determining if
+        ///     Verify whether an argument exception was thrown if given two letter pair that does not have length 2 when determining if
         ///     the pair is forbidden.
         /// </summary>
         [TestMethod]
@@ -322,7 +322,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether an argument exception was thrown if given two letter pair with non-alphabet character when determining if
+        ///     Verify whether an argument exception was thrown if given two letter pair with non-alphabet character when determining if
         ///     the pair is forbidden.
         /// </summary>
         [TestMethod]

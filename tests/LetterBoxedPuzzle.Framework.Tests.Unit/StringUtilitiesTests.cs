@@ -37,7 +37,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             + @"""l"", ""m"", ""n"", ""o"", ""p"", ""q"", ""r"", ""s"", ""t"", ""u"", ""v"", ""w"", ""x"", ""y"", ""z""";
 
         /// <summary>
-        ///     Verifies whether the given an empty character array that the single-quoted empty string '' is returned.
+        ///     Verify whether the given an empty character array that the single-quoted empty string '' is returned.
         /// </summary>
         [TestMethod]
         public void QuoteJoin_GivenEmptyCharacterArray_ReturnsSingleQuotedEmptyString()
@@ -53,10 +53,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the given an empty string array that the double-quoted empty string "" is returned.
+        ///     Verify whether the given an empty string array that the double-quoted empty string "" is returned.
         /// </summary>
         [TestMethod]
-        public void QuoteJoin_GivenEmptyStringArray_ReturnsEmptyStringQuoted()
+        public void QuoteJoin_GivenEmptyStringArray_ReturnsDoubleQuotedEmptyString()
         {
             // Arrange
             const string expectedEmptyQuotes = @"""""";
@@ -69,7 +69,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the given the single character 'a' that the string "'a'" is returned.
+        ///     Verify whether the given the single character 'a' that the string "'a'" is returned.
         /// </summary>
         [TestMethod]
         public void QuoteJoin_GivenSingleCharacter_ReturnsStringOfCharacterQuoted()
@@ -86,7 +86,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the given the simple test word that the single-quoted simple test word is returned.
+        ///     Verify whether the given the simple test word that the single-quoted simple test word is returned.
         /// </summary>
         [TestMethod]
         public void QuoteJoin_GivenSimpleTestWordAsOnlyInput_ReturnsSimpleTestInputQuoted()
@@ -103,7 +103,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the given the character array of lowercase alphabet letters that a string of them single-quoted delimited by a
+        ///     Verify whether the given the character array of lowercase alphabet letters that a string of them single-quoted delimited by a
         ///     comma and a space is returned.
         /// </summary>
         [TestMethod]
@@ -121,7 +121,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether the given the string array of lowercase alphabet letters that a string of them double-quoted delimited by a
+        ///     Verify whether the given the string array of lowercase alphabet letters that a string of them double-quoted delimited by a
         ///     comma and a space is returned.
         /// </summary>
         [TestMethod]

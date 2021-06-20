@@ -20,7 +20,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     public class AlphabetConstantsTests
     {
         /// <summary>
-        ///     Verify that the lowercase alphabet character array is correct.
+        ///     Verify whether the lowercase alphabet character array is correct.
         /// </summary>
         [TestMethod]
         public void LowercaseAlphabet_IsCorrect()
@@ -42,7 +42,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verify that the uppercase alphabet character array is correct.
+        ///     Verify whether the uppercase alphabet character array is correct.
         /// </summary>
         [TestMethod]
         public void UppercaseAlphabet_IsCorrect()
@@ -64,7 +64,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verify that the lowercase alphabet text string is correct.
+        ///     Verify whether the lowercase alphabet text string is correct.
         /// </summary>
         [TestMethod]
         public void LowercaseAlphabetText_IsCorrect()
@@ -80,7 +80,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verify that the uppercase alphabet text string is correct.
+        ///     Verify whether the uppercase alphabet text string is correct.
         /// </summary>
         [TestMethod]
         public void UppercaseAlphabetText_IsCorrect()

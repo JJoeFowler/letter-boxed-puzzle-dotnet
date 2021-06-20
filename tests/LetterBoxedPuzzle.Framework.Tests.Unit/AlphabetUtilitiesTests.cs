@@ -31,7 +31,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     public class AlphabetUtilitiesTests
     {
         /// <summary>
-        ///     Verifies whether given a lowercase letter of the alphabet is determined to be a valid lowercase alphabet letter.
+        ///     Verify whether given a lowercase letter of the alphabet is determined to be a valid lowercase alphabet letter.
         /// </summary>
         [TestMethod]
         public void IsLowercaseAlphabetLetter_GivenLowercaseAlphabetLetter_IsTrue()
@@ -50,7 +50,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given a character that is not a lowercase letter of the alphabet that it is determined not to be one.
+        ///     Verify whether given a character that is not a lowercase letter of the alphabet that it is determined not to be one.
         /// </summary>
         [TestMethod]
         public void IsLowercaseAlphabetLetter_GivenNonLowercaseAlphabetLetter_IsFalse()
@@ -69,7 +69,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given a uppercase letter of the alphabet is determined to be a valid uppercase alphabet letter.
+        ///     Verify whether given a uppercase letter of the alphabet is determined to be a valid uppercase alphabet letter.
         /// </summary>
         [TestMethod]
         public void IsUppercaseAlphabetLetter_GivenUppercaseAlphabetLetter_IsTrue()
@@ -88,7 +88,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given a character that is not an uppercase letter of the alphabet that it is determined not to be one.
+        ///     Verify whether given a character that is not an uppercase letter of the alphabet that it is determined not to be one.
         /// </summary>
         [TestMethod]
         public void IsUppercaseAlphabetLetter_GivenNonUppercaseAlphabetLetter_IsFalse()
@@ -107,7 +107,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given a lowercase or uppercase letter of the alphabet is determined to be a valid alphabet letter.
+        ///     Verify whether given a lowercase or uppercase letter of the alphabet is determined to be a valid alphabet letter.
         /// </summary>
         [TestMethod]
         public void IsAlphabetLetter_GivenLowercaseOrUppercaseAlphabetLetter_IsTrue()
@@ -126,7 +126,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given a non-alphabet character is determined not to be a valid alphabet letter.
+        ///     Verify whether given a non-alphabet character is determined not to be a valid alphabet letter.
         /// </summary>
         [TestMethod]
         public void IsAlphabetLetter_GivenNonAlphabetLetter_IsTrue()
@@ -145,7 +145,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given a byte-sized character (whose value is between 0 and 255) that the converted byte value is returned.
+        ///     Verify whether given a byte-sized character (whose value is between 0 and 255) that the converted byte value is returned.
         /// </summary>
         [TestMethod]
         public void GetByteValue_GivenByteSizedCharacter_ReturnsCorrectByteValue()
@@ -172,7 +172,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given the first non-byte sized unicode character that an overflow exception is thrown.
+        ///     Verify whether given the first non-byte sized unicode character that an overflow exception is thrown.
         /// </summary>
         [ExpectedException(typeof(OverflowException))]
         [TestMethod]
@@ -186,7 +186,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given lowercase alphabet letters that the corresponding alphabet bit mask is returned.
+        ///     Verify whether given lowercase alphabet letters that the corresponding alphabet bit mask is returned.
         /// </summary>
         [TestMethod]
         public void GetAlphabetBitMask_GivenLowercaseAlphabetLetter_ReturnsCorrespondingAlphabetBitMask()
@@ -212,7 +212,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given the empty that the default alphabet bit mask <see cref="AlphabetBitMask.None" /> is returned.
+        ///     Verify whether given the empty that the default alphabet bit mask <see cref="AlphabetBitMask.None" /> is returned.
         /// </summary>
         [TestMethod]
         public void GetAlphabetBitMask_GivenEmptyString_ReturnsNoneAlphabetBitMask()
@@ -228,7 +228,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given a-to-z test word that the alphabet bit mask with all bits set is returned.
+        ///     Verify whether given a-to-z test word that the alphabet bit mask with all bits set is returned.
         /// </summary>
         [TestMethod]
         public void GetAlphabetBitMask_GivenAToZTestWord_ReturnsAlphabetBitMaskWithAllBitsSet()
@@ -244,7 +244,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given simple test word that the corresponding alphabet bit mask with for all its letters is returned.
+        ///     Verify whether given simple test word that the corresponding alphabet bit mask with for all its letters is returned.
         /// </summary>
         [TestMethod]
         public void GetAlphabetBitMask_GivenSimpleTestWord_ReturnsCorrespondingAlphabetBitMask()
@@ -260,7 +260,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is throw if given a non-alphabet character when determining its alphabet bit mask.
+        ///     Verify whether an argument exception is throw if given a non-alphabet character when determining its alphabet bit mask.
         /// </summary>
         [TestMethod]
         public void GetAlphabetBitMask_GivenNonAlphabetLetter_ThrowsArgumentException()
@@ -273,7 +273,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument null exception is throw if given a null value for a word when determining its the alphabet bit mask.
+        ///     Verify whether an argument null exception is throw if given a null value for a word when determining its the alphabet bit mask.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -289,7 +289,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is throw if given a word with a non-alphabet letter when determining its alphabet bit mask.
+        ///     Verify whether an argument exception is throw if given a word with a non-alphabet letter when determining its alphabet bit mask.
         /// </summary>
         [TestMethod]
         public void GetAlphabetBitMask_GivenWordWithNonAlphabetLetter_ThrowsArgumentException()
@@ -302,7 +302,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given the lower case letter 'a' with size of the alphabet that the generated sequence is the lowercase alphabet.
+        ///     Verify whether given the lower case letter 'a' with size of the alphabet that the generated sequence is the lowercase alphabet.
         /// </summary>
         [TestMethod]
         public void GenerateAlphabeticRangeSequence_GivenLowercaseAWithAlphabetSize_ReturnsLowercaseAlphabetSequenceOf()
@@ -328,7 +328,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given the upper case letter 'A' with size of the alphabet that the generated sequence is the uppercase alphabet.
+        ///     Verify whether given the upper case letter 'A' with size of the alphabet that the generated sequence is the uppercase alphabet.
         /// </summary>
         [TestMethod]
         public void GenerateAlphabeticRangeSequence_GivenUppercaseAWithAlphabetSize_ReturnsUppercaseAlphabetSequence()
@@ -387,7 +387,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is throw if given any non-alphabet character as a starting letter to generate an alphabetic
+        ///     Verify whether an argument exception is throw if given any non-alphabet character as a starting letter to generate an alphabetic
         ///     range sequence.
         /// </summary>
         [TestMethod]
@@ -428,7 +428,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given the lower case letter 'a' with size of the alphabet that the generated text is the lowercase alphabet.
+        ///     Verify whether given the lower case letter 'a' with size of the alphabet that the generated text is the lowercase alphabet.
         /// </summary>
         [TestMethod]
         public void GenerateAlphabeticRangeAsText_GivenLowercaseAWithAlphabetSize_ReturnsLowercaseAlphabet()
@@ -454,7 +454,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether given the upper case letter 'A' with size of the alphabet that the generated text is the uppercase alphabet.
+        ///     Verify whether given the upper case letter 'A' with size of the alphabet that the generated text is the uppercase alphabet.
         /// </summary>
         [TestMethod]
         public void GenerateAlphabeticRangeAsText_GivenUppercaseAWithAlphabetSize_ReturnsUppercaseAlphabet()
@@ -536,7 +536,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is throw if given any non-alphabet character as a starting letter to generate an alphabetic
+        ///     Verify whether an argument exception is throw if given any non-alphabet character as a starting letter to generate an alphabetic
         ///     range as text.
         /// </summary>
         [TestMethod]
@@ -554,7 +554,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that when given the "xY" as the text input that the generated distinct two-letter pairs are all four possible
+        ///     Verify whether when given the "xY" as the text input that the generated distinct two-letter pairs are all four possible
         ///     lowercase pairs of the lowercase letters 'x' and 'y'.
         /// </summary>
         [TestMethod]
@@ -580,7 +580,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that when given the "AbC" as the text input that the generated distinct two-letter pairs are all nine possible
+        ///     Verify whether when given the "AbC" as the text input that the generated distinct two-letter pairs are all nine possible
         ///     lowercase pairs of the lowercase letters 'a', 'b', and 'c'.
         /// </summary>
         [TestMethod]
@@ -606,7 +606,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that when given the full alphabet (both lowercase and uppercase) as the input text that 26^2 = 676 distinct lowercase
+        ///     Verify whether when given the full alphabet (both lowercase and uppercase) as the input text that 26^2 = 676 distinct lowercase
         ///     two-letter pairs are returned.
         /// </summary>
         [TestMethod]
@@ -624,7 +624,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that when given the same lowercase and uppercase letter repeated a hundred times each as the input text that only the
+        ///     Verify whether when given the same lowercase and uppercase letter repeated a hundred times each as the input text that only the
         ///     single two-letter pair of the lowercase letter is returned.
         /// </summary>
         [TestMethod]
@@ -653,7 +653,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument null exception is throw if given a null value when generating all distinct two-letter pairs.
+        ///     Verify whether an argument null exception is throw if given a null value when generating all distinct two-letter pairs.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -669,7 +669,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is throw if given either an empty string or a single-letter string when generating
+        ///     Verify whether an argument exception is throw if given either an empty string or a single-letter string when generating
         ///     all distinct two-letter pairs.
         /// </summary>
         [TestMethod]
@@ -684,7 +684,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies that an argument exception is throw if given a text input with a non-alphabet letter when generating all distinct
+        ///     Verify whether an argument exception is throw if given a text input with a non-alphabet letter when generating all distinct
         ///     two-letter pairs.
         /// </summary>
         [TestMethod]

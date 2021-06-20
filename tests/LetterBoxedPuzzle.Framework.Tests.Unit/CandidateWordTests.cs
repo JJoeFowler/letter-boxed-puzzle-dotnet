@@ -31,7 +31,6 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     [TestClass]
     public class CandidateWordTests
     {
-
         /// <summary>
         ///     Candidate word initialized with the simple test word.
         /// </summary>
@@ -463,7 +462,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verify
+        ///     Verify whether candidate words whose letters are not all contained in the side letters are not allowed.
         /// </summary>
         [TestMethod]
         public void IsAllowed_GivenCandidateWordNotContainedInSideLetters_IsFalse()
@@ -474,11 +473,11 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             var testSideLetters = new SideLetters(testLetterGroups);
 
-            var invalidWords = (from firstCharacter in testLetterGroups[0]
-                                from secondCharacter in testLetterGroups[1]
-                                from thirdCharacter in testLetterGroups[2]
-                                from fourthCharacter in otherLetters
-                                select firstCharacter.ToString() + secondCharacter + thirdCharacter + fourthCharacter).ToArray();
+            var invalidWords = (from first in testLetterGroups[0]
+                                from second in testLetterGroups[1]
+                                from third in testLetterGroups[2]
+                                from fourth in otherLetters
+                                select first.ToString() + second + third + fourth).ToArray();
 
             // Act
             var actualIsAllowed = invalidWords.Select(word => new CandidateWord(word).IsAllowed(testSideLetters)).ToArray();
