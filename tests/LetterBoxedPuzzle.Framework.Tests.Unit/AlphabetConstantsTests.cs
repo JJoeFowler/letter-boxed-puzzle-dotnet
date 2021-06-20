@@ -26,7 +26,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void LowercaseAlphabet_IsCorrect()
         {
             // Arrange
-            var expectedLowercaseAlphabet = GenerateAlphabeticRangeSequence(LowerCaseA, EnglishAlphabetSize);
+            var expectedLowercaseAlphabet = GenerateAlphabeticRangeSequence(LowercaseA, EnglishAlphabetSize);
 
             // Act
             var actualLowercaseAlphabet = LowercaseAlphabet;
@@ -48,7 +48,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void UppercaseAlphabet_IsCorrect()
         {
             // Arrange
-            var expectedUppercaseAlphabet = GenerateAlphabeticRangeSequence(UpperCaseA, EnglishAlphabetSize);
+            var expectedUppercaseAlphabet = GenerateAlphabeticRangeSequence(UppercaseA, EnglishAlphabetSize);
 
             // Act
             var actualUppercaseAlphabet = UppercaseAlphabet;
@@ -70,7 +70,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void LowercaseAlphabetText_IsCorrect()
         {
             // Arrange
-            var expectedText = GenerateAlphabeticRangeAsText(LowerCaseA, EnglishAlphabetSize);
+            var expectedText = GenerateAlphabeticRangeAsText(LowercaseA, EnglishAlphabetSize);
 
             // Act
             var actualText = LowercaseAlphabetText;
@@ -86,7 +86,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void UppercaseAlphabetText_IsCorrect()
         {
             // Arrange
-            var expectedText = GenerateAlphabeticRangeAsText(UpperCaseA, EnglishAlphabetSize);
+            var expectedText = GenerateAlphabeticRangeAsText(UppercaseA, EnglishAlphabetSize);
 
             // Act
             var actualText = UppercaseAlphabetText;

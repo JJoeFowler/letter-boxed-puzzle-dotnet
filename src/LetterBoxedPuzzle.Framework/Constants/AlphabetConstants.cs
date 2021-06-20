@@ -24,24 +24,24 @@ namespace LetterBoxedPuzzle.Framework.Constants
         public const int EnglishAlphabetSize = 26;
 
         /// <summary>
-        ///     The lower case letter 'a'.
+        ///     The lowercase letter 'a'.
         /// </summary>
-        public const char LowerCaseA = 'a';
+        public const char LowercaseA = 'a';
 
         /// <summary>
-        ///     The upper case letter 'A'.
+        ///     The uppercase letter 'A'.
         /// </summary>
-        public const char UpperCaseA = 'A';
+        public const char UppercaseA = 'A';
 
         /// <summary>
-        ///     The lower case letter 'z'.
+        ///     The lowercase letter 'z'.
         /// </summary>
-        public const char LowerCaseZ = 'z';
+        public const char LowercaseZ = 'z';
 
         /// <summary>
-        ///     The upper case letter 'Z'.
+        ///     The uppercase letter 'Z'.
         /// </summary>
-        public const char UpperCaseZ = 'Z';
+        public const char UppercaseZ = 'Z';
 
         /// <summary>
         ///     The characters of the lowercase alphabet from 'a' to 'z'.

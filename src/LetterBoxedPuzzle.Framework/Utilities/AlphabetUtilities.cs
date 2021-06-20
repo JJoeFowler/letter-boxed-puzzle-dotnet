@@ -44,18 +44,18 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </summary>
         static AlphabetUtilities()
         {
-            for (int index = AlphabetConstants.LowerCaseA; index <= AlphabetConstants.LowerCaseZ; index++)
+            for (int index = AlphabetConstants.LowercaseA; index <= AlphabetConstants.LowercaseZ; index++)
             {
                 IsLowercaseAlphabetLetterByCharacter[index] = true;
                 IsAlphabetLetterByCharacter[index] = true;
-                AlphabetBitMaskByByteValue[index] = (index - AlphabetConstants.LowerCaseA + 1).ToAlphabetBitMask();
+                AlphabetBitMaskByByteValue[index] = (index - AlphabetConstants.LowercaseA + 1).ToAlphabetBitMask();
             }
 
-            for (int index = AlphabetConstants.UpperCaseA; index <= AlphabetConstants.UpperCaseZ; index++)
+            for (int index = AlphabetConstants.UppercaseA; index <= AlphabetConstants.UppercaseZ; index++)
             {
                 IsUppercaseAlphabetLetterByCharacter[index] = true;
                 IsAlphabetLetterByCharacter[index] = true;
-                AlphabetBitMaskByByteValue[index] = (index - AlphabetConstants.UpperCaseA + 1).ToAlphabetBitMask();
+                AlphabetBitMaskByByteValue[index] = (index - AlphabetConstants.UppercaseA + 1).ToAlphabetBitMask();
             }
         }
 
@@ -170,7 +170,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
             }
 
             var maximumLength = AlphabetConstants.EnglishAlphabetSize - startingLetter
-                + (IsLowercaseAlphabetLetter(startingLetter) ? AlphabetConstants.LowerCaseA : AlphabetConstants.UpperCaseA);
+                + (IsLowercaseAlphabetLetter(startingLetter) ? AlphabetConstants.LowercaseA : AlphabetConstants.UppercaseA);
 
             if ((length < 1) || (length > maximumLength))
             {
