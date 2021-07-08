@@ -10,6 +10,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.InteropServices;
 
     using LetterBoxedPuzzle.Framework.Constants;
     using LetterBoxedPuzzle.Framework.Models;
@@ -32,7 +33,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         /// <summary>
         ///     Checks whether the word archive initialized by all legal words contains the test word.
         /// </summary>
-        [Ignore]
+        [TestMethod]
         public void WordArchive_GivenLegalWordsText_ContainsTestWord()
         {
             var wordArchive = new WordArchive(WordConstants.AllLegalWordsText);
@@ -45,72 +46,28 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // var letterBoxedLetterGroups = new[] { "ayg", "ocb", "rif", "tln" };
             // var letterBoxedLetterGroups = new[] { "aik", "buo", "fmt", "rcj" };
             // var letterBoxedLetterGroups = new[] { "nby", "aoh", "itu", "slm" };
-            var letterBoxedLetterGroups = new[] { "koz", "egb", "cnm", "iar" };
+            // var letterBoxedLetterGroups = new[] { "koz", "egb", "cnm", "iar" };
+            // var sideLetters = new SideLetters("clh", "drk", "vsn", "aei");
+            // var sideLetters = new SideLetters("tqe", "gvw", "uhy", "oai");
 
-            void OutputDuplicateWords(IEnumerable<string> words, string description)
-            {
-                var seenWord = new HashSet<string>();
-                var wordCounts = new Dictionary<string, int>();
-
-                foreach (var word in words)
-                {
-                    if (!seenWord.Contains(word))
-                    {
-                        seenWord.Add(word);
-                        continue;
-                    }
-
-                    if (!wordCounts.ContainsKey(word))
-                    {
-                        wordCounts[word] = 1;
-                    }
-
-                    wordCounts[word]++;
-                }
-
-                if (wordCounts.Keys.Count == 0)
-                {
-                    // Console.WriteLine($"Word list {description} has no duplicates.");
-                    return;
-                }
-
-                Console.Write($"Word list {description} has the following duplicate words: ");
-
-                string.Join(", ", wordCounts.OrderBy(kvp => kvp.Value).ThenBy(kvp => kvp.Key).Select(kvp => $"{kvp.Key} {kvp.Value} times"));
-            }
-
-            var letterBoxedLetters = string.Join(string.Empty, letterBoxedLetterGroups);
-            var letterBoxedLettersBitMask = GetAlphabetBitMask(letterBoxedLetters);
+            // var sideLetters = new SideLetters("srb", "ita", "feh", "lwu");
+            // var sideLetters = new SideLetters("aih", "lpn", "fyt", "mco");
+            // var sideLetters = new SideLetters("iye", "rom", "anp", "txl");
+            // var sideLetters = new SideLetters("otr", "jcn", "eku", "sah");
+            // var sideLetters = new SideLetters("hor", "egt", "inp", "cuy");
+            var sideLetters = new SideLetters("oai", "ucw", "tlq", "erd");
 
             var candidateWordsByName = wordArchive.CandidateWordsByName;
 
-            var letterBoxedWords = wordArchive.AllowedWords.Where(word => candidateWordsByName[word].IsContainedIn(letterBoxedLetters)).ToArray();
-            var letterBoxedWordsLength = letterBoxedWords.Length;
+            var sortedLetterBoxedPairs = sideLetters.ForbiddenTwoLetterPairs.OrderBy(x => x).ToArray();
 
-            var letterBoxedPairs = new HashSet<string>();
+            var legalWords = candidateWordsByName.Keys.Where(word => candidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
 
-            static void AllStringPairs(string text, ISet<string> pairs)
-            {
-                foreach (var firstText in text)
-                {
-                    foreach (var secondText in text)
-                    {
-                        pairs.Add(firstText + secondText.ToString());
-                    }
-                }
-            }
-
-            foreach (var letterBoxedLetterGroup in letterBoxedLetterGroups)
-            {
-                AllStringPairs(letterBoxedLetterGroup, letterBoxedPairs);
-            }
-
-            var sortedLetterBoxedPairs = letterBoxedPairs.OrderBy(x => x);
-
-            const int LetterBoxedMinimumWordLength = 3;
-            var legalWords = letterBoxedWords.Where(word => word.Length >= LetterBoxedMinimumWordLength && !HasWordPair(word, letterBoxedPairs))
-                .ToArray();
             var legalWordsLength = legalWords.Length;
+
+            var letterBoxedLetters = sideLetters.DistinctLetters;
+
+            var letterBoxedWordsLength = candidateWordsByName.Keys.Select(word => candidateWordsByName[word].IsContainedIn(letterBoxedLetters)).ToArray().Length;
 
             Console.WriteLine($"There are {letterBoxedWordsLength} words using only letters '{letterBoxedLetters}'.");
             Console.WriteLine();
@@ -147,6 +104,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             Console.WriteLine();
             Console.WriteLine($"This gives a total of {totalOneWordChecks} checks for a one-word solution.");
 
+            var letterBoxedLettersBitMask = new CandidateWord(letterBoxedLetters).AlphabetBitMask;
             bool HasAllLetters(string word) => GetAlphabetBitMask(word) == letterBoxedLettersBitMask;
 
             var oneWordSolutions = new List<string>();

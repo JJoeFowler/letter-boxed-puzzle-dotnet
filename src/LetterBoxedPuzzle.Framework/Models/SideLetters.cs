@@ -71,14 +71,14 @@ namespace LetterBoxedPuzzle.Framework.Models
         ///     Gets the forbidden two-letter pairs that cannot be contained in a solution of a letter-boxed puzzle.
         /// </summary>
         /// <returns>The forbidden two-letter pairs of letters.</returns>
-        private IEnumerable<string> ForbiddenTwoLetterPairs =>
+        public IEnumerable<string> ForbiddenTwoLetterPairs =>
             this.LetterGroups.Aggregate(
                 new List<string>(),
                 (current, group) =>
                 {
                     current.AddRange(GenerateAllDistinctTwoLetterPairs(group));
                     return current;
-                }).Distinct();
+                }).Distinct().OrderBy(x => x);
 
         /// <summary>
         ///     Gets the set of forbidden two-letter pairs.
