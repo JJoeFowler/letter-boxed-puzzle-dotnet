@@ -22,6 +22,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using static TestCommonConstants;
 
     using static Utilities.AlphabetUtilities;
+    using static Utilities.StringUtilities;
 
     /// <summary>
     ///     The unit tests for the word archive.
@@ -30,9 +31,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     public class WordArchiveTests
     {
         /// <summary>
-        ///     Test capitalized legal words.
+        ///     Test words consisting of obscure English words.
         /// </summary>
-        private static readonly string[] TestLegalWords =
+        private static readonly string[] TestEnglishWords =
             {
                 "aardwolves", "bouillabaisses", "crepehangings", "devilishnesses", "epigrammatizing", "forciblenesses", "geopoliticians",
                 "hygroscopically", "infantilization", "jellifications", "kibbitzers", "letterboxings", "mythologization", "northwesterlies",
@@ -41,7 +42,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             };
 
         /// <summary>
-        ///     Test country names that are not legal words.
+        ///     Test country names that are not English words.
         /// </summary>
         private static readonly string[] TestCountryNames =
             {
@@ -50,26 +51,54 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             };
 
         /// <summary>
-        ///     Gets the test array of allowed words.
+        ///     Test letter groups.
         /// </summary>
-        internal static string[] TestAllowedWords { get; private set; } = Array.Empty<string>();
+        private static readonly string[] TestLetterGroups = { "abc", "def", "ghi" };
 
         /// <summary>
-        ///     Gets the test set of allowed words.
+        ///     Test side letters.
         /// </summary>
-        internal static ISet<string> TestAllowedWordsSet { get; private set; } = new HashSet<string>();
+        private static readonly SideLetters TestSideLetters = new (TestLetterGroups);
 
         /// <summary>
-        ///     Sets up the test class by initializing the test set of allowed words.
+        ///     Test words that should be allowed for the test side letters.
+        /// </summary>
+        private static readonly string[] TestAllowedWords = { "ahead", "bid", "chad", "did", "eh", "gag", "head", "ice" };
+
+        /// <summary>
+        ///     Test words that should not be allowed for the test side letters.
+        /// </summary>
+        private static readonly string[] TestNotAllowedWords = { "acid", "bad", "cage", "dig", "each", "fade", "gig", "high", "iced" };
+
+        /// <summary>
+        ///     Gets the test archive of all English words.
+        /// </summary>
+        internal static WordArchive TestArchive { get; } = new (WordConstants.EnglishWordsText);
+
+        /// <summary>
+        ///     Gets the words of the test archive.
+        /// </summary>
+        internal static string[] TestArchiveWords { get; } = TestArchive.AllWords;
+
+        /// <summary>
+        ///     Gets the set of words of the test archive.
+        /// </summary>
+        internal static ISet<string> TestArchiveWordsSet { get; private set; } = new HashSet<string>();
+
+        /// <summary>
+        ///     Gets the test candidate words keyed by their name.
+        /// </summary>
+        internal static IReadOnlyDictionary<string, CandidateWord> TestCandidateWordsByName { get; } = TestArchive.AllCandidateWordsByName;
+
+        /// <summary>
+        ///     Sets up the test class by initializing the test set of legal words.
         /// </summary>
         /// <param name="_">The test context.</param>
         [ClassInitialize]
         public static void Setup(TestContext _)
         {
-            TestAllowedWords = new WordArchive(WordConstants.AllowedEnglishWordsText).AllowedWords;
-
-            TestAllowedWordsSet = TestAllowedWords.Aggregate(
-                TestAllowedWordsSet,
+            TestArchiveWordsSet = TestArchiveWords.Aggregate(
+                TestArchiveWordsSet,
                 (current, word) =>
                 {
                     current.Add(word);
@@ -78,79 +107,66 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verifies whether.
+        ///     Verifies whether the legal words does not contain any words having white space.
         /// </summary>
         [TestMethod]
-        public void Ack()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-        }
-
-        /// <summary>
-        ///     Verifies whether the allowed words does not contain any words having white space.
-        /// </summary>
-        [TestMethod]
-        public void AllowedWords_ContainsAnyWordsWithWhiteSpace_IsFalse()
+        public void LegalWords_ContainsAnyWordsWithWhiteSpace_IsFalse()
         {
             // Arrange
             var whiteSpaceRegex = new Regex(@"\s");
 
             // Act
-            var containsWhiteSpace = TestAllowedWords.Select(word => whiteSpaceRegex.IsMatch(word)).ToArray();
+            var containsWhiteSpace = TestArchiveWords.Select(word => whiteSpaceRegex.IsMatch(word)).ToArray();
 
             // Assert
-            for (int wordIndex = 0; wordIndex < TestAllowedWords.Length; wordIndex++)
+            for (var wordIndex = 0; wordIndex < TestArchiveWords.Length; wordIndex++)
             {
-                Assert.IsFalse(containsWhiteSpace[wordIndex], $"Allowed word {TestAllowedWords[wordIndex]} contains white space.");
+                Assert.IsFalse(containsWhiteSpace[wordIndex], $"Allowed word {TestArchiveWords[wordIndex]} contains white space.");
             }
         }
 
         /// <summary>
-        ///     Verifies whether the allowed words contain all of the lowercase but not any of the capitalized or uppercase test legal words.
+        ///     Verifies whether the legal words contain all of the lowercase but not any of the capitalized or uppercase test English words.
         /// </summary>
         [TestMethod]
-        public void AllWords_ContainsAllLowercaseButNotAnyCapitalizedOrUppercaseTestLegalWord_IsTrue()
+        public void AllWords_ContainsAllLowercaseButNotAnyCapitalizedOrUppercaseTestEnglishWord_IsTrue()
         {
             // Arrange
-            var containsLowercaseLegalWord = new bool[AlphabetSize];
-            var containsCapitalizedLegalWord = new bool[AlphabetSize];
-            var containsUppercaseLegalWord = new bool[AlphabetSize];
+            var containsLowercaseEnglishWord = new bool[AlphabetSize];
+            var containsCapitalizedEnglishWord = new bool[AlphabetSize];
+            var containsUppercaseEnglishWord = new bool[AlphabetSize];
 
-            var lowercaseTestLegalWords = TestLegalWords.Select(word => word.ToLowerInvariant()).ToArray();
-            var capitalizedTestLegalWords = TestLegalWords.Select(word => word.ToFirstCharUpper()).ToArray();
-            var uppercaseTestLegalWords = TestLegalWords.Select(word => word.ToUpperInvariant()).ToArray();
+            var lowercaseTestEnglishWords = TestEnglishWords.Select(word => word.ToLowerInvariant()).ToArray();
+            var capitalizedTestEnglishWords = TestEnglishWords.Select(word => word.ToFirstCharUpper()).ToArray();
+            var uppercaseTestEnglishWords = TestEnglishWords.Select(word => word.ToUpperInvariant()).ToArray();
 
             // Act
             for (var letterIndex = 0; letterIndex < AlphabetSize; letterIndex++)
             {
-                containsLowercaseLegalWord[letterIndex] = TestAllowedWordsSet.Contains(lowercaseTestLegalWords[letterIndex]);
-                containsCapitalizedLegalWord[letterIndex] = TestAllowedWordsSet.Contains(capitalizedTestLegalWords[letterIndex]);
-                containsUppercaseLegalWord[letterIndex] = TestAllowedWordsSet.Contains(uppercaseTestLegalWords[letterIndex]);
+                containsLowercaseEnglishWord[letterIndex] = TestArchiveWordsSet.Contains(lowercaseTestEnglishWords[letterIndex]);
+                containsCapitalizedEnglishWord[letterIndex] = TestArchiveWordsSet.Contains(capitalizedTestEnglishWords[letterIndex]);
+                containsUppercaseEnglishWord[letterIndex] = TestArchiveWordsSet.Contains(uppercaseTestEnglishWords[letterIndex]);
             }
 
             // Assert
             for (var letterIndex = 0; letterIndex < AlphabetSize; letterIndex++)
             {
                 Assert.IsTrue(
-                    containsLowercaseLegalWord[letterIndex],
-                    $"The allowed words does not contain the lowercase legal word '{lowercaseTestLegalWords[letterIndex]}'.");
+                    containsLowercaseEnglishWord[letterIndex],
+                    $"The legal words does not contain the lowercase English word '{lowercaseTestEnglishWords[letterIndex]}'.");
 
                 Assert.IsFalse(
-                    containsCapitalizedLegalWord[letterIndex],
-                    $"The allowed words contains the capitalized legal word '{capitalizedTestLegalWords[letterIndex]}'.");
+                    containsCapitalizedEnglishWord[letterIndex],
+                    $"The legal words contains the capitalized English word '{capitalizedTestEnglishWords[letterIndex]}'.");
 
                 Assert.IsFalse(
-                    containsUppercaseLegalWord[letterIndex],
-                    $"The allowed words contains the uppercase legal word '{uppercaseTestLegalWords[letterIndex]}'.");
+                    containsUppercaseEnglishWord[letterIndex],
+                    $"The legal words contains the uppercase English word '{uppercaseTestEnglishWords[letterIndex]}'.");
             }
         }
 
         /// <summary>
-        ///     Verifies whether the allowed words does not contain any of the lowercase, capitalized, or uppercase test country names.
+        ///     Verifies whether the legal words does not contain any of the lowercase, capitalized, or uppercase test country names.
         /// </summary>
         [TestMethod]
         public void AllWords_ContainsAnyLowercaseOrCapitalizedOrUppercaseTestCountryName_IsFalse()
@@ -168,9 +184,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // Act
             for (var countryNameIndex = 0; countryNameIndex < countryNamesLength; countryNameIndex++)
             {
-                containsLowercaseCountryName[countryNameIndex] = TestAllowedWordsSet.Contains(lowercaseTestCountryNames[countryNameIndex]);
-                containsCapitalizedCountryName[countryNameIndex] = TestAllowedWordsSet.Contains(capitalizedTestCountryNames[countryNameIndex]);
-                containsUppercaseCountryName[countryNameIndex] = TestAllowedWordsSet.Contains(uppercaseTestCountryNames[countryNameIndex]);
+                containsLowercaseCountryName[countryNameIndex] = TestArchiveWordsSet.Contains(lowercaseTestCountryNames[countryNameIndex]);
+                containsCapitalizedCountryName[countryNameIndex] = TestArchiveWordsSet.Contains(capitalizedTestCountryNames[countryNameIndex]);
+                containsUppercaseCountryName[countryNameIndex] = TestArchiveWordsSet.Contains(uppercaseTestCountryNames[countryNameIndex]);
             }
 
             // Assert
@@ -178,25 +194,152 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             {
                 Assert.IsFalse(
                     containsLowercaseCountryName[countryNameIndex],
-                    $"The allowed words contains the lowercase country name '{lowercaseTestCountryNames[countryNameIndex]}'.");
+                    $"The legal words contains the lowercase country name '{lowercaseTestCountryNames[countryNameIndex]}'.");
 
                 Assert.IsFalse(
                     containsCapitalizedCountryName[countryNameIndex],
-                    $"The allowed words contains the capitalized country name '{capitalizedTestCountryNames[countryNameIndex]}'.");
+                    $"The legal words contains the capitalized country name '{capitalizedTestCountryNames[countryNameIndex]}'.");
 
                 Assert.IsFalse(
                     containsUppercaseCountryName[countryNameIndex],
-                    $"The allowed words contains the uppercase country name '{uppercaseTestCountryNames[countryNameIndex]}'.");
+                    $"The legal words contains the uppercase country name '{uppercaseTestCountryNames[countryNameIndex]}'.");
             }
         }
 
         /// <summary>
-        ///     Verifies whether the word archive initialized by all legal words contains the test word.
+        ///     Verifies whether the test candidate words by name contains all of the test English words as keys.
+        /// </summary>
+        [TestMethod]
+        public void AllCandidateWordsByName_ContainsAllTestEnglishWordsAsKeys_IsTrue()
+        {
+            // Arrange
+            var testCandidateWordsDictionary = TestCandidateWordsByName;
+
+            // Act
+            var containsWordAsKey = TestEnglishWords.Select(word => testCandidateWordsDictionary.ContainsKey(word)).ToArray();
+
+            // Assert
+            for (var wordIndex = 0; wordIndex < TestEnglishWords.Length; wordIndex++)
+            {
+                var englishWord = TestEnglishWords[wordIndex];
+                Assert.IsTrue(containsWordAsKey[wordIndex], $"Expected test candidate words to contain the word '{englishWord}' as a key.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether the test candidate words by name does not contains any of the test country names as keys.
+        /// </summary>
+        [TestMethod]
+        public void AllCandidateWordsByName_ContainsAnyTestCountryNamesAsKey_IsFalse()
+        {
+            // Arrange
+            var testCandidateWordsDictionary = TestCandidateWordsByName;
+
+            // Act
+            var containsWordAsKey = TestCountryNames.Select(word => testCandidateWordsDictionary.ContainsKey(word.ToLowerInvariant())).ToArray();
+
+            // Assert
+            for (var wordIndex = 0; wordIndex < TestCountryNames.Length; wordIndex++)
+            {
+                var countryName = TestCountryNames[wordIndex].ToLowerInvariant();
+                Assert.IsFalse(
+                    containsWordAsKey[wordIndex],
+                    $"Expected test candidate words not to contain the lowercased country name '{countryName}' as a key.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether the values of test candidate words by name for the English words have alphabet bit masks that match the alphabet
+        ///     bit masks of corresponding English word.
+        /// </summary>
+        [TestMethod]
+        public void AllCandidateWordsByName_TestEnglishWordsValuesAlphabetBitMasks_MatchesEnglishWordAlphabetBitMasks()
+        {
+            // Arrange
+            var testCandidateWords = TestEnglishWords.Select(word => TestCandidateWordsByName[word]).ToArray();
+            var expectedAlphabetBitMask = TestEnglishWords.Select(word => new CandidateWord(word).AlphabetBitMask).ToArray();
+
+            // Act
+            var actualAlphabetBitMask = testCandidateWords.Select(word => word.AlphabetBitMask).ToArray();
+
+            // Assert
+            for (var wordIndex = 0; wordIndex < TestEnglishWords.Length; wordIndex++)
+            {
+                var englishWord = TestEnglishWords[wordIndex];
+                var expectedBitMask = expectedAlphabetBitMask[wordIndex];
+                var actualBitMask = actualAlphabetBitMask[wordIndex];
+
+                Assert.IsNotNull(actualBitMask, $"The alphabet bit mask for the candidate word for '{englishWord}' was null.");
+
+                var expectedBinaryBitMask = Convert.ToString((int)expectedBitMask, 2);
+                var actualBinaryBitMask = Convert.ToString((int)actualBitMask, 2);
+
+                Assert.AreEqual(
+                    expectedBitMask,
+                    actualBitMask,
+                    $"The candidate word '{englishWord}' had an alphabet bit mask of '{actualBinaryBitMask}' and not '{expectedBinaryBitMask}'.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given the test side letters that all the permitted puzzle words include the test words that should be allowed.
+        /// </summary>
+        [TestMethod]
+        public void GetPermittedPuzzleWords_GivenTestSideLetters_ContainsAllTestAllowedWords()
+        {
+            // Arrange
+            var testAllowedWordSet = TestAllowedWords.Aggregate(
+                new HashSet<string>(),
+                (current, word) =>
+                {
+                    current.Add(word);
+                    return current;
+                });
+
+            // Act
+            var permittedPuzzleWords = TestArchive.GetPermittedPuzzleWords(TestSideLetters);
+            var actualAllowedWords = permittedPuzzleWords.Where(word => testAllowedWordSet.Contains(word)).ToArray();
+
+            // Assert
+            for (var wordIndex = 0; wordIndex < TestAllowedWords.Length; wordIndex++)
+            {
+                var allowedWord = TestAllowedWords[wordIndex];
+                var sideLetterGroups = QuoteJoin(TestSideLetters.LetterGroups);
+                Assert.IsTrue(
+                    actualAllowedWords.Contains(allowedWord),
+                    $"Expected '{allowedWord}' to be one of the words allowed for the side letters {sideLetterGroups}.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given the test side letters that all the permitted puzzle words do not include any of the test words that
+        ///     should be not be allowed.
+        /// </summary>
+        [TestMethod]
+        public void GetPermittedPuzzleWords_GivenTestSideLetters_ContainsNoTestNotAllowedWords()
+        {
+            // Arrange and act
+            var permittedPuzzleWords = TestArchive.GetPermittedPuzzleWords(TestSideLetters);
+            var containsTestNotAllowedWord = TestNotAllowedWords.Select(word => permittedPuzzleWords.Contains(word)).ToArray();
+
+            // Assert
+            for (var wordIndex = 0; wordIndex < TestNotAllowedWords.Length; wordIndex++)
+            {
+                var testNotAllowedWord = TestNotAllowedWords[wordIndex];
+                var sideLetterGroups = QuoteJoin(TestSideLetters.LetterGroups);
+                Assert.IsFalse(
+                    containsTestNotAllowedWord[wordIndex],
+                    $"Expected '{testNotAllowedWord}' not to be one of the words allowed for the side letters {sideLetterGroups}.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether the word archive initialized by all English words contains the test word.
         /// </summary>
         [Ignore]
-        public void WordArchive_GivenLegalWordsText_ContainsTestWord()
+        public void WordArchive_GivenEnglishWordsText_ContainsTestWord()
         {
-            var wordArchive = new WordArchive(WordConstants.AllowedEnglishWordsText);
+            var wordArchive = new WordArchive(WordConstants.EnglishWordsText);
 
             // var letterBoxedLetterGroups = new[] { "ifl", "swo", "gnm", "yae" };
             // var letterBoxedLetterGroups = new[] { "abc", "def", "ghi", "rst" };
@@ -217,13 +360,13 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // var sideLetters = new SideLetters("hor", "egt", "inp", "cuy");
             var sideLetters = new SideLetters("oai", "ucw", "tlq", "erd");
 
-            var candidateWordsByName = wordArchive.CandidateWordsByName;
+            var candidateWordsByName = wordArchive.AllCandidateWordsByName;
 
             var sortedLetterBoxedPairs = sideLetters.ForbiddenTwoLetterPairs.OrderBy(x => x).ToArray();
 
-            var legalWords = candidateWordsByName.Keys.Where(word => candidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
+            var englishWords = candidateWordsByName.Keys.Where(word => candidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
 
-            var legalWordsLength = legalWords.Length;
+            var englishWordsLength = englishWords.Length;
 
             var letterBoxedLetters = sideLetters.DistinctLetters;
 
@@ -233,22 +376,22 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             Console.WriteLine($"There are {letterBoxedWordsLength} words using only letters '{letterBoxedLetters}'.");
             Console.WriteLine();
 
-            Console.WriteLine($"Of those there are {legalWordsLength} words not having any of the following pairs:");
+            Console.WriteLine($"Of those there are {englishWordsLength} words not having any of the following pairs:");
             Console.WriteLine($"  '{string.Join("', '", sortedLetterBoxedPairs)}'");
             Console.WriteLine();
 
-            Console.WriteLine($"Computing one-word solutions based upon length of those {legalWordsLength} words:");
+            Console.WriteLine($"Computing one-word solutions based upon length of those {englishWordsLength} words:");
 
             const int minOneWordLength = 12;
-            var minLength = legalWords.Min(word => word.Length);
-            var maxLength = legalWords.Max(word => word.Length);
+            var minLength = englishWords.Min(word => word.Length);
+            var maxLength = englishWords.Max(word => word.Length);
 
             var wordGroups = new string[maxLength][];
 
             var totalOneWordChecks = 0;
             for (var length = minLength; length < maxLength; length++)
             {
-                var wordGroup = legalWords.Where(x => x.Length == length).ToArray();
+                var wordGroup = englishWords.Where(x => x.Length == length).ToArray();
                 var wordGroupLength = wordGroup.Length;
                 wordGroups[length - 1] = wordGroup;
                 Console.Write($"  Length {length} has {wordGroupLength} words");
@@ -293,41 +436,41 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             Console.WriteLine();
             Console.WriteLine("Computing two-word solutions:");
 
-            var legalWordsByLetter = new Dictionary<char, string[]>();
+            var englishWordsByLetter = new Dictionary<char, string[]>();
             var startsWithWordsByLetter = new Dictionary<char, string[]>();
             var endsWithWordsByLetter = new Dictionary<char, string[]>();
 
             foreach (var letter in letterBoxedLetters)
             {
                 var letterBitMask = GetAlphabetBitMask(letter);
-                var legalWordsForLetter =
-                    legalWords.Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) > 0).ToArray();
+                var englishWordsForLetter = englishWords.Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) > 0)
+                    .ToArray();
 
-                var wordsStartWithLetter = legalWordsForLetter.Where(word => word[0] == letter).ToArray();
-                var wordsEndWithLetter = legalWordsForLetter.Where(word => word[^1] == letter).ToArray();
+                var wordsStartWithLetter = englishWordsForLetter.Where(word => word[0] == letter).ToArray();
+                var wordsEndWithLetter = englishWordsForLetter.Where(word => word[^1] == letter).ToArray();
 
-                legalWordsByLetter[letter] = legalWordsForLetter;
+                englishWordsByLetter[letter] = englishWordsForLetter;
                 startsWithWordsByLetter[letter] = wordsStartWithLetter;
                 endsWithWordsByLetter[letter] = wordsEndWithLetter;
             }
 
-            var sortedLetters = letterBoxedLetters.ToCharArray().OrderBy(c => legalWordsByLetter[c].Length);
+            var sortedLetters = letterBoxedLetters.ToCharArray().OrderBy(c => englishWordsByLetter[c].Length);
             var smallestLetter = sortedLetters.First();
 
-            var legalWordsWithSmallestLetterByLetter = new Dictionary<char, string[]>();
+            var englishWordsWithSmallestLetterByLetter = new Dictionary<char, string[]>();
             var startsWithWordsWithSmallestLetterByLetter = new Dictionary<char, string[]>();
             var endsWithWordsWithSmallestLetterByLetter = new Dictionary<char, string[]>();
 
             foreach (var letter in sortedLetters)
             {
                 var letterBitMask = GetAlphabetBitMask(letter) | GetAlphabetBitMask(smallestLetter);
-                var legalWordsForLetterWithSmallestLetter = legalWords
+                var englishWordsForLetterWithSmallestLetter = englishWords
                     .Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) == (int)letterBitMask).ToArray();
 
-                var wordsStartWithLetterWithSmallestLetter = legalWordsForLetterWithSmallestLetter.Where(word => word[0] == letter).ToArray();
-                var wordsEndWithLetterWithSmallestLetter = legalWordsForLetterWithSmallestLetter.Where(word => word[^1] == letter).ToArray();
+                var wordsStartWithLetterWithSmallestLetter = englishWordsForLetterWithSmallestLetter.Where(word => word[0] == letter).ToArray();
+                var wordsEndWithLetterWithSmallestLetter = englishWordsForLetterWithSmallestLetter.Where(word => word[^1] == letter).ToArray();
 
-                legalWordsWithSmallestLetterByLetter[letter] = legalWordsForLetterWithSmallestLetter;
+                englishWordsWithSmallestLetterByLetter[letter] = englishWordsForLetterWithSmallestLetter;
                 startsWithWordsWithSmallestLetterByLetter[letter] = wordsStartWithLetterWithSmallestLetter;
                 endsWithWordsWithSmallestLetterByLetter[letter] = wordsEndWithLetterWithSmallestLetter;
             }
@@ -335,7 +478,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             var totalTwoWordChecks = 0;
             foreach (var letter in sortedLetters)
             {
-                Console.Write($"  {letter} -> {legalWordsByLetter[letter].Length} total words with '{letter}' where ");
+                Console.Write($"  {letter} -> {englishWordsByLetter[letter].Length} total words with '{letter}' where ");
 
                 var endWithSmallestLetterLength = endsWithWordsWithSmallestLetterByLetter[letter].Length;
                 var startLength = startsWithWordsByLetter[letter].Length;
@@ -439,7 +582,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 }
             }
 
-            Assert.IsTrue(wordArchive.CandidateWordsByName.ContainsKey(TestLegalWords[0]));
+            Assert.IsTrue(wordArchive.AllCandidateWordsByName.ContainsKey(TestEnglishWords[0]));
         }
 
         private static bool HasWordPair(string word, HashSet<string> pairs)

@@ -13,8 +13,8 @@ namespace LetterBoxedPuzzle.Framework.Constants
     public static class WordConstants
     {
         /// <summary>
-        ///     The text of allowed the English words, where each word is separated by a new line.
+        ///     The text of all English words, where each word is separated by a new line.
         /// </summary>
-        public static readonly string AllowedEnglishWordsText = Properties.Resources.Scrabble_Words_2019;
+        public static readonly string EnglishWordsText = Properties.Resources.Scrabble_Words_2019;
     }
 }

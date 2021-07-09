@@ -20,32 +20,44 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <summary>
         ///     Initializes a new instance of the <see cref="WordArchive" /> class.
         /// </summary>
-        /// <param name="whiteSpaceDelimitedAllowedWordText">The text of allowed words, white-spaced delimited.</param>
-        public WordArchive(string whiteSpaceDelimitedAllowedWordText)
+        /// <param name="wordText">The word text, white-space delimited.</param>
+        public WordArchive(string wordText)
         {
-            this.AllowedWords = Regex.Split(whiteSpaceDelimitedAllowedWordText.ToLowerInvariant(), @"\s+")
-                .Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
+            this.AllWords = Regex.Split(wordText.ToLowerInvariant(), @"\s+").Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
+            this.AllCandidateWordsByName = GetCandidateWordsByName(this.AllWords);
         }
 
         /// <summary>
-        ///     Gets the dictionary of allowed candidate words keyed by their name.
+        ///     Gets all of the words of the archive.
         /// </summary>
-        public IReadOnlyDictionary<string, CandidateWord> CandidateWordsByName => GetCandidateWordsByName(this.AllowedWords);
+        public string[] AllWords { get; }
 
         /// <summary>
-        ///     Gets the allowed words of the archive.
+        ///     Gets the mapping of all words to their corresponding candidate word, which include the alphabet bit mask and sequential letter
+        ///     pairs of the word for quick computation of whether the word is permitted for a given letter boxed puzzle.
         /// </summary>
-        public string[] AllowedWords { get; }
+        public IReadOnlyDictionary<string, CandidateWord> AllCandidateWordsByName { get; }
 
         /// <summary>
-        ///     Gets the words allowed by the puzzle, which are those words without any sequential letters that are one of the forbidden pairs
-        ///     formed from the specified side letters of the puzzle.
+        ///     Gets the permitted words for the letter boxed puzzle, which are those words without any sequential letters that are one
+        ///     of the forbidden pairs formed from the specified side letters of the puzzle.
         /// </summary>
         /// <param name="sideLetters">The side letters of the puzzle.</param>
-        /// <returns>The legal words allowed by the puzzle.</returns>
-        public string[] GetLegalPuzzleWords(SideLetters sideLetters)
+        /// <returns>The words allowed by the puzzle.</returns>
+        public string[] GetPermittedPuzzleWords(SideLetters sideLetters)
         {
-            return this.AllowedWords.Where(word => this.CandidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
+            return this.AllWords.Where(word => this.AllCandidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
+        }
+
+        /// <summary>
+        ///     Gets the permitted candidate words for the specified side letters of the puzzle, which includes their alphabet bit masks
+        ///     and sequential letter pairs for each candidate word.
+        /// </summary>
+        /// <param name="sideLetters">The side letters of the puzzle.</param>
+        /// <returns>The candidate words for the specified puzzle side letters.</returns>
+        public CandidateWord[] GetPuzzleCandidateWords(SideLetters sideLetters)
+        {
+            return this.GetPermittedPuzzleWords(sideLetters).Select(word => this.AllCandidateWordsByName[word]).ToArray();
         }
 
         /// <summary>
