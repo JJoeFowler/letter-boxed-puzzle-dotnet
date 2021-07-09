@@ -31,6 +31,26 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     public class WordArchiveTests
     {
         /// <summary>
+        ///     Gets the test archive of all English words.
+        /// </summary>
+        internal static readonly WordArchive TestArchive = new (WordConstants.EnglishWordsText);
+
+        /// <summary>
+        ///     Gets the words of the test archive.
+        /// </summary>
+        internal static readonly string[] TestArchiveWords = TestArchive.AllWords;
+
+        /// <summary>
+        ///     Gets the set of words of the test archive.
+        /// </summary>
+        internal static readonly ISet<string> TestArchiveWordsSet = TestArchiveWords.ToHashSet();
+
+        /// <summary>
+        ///     Gets the test candidate words keyed by their name.
+        /// </summary>
+        internal static readonly IReadOnlyDictionary<string, CandidateWord> TestCandidateWordsByName = TestArchive.AllCandidateWordsByName;
+
+        /// <summary>
         ///     Test words consisting of obscure English words.
         /// </summary>
         private static readonly string[] TestEnglishWords =
@@ -69,42 +89,6 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         ///     Test words that should not be allowed for the test side letters.
         /// </summary>
         private static readonly string[] TestNotAllowedWords = { "acid", "bad", "cage", "dig", "each", "fade", "gig", "high", "iced" };
-
-        /// <summary>
-        ///     Gets the test archive of all English words.
-        /// </summary>
-        internal static WordArchive TestArchive { get; } = new (WordConstants.EnglishWordsText);
-
-        /// <summary>
-        ///     Gets the words of the test archive.
-        /// </summary>
-        internal static string[] TestArchiveWords { get; } = TestArchive.AllWords;
-
-        /// <summary>
-        ///     Gets the set of words of the test archive.
-        /// </summary>
-        internal static ISet<string> TestArchiveWordsSet { get; private set; } = new HashSet<string>();
-
-        /// <summary>
-        ///     Gets the test candidate words keyed by their name.
-        /// </summary>
-        internal static IReadOnlyDictionary<string, CandidateWord> TestCandidateWordsByName { get; } = TestArchive.AllCandidateWordsByName;
-
-        /// <summary>
-        ///     Sets up the test class by initializing the test set of legal words.
-        /// </summary>
-        /// <param name="_">The test context.</param>
-        [ClassInitialize]
-        public static void Setup(TestContext _)
-        {
-            TestArchiveWordsSet = TestArchiveWords.Aggregate(
-                TestArchiveWordsSet,
-                (current, word) =>
-                {
-                    current.Add(word);
-                    return current;
-                });
-        }
 
         /// <summary>
         ///     Verifies whether the legal words does not contain any words having white space.
