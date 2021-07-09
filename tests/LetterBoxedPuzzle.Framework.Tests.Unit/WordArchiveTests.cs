@@ -288,48 +288,110 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void GetPermittedPuzzleWords_GivenTestSideLetters_ContainsAllTestAllowedWords()
         {
             // Arrange
-            var testAllowedWordSet = TestAllowedWords.Aggregate(
-                new HashSet<string>(),
-                (current, word) =>
-                {
-                    current.Add(word);
-                    return current;
-                });
+            var allowedWordsLength = TestAllowedWords.Length;
+            var actualContainsPuzzleWord = new bool[allowedWordsLength];
 
             // Act
-            var permittedPuzzleWords = TestArchive.GetPermittedPuzzleWords(TestSideLetters);
-            var actualAllowedWords = permittedPuzzleWords.Where(word => testAllowedWordSet.Contains(word)).ToArray();
+            var permittedPuzzleWords = TestArchive.GetPermittedPuzzleWords(TestSideLetters).ToArray();
+            for (var wordIndex = 0; wordIndex < allowedWordsLength; wordIndex++)
+            {
+                actualContainsPuzzleWord[wordIndex] = permittedPuzzleWords.Contains(TestAllowedWords[wordIndex]);
+            }
 
             // Assert
-            for (var wordIndex = 0; wordIndex < TestAllowedWords.Length; wordIndex++)
+            for (var wordIndex = 0; wordIndex < allowedWordsLength; wordIndex++)
             {
                 var allowedWord = TestAllowedWords[wordIndex];
                 var sideLetterGroups = QuoteJoin(TestSideLetters.LetterGroups);
                 Assert.IsTrue(
-                    actualAllowedWords.Contains(allowedWord),
+                    actualContainsPuzzleWord[wordIndex],
                     $"Expected '{allowedWord}' to be one of the words allowed for the side letters {sideLetterGroups}.");
             }
         }
 
         /// <summary>
-        ///     Verifies whether given the test side letters that all the permitted puzzle words do not include any of the test words that
-        ///     should be not be allowed.
+        ///     Verifies whether given the test side letters that all the puzzle candidate words include the candidate words that should be allowed.
         /// </summary>
         [TestMethod]
-        public void GetPermittedPuzzleWords_GivenTestSideLetters_ContainsNoTestNotAllowedWords()
+        public void GetPuzzleCandidateWords_GivenTestSideLetters_ContainsAllTestAllowedWords()
         {
-            // Arrange and act
-            var permittedPuzzleWords = TestArchive.GetPermittedPuzzleWords(TestSideLetters);
-            var containsTestNotAllowedWord = TestNotAllowedWords.Select(word => permittedPuzzleWords.Contains(word)).ToArray();
+            // Arrange
+            var allowedWordsLength = TestAllowedWords.Length;
+            var actualContainsCandidateWord = new bool[allowedWordsLength];
+
+            // Act
+            var candidateLowercaseWords = TestArchive.GetPuzzleCandidateWords(TestSideLetters).Select(candidate => candidate.LowercaseWord);
+            for (var wordIndex = 0; wordIndex < allowedWordsLength; wordIndex++)
+            {
+                actualContainsCandidateWord[wordIndex] = candidateLowercaseWords.Contains(TestAllowedWords[wordIndex]);
+            }
 
             // Assert
-            for (var wordIndex = 0; wordIndex < TestNotAllowedWords.Length; wordIndex++)
+            for (var wordIndex = 0; wordIndex < allowedWordsLength; wordIndex++)
             {
-                var testNotAllowedWord = TestNotAllowedWords[wordIndex];
+                var allowedWord = TestAllowedWords[wordIndex];
+                var sideLetterGroups = QuoteJoin(TestSideLetters.LetterGroups);
+                Assert.IsTrue(
+                    actualContainsCandidateWord[wordIndex],
+                    $"Expected '{allowedWord}' to be one of the words allowed for the side letters {sideLetterGroups}.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given the test side letters that all the permitted puzzle words does not include the test words that should
+        ///     not be allowed.
+        /// </summary>
+        [TestMethod]
+        public void GetPermittedPuzzleWords_GivenTestSideLetters_ContainsAllTestNotAllowedWords()
+        {
+            // Arrange
+            var notAllowedWordsLength = TestNotAllowedWords.Length;
+            var actualContainsPuzzleWord = new bool[notAllowedWordsLength];
+
+            // Act
+            var permittedPuzzleWords = TestArchive.GetPermittedPuzzleWords(TestSideLetters).ToArray();
+            for (var wordIndex = 0; wordIndex < notAllowedWordsLength; wordIndex++)
+            {
+                actualContainsPuzzleWord[wordIndex] = permittedPuzzleWords.Contains(TestNotAllowedWords[wordIndex]);
+            }
+
+            // Assert
+            for (var wordIndex = 0; wordIndex < notAllowedWordsLength; wordIndex++)
+            {
+                var notAllowedWord = TestNotAllowedWords[wordIndex];
                 var sideLetterGroups = QuoteJoin(TestSideLetters.LetterGroups);
                 Assert.IsFalse(
-                    containsTestNotAllowedWord[wordIndex],
-                    $"Expected '{testNotAllowedWord}' not to be one of the words allowed for the side letters {sideLetterGroups}.");
+                    actualContainsPuzzleWord[wordIndex],
+                    $"Expected '{notAllowedWord}' not to be one of the words not allowed for the side letters {sideLetterGroups}.");
+            }
+        }
+
+        /// <summary>
+        ///     Verifies whether given the test side letters that all the puzzle candidate words does not include the candidate words that
+        ///     should not be allowed.
+        /// </summary>
+        [TestMethod]
+        public void GetPuzzleCandidateWords_GivenTestSideLetters_ContainsAllTestNotAllowedWords()
+        {
+            // Arrange
+            var notAllowedWordsLength = TestNotAllowedWords.Length;
+            var actualContainsCandidateWord = new bool[notAllowedWordsLength];
+
+            // Act
+            var candidateLowercaseWords = TestArchive.GetPuzzleCandidateWords(TestSideLetters).Select(candidate => candidate.LowercaseWord);
+            for (var wordIndex = 0; wordIndex < notAllowedWordsLength; wordIndex++)
+            {
+                actualContainsCandidateWord[wordIndex] = candidateLowercaseWords.Contains(TestNotAllowedWords[wordIndex]);
+            }
+
+            // Assert
+            for (var wordIndex = 0; wordIndex < notAllowedWordsLength; wordIndex++)
+            {
+                var notAllowedWord = TestNotAllowedWords[wordIndex];
+                var sideLetterGroups = QuoteJoin(TestSideLetters.LetterGroups);
+                Assert.IsFalse(
+                    actualContainsCandidateWord[wordIndex],
+                    $"Expected '{notAllowedWord}' not to be one of the words not allowed for the side letters {sideLetterGroups}.");
             }
         }
 
