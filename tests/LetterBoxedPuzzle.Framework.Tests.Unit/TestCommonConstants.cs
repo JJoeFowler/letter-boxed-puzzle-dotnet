@@ -24,6 +24,16 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         internal const int AlphabetSize = 26;
 
         /// <summary>
+        ///     The lowercase alphabet test string.
+        /// </summary>
+        internal const string LowercaseAlphabetTestString = "abcdefghijklmnopqrstuvwxyz";
+
+        /// <summary>
+        ///     The uppercase alphabet test string.
+        /// </summary>
+        internal const string UppercaseAlphabetTestString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        /// <summary>
         ///     Simple test word.
         /// </summary>
         internal const string SimpleTestWord = nameof(SimpleTestWord);
@@ -39,6 +49,33 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         ///     A-to-Z test word.
         /// </summary>
         internal const string AToZTestWord = "TheQuickBrownFoxJumpsOverTheLazyDog";
+
+        /// <summary>
+        ///     The lowercase test alphabet.
+        /// </summary>
+        internal static readonly char[] LowercaseTestAlphabet =
+            Enumerable.Range(0, AlphabetSize).Select(letter => LowercaseAlphabetTestString[letter]).ToArray();
+
+        /// <summary>
+        ///     The uppercase test alphabet.
+        /// </summary>
+        internal static readonly char[] UppercaseTestAlphabet =
+            Enumerable.Range(0, AlphabetSize).Select(letter => UppercaseAlphabetTestString[letter]).ToArray();
+
+        /// <summary>
+        ///     The test white space strings.
+        /// </summary>
+        internal static readonly string[] TestWhitespaceStrings = { " ", "  ", "\t", "\n", "\r", "\t\n ", "\r\t", "\n\r", "\r\n", " \t \n \r " };
+
+        /// <summary>
+        ///     The test strings with the first letter lowercased.
+        /// </summary>
+        internal static readonly string[] TestFirstCharLowercasedStrings = { "abc", "d ef", "gH i", "jKL", "mn  O", "p qR ", "sTU", "vwX", "yZ " };
+
+        /// <summary>
+        ///     Corresponding test strings with the first letter uppercased.
+        /// </summary>
+        internal static readonly string[] TestFirstCharUppercasedStrings = { "Abc", "D ef", "GH i", "JKL", "Mn  O", "P qR ", "STU", "VwX", "YZ " };
 
         /// <summary>
         ///     Name of animals as test words.
