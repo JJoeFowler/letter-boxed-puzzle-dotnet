@@ -13,24 +13,29 @@ namespace LetterBoxedPuzzle.Framework.Models
     using System.Text.RegularExpressions;
 
     /// <summary>
-    ///     Class for word archive, containing all the legal words as candidate words.
+    ///     Class for word archive, containing all the specified words and their corresponding candidate words.
     /// </summary>
     public class WordArchive
     {
+        /// <summary>
+        ///     All the words of the archive.
+        /// </summary>
+        private readonly string[] allWords;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="WordArchive" /> class.
         /// </summary>
         /// <param name="wordText">The word text, white-space delimited.</param>
         public WordArchive(string wordText)
         {
-            this.AllWords = Regex.Split(wordText.ToLowerInvariant(), @"\s+").Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
-            this.AllCandidateWordsByName = GetCandidateWordsByName(this.AllWords);
+            this.allWords = Regex.Split(wordText.ToLowerInvariant(), @"\s+").Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
+            this.AllCandidateWordsByName = GetCandidateWordsByName(this.allWords);
         }
 
         /// <summary>
-        ///     Gets all of the words of the archive.
+        ///     Gets a copy of all of the words of the archive.
         /// </summary>
-        public string[] AllWords { get; }
+        public string[] AllWords => this.allWords.ToArray();
 
         /// <summary>
         ///     Gets the mapping of all words to their corresponding candidate word, which include the alphabet bit mask and sequential letter
@@ -46,7 +51,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <returns>The words allowed by the puzzle.</returns>
         public string[] GetPermittedPuzzleWords(SideLetters sideLetters)
         {
-            return this.AllWords.Where(word => this.AllCandidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
+            return this.allWords.Where(word => this.AllCandidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
         }
 
         /// <summary>
@@ -69,7 +74,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         {
             _ = words ?? throw new ArgumentNullException(nameof(words));
 
-            var candidateWords = words.Select(word => new CandidateWord(word)).Distinct().ToArray();
+            var candidateWords = words.Select(word => new CandidateWord(word)).Distinct();
 
             return candidateWords.ToDictionary(candidate => candidate.LowercaseWord, candidate => candidate);
         }
