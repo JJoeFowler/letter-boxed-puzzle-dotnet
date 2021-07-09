@@ -95,7 +95,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         ///     Gets the alphabet bit mask of the word where '<see cref="Enums.AlphabetBitMask.A" />', ..., <see cref="Enums.AlphabetBitMask.Z" />
         ///     correspond to bits 1, ..., 26 to the whether the word contains the respective letters.
         /// </summary>
-        public AlphabetBitMask AlphabetBitMask { get; internal set; }
+        public AlphabetBitMask AlphabetBitMask { get; }
 
         /// <summary>
         ///     Determines whether all the letters of the candidate word are contained within the given candidate letters.
