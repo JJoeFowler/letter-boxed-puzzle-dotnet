@@ -7,6 +7,7 @@
 
 namespace LetterBoxedPuzzle.Framework.Utilities
 {
+    using System;
     using System.Linq;
 
     /// <summary>
@@ -23,6 +24,12 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <returns>The join of each text value double-quoted and separated by a comma and a space.</returns>
         public static string QuoteJoin(params string[] textValues)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (textValues.Any(x => x == null))
+            {
+                throw new ArgumentException($"None of the values for the parameter {nameof(textValues)} can be null.");
+            }
+
             return $"\"{string.Join("\", \"", textValues.Select(value => value ?? "null"))}\"";
         }
 

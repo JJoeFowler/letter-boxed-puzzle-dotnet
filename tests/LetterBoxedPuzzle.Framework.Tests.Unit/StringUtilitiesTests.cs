@@ -53,6 +53,22 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
+        ///     Verify whether the given an  array that the single-quoted empty string '' is returned.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void QuoteJoin_GivenArgumentsWithNullValue_ThrowsArgumentException()
+        {
+            // Arrange, disabling warning for non-nullable string array having a null value.
+#pragma warning disable 8625
+            string[] parametersWithNullValue = { "abc", null, "def" };
+#pragma warning restore 8625
+
+            // Act
+            _ = QuoteJoin(parametersWithNullValue);
+        }
+
+        /// <summary>
         ///     Verify whether the given an empty string array that the double-quoted empty string "" is returned.
         /// </summary>
         [TestMethod]
