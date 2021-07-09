@@ -68,16 +68,6 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         internal static readonly string[] TestWhitespaceStrings = { " ", "  ", "\t", "\n", "\r", "\t\n ", "\r\t", "\n\r", "\r\n", " \t \n \r " };
 
         /// <summary>
-        ///     The test strings with the first letter lowercased.
-        /// </summary>
-        internal static readonly string[] TestFirstCharLowercasedStrings = { "abc", "d ef", "gH i", "jKL", "mn  O", "p qR ", "sTU", "vwX", "yZ " };
-
-        /// <summary>
-        ///     Corresponding test strings with the first letter uppercased.
-        /// </summary>
-        internal static readonly string[] TestFirstCharUppercasedStrings = { "Abc", "D ef", "GH i", "JKL", "Mn  O", "P qR ", "STU", "VwX", "YZ " };
-
-        /// <summary>
         ///     Name of animals as test words.
         /// </summary>
         internal static readonly string[] AnimalTestWords = { "Aardvark", "BEAR", "cat", "doG", "elephant", "FoX", "GORILLA", "harE", "Zebra" };

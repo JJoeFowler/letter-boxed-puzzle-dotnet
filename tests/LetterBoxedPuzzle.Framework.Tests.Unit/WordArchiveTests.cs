@@ -10,6 +10,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using LetterBoxedPuzzle.Framework.Constants;
     using LetterBoxedPuzzle.Framework.Models;
@@ -49,9 +50,14 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             };
 
         /// <summary>
+        ///     Gets the test array of allowed words.
+        /// </summary>
+        internal static string[] TestAllowedWords { get; private set; } = Array.Empty<string>();
+
+        /// <summary>
         ///     Gets the test set of allowed words.
         /// </summary>
-        internal static IReadOnlySet<string> TestAllowedWordsSet { get; private set; } = new HashSet<string>();
+        internal static ISet<string> TestAllowedWordsSet { get; private set; } = new HashSet<string>();
 
         /// <summary>
         ///     Sets up the test class by initializing the test set of allowed words.
@@ -60,10 +66,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         [ClassInitialize]
         public static void Setup(TestContext _)
         {
-            var allowedWords = new WordArchive(WordConstants.AllowedEnglishWordsText).AllowedWords;
+            TestAllowedWords = new WordArchive(WordConstants.AllowedEnglishWordsText).AllowedWords;
 
-            TestAllowedWordsSet = allowedWords.Aggregate(
-                new HashSet<string>(),
+            TestAllowedWordsSet = TestAllowedWords.Aggregate(
+                TestAllowedWordsSet,
                 (current, word) =>
                 {
                     current.Add(word);
@@ -82,6 +88,25 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // Act
 
             // Assert
+        }
+
+        /// <summary>
+        ///     Verifies whether the allowed words does not contain any words having white space.
+        /// </summary>
+        [TestMethod]
+        public void AllowedWords_ContainsAnyWordsWithWhiteSpace_IsFalse()
+        {
+            // Arrange
+            var whiteSpaceRegex = new Regex(@"\s");
+
+            // Act
+            var containsWhiteSpace = TestAllowedWords.Select(word => whiteSpaceRegex.IsMatch(word)).ToArray();
+
+            // Assert
+            for (int wordIndex = 0; wordIndex < TestAllowedWords.Length; wordIndex++)
+            {
+                Assert.IsFalse(containsWhiteSpace[wordIndex], $"Allowed word {TestAllowedWords[wordIndex]} contains white space.");
+            }
         }
 
         /// <summary>
@@ -416,7 +441,6 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             Assert.IsTrue(wordArchive.CandidateWordsByName.ContainsKey(TestLegalWords[0]));
         }
-
 
         private static bool HasWordPair(string word, HashSet<string> pairs)
         {
