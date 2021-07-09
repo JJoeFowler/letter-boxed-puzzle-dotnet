@@ -30,19 +30,30 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <summary>
         ///     Gets the dictionary of allowed candidate words keyed by their name.
         /// </summary>
-        public IDictionary<string, CandidateWord> CandidateWordsByName => GetCandidateWordsByName(this.AllowedWords);
+        public IReadOnlyDictionary<string, CandidateWord> CandidateWordsByName => GetCandidateWordsByName(this.AllowedWords);
 
         /// <summary>
-        ///     Gets the allowed words for the archive.
+        ///     Gets the allowed words of the archive.
         /// </summary>
         public string[] AllowedWords { get; }
+
+        /// <summary>
+        ///     Gets the words allowed by the puzzle, which are those words without any sequential letters that are one of the forbidden pairs
+        ///     formed from the specified side letters of the puzzle.
+        /// </summary>
+        /// <param name="sideLetters">The side letters of the puzzle.</param>
+        /// <returns>The legal words allowed by the puzzle.</returns>
+        public string[] GetLegalPuzzleWords(SideLetters sideLetters)
+        {
+            return this.AllowedWords.Where(word => this.CandidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
+        }
 
         /// <summary>
         ///     Gets the candidate words keyed by their name for the given words.
         /// </summary>
         /// <param name="words">The words.</param>
         /// <returns>The candidate words keyed by their name.</returns>
-        private static IDictionary<string, CandidateWord> GetCandidateWordsByName(IEnumerable<string> words)
+        private static IReadOnlyDictionary<string, CandidateWord> GetCandidateWordsByName(string[] words)
         {
             _ = words ?? throw new ArgumentNullException(nameof(words));
 
