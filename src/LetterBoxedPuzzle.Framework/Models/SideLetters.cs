@@ -55,6 +55,10 @@ namespace LetterBoxedPuzzle.Framework.Models
             this.LetterGroups = letterGroups.Select(group => group.ToLowerInvariant()).ToArray();
 
             this.DistinctLetters = new string(this.LetterGroups.SelectMany(x => x).Distinct().ToArray());
+
+            this.ForbiddenTwoLetterPairs = GenerateForbiddenTwoLetterPairs(this.LetterGroups);
+
+            this.ForbiddenTwoLetterPairSet = this.ForbiddenTwoLetterPairs.ToHashSet();
         }
 
         /// <summary>
@@ -71,26 +75,12 @@ namespace LetterBoxedPuzzle.Framework.Models
         ///     Gets the forbidden two-letter pairs that cannot be contained in a solution of a letter-boxed puzzle.
         /// </summary>
         /// <returns>The forbidden two-letter pairs of letters.</returns>
-        public IEnumerable<string> ForbiddenTwoLetterPairs =>
-            this.LetterGroups.Aggregate(
-                new List<string>(),
-                (current, group) =>
-                {
-                    current.AddRange(GenerateAllDistinctTwoLetterPairs(group));
-                    return current;
-                }).Distinct().OrderBy(x => x);
+        public IOrderedEnumerable<string> ForbiddenTwoLetterPairs { get; }
 
         /// <summary>
         ///     Gets the set of forbidden two-letter pairs.
         /// </summary>
-        private ISet<string> ForbiddenTwoLetterPairSet =>
-            this.ForbiddenTwoLetterPairs.Aggregate(
-                new HashSet<string>(),
-                (current, pair) =>
-                {
-                    current.Add(pair);
-                    return current;
-                });
+        private IReadOnlySet<string> ForbiddenTwoLetterPairSet { get; }
 
         /// <summary>
         ///     Determines whether the given pair of two letters is forbidden and cannot be contained in any solution to the letter-boxed puzzle.
@@ -116,6 +106,16 @@ namespace LetterBoxedPuzzle.Framework.Models
             }
 
             return this.ForbiddenTwoLetterPairSet.Contains(twoLetterPair.ToLowerInvariant());
+        }
+
+        /// <summary>
+        ///     Generate the distinct forbidden two-letter pairs that cannot be contained in a solution of a letter-boxed puzzle.
+        /// </summary>
+        /// <param name="letterGroups">The letter groups.</param>
+        /// <returns>The forbidden two-letter pairs.</returns>
+        private static IOrderedEnumerable<string> GenerateForbiddenTwoLetterPairs(IEnumerable<string> letterGroups)
+        {
+            return letterGroups.SelectMany(GenerateAllDistinctTwoLetterPairs).Distinct().OrderBy(pair => pair);
         }
     }
 }
