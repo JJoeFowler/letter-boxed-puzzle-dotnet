@@ -427,7 +427,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
 
             var englishWordsLength = englishWords.Length;
 
-            var letterBoxedLetters = sideLetters.DistinctLetters;
+            var letterBoxedLetters = sideLetters.SortedLetters;
 
             var letterBoxedWordsLength = candidateWordsByName.Keys.Select(word => candidateWordsByName[word].IsContainedIn(letterBoxedLetters))
                 .ToArray().Length;

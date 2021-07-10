@@ -52,7 +52,7 @@ namespace LetterBoxedPuzzle.Framework.Models
 
             this.LetterGroups = letterGroups.Select(group => group.ToLowerInvariant()).ToArray();
 
-            this.DistinctLetters = new string(this.LetterGroups.SelectMany(x => x).Distinct().ToArray());
+            this.SortedLetters = new string(this.LetterGroups.SelectMany(x => x).Distinct().OrderBy(x => x).ToArray());
 
             this.ForbiddenTwoLetterPairs = GenerateForbiddenTwoLetterPairs(this.LetterGroups);
 
@@ -65,9 +65,9 @@ namespace LetterBoxedPuzzle.Framework.Models
         public string[] LetterGroups { get; }
 
         /// <summary>
-        ///     Gets the distinct letters among all the letter groups.
+        ///     Gets the distinct alphabetically sorted letters among all the letter groups.
         /// </summary>
-        public string DistinctLetters { get; }
+        public string SortedLetters { get; }
 
         /// <summary>
         ///     Gets the forbidden two-letter pairs that cannot be contained in a solution of a letter-boxed puzzle.

@@ -176,21 +176,21 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verify whether given the letter groups consist of all three-letter alphabetic ranges as texts, i.e., "abc", "bcd", ..., "xyz"
-        ///     that the lowercase alphabet is returned for the distinct letters.
+        ///     Verify whether given the letter groups consisting of all three-letter alphabetic ranges as texts reversed, i.e.,
+        ///     "xyz", "uvw", ..., "bcd", "abc", that the sorted lowercase alphabet is returned.
         /// </summary>
         [TestMethod]
-        public void DistinctLetters_GivenLetterGroupsConsistingOfAllThreeLetterAlphabeticRangesAsText_ReturnsLowercaseAlphabet()
+        public void SortedLetters_GivenLetterGroupsConsistingOfAllThreeLetterAlphabeticRangesAsTextReversed_ReturnsSortedLowercaseAlphabet()
         {
             // Arrange
             var testLetterGroups = Enumerable.Range(LowercaseA, EnglishAlphabetSize - 2)
-                .Select(startingLetter => GenerateAlphabeticRangeAsText((char)startingLetter, 3)).ToArray();
+                .Select(startingLetter => GenerateAlphabeticRangeAsText((char)startingLetter, 3)).Reverse().ToArray();
 
             var testSideLetter = new SideLetters(testLetterGroups);
             var expectedLetters = LowercaseAlphabetText;
 
             // Act
-            var actualLetters = testSideLetter.DistinctLetters;
+            var actualLetters = testSideLetter.SortedLetters;
 
             // Assert
             var quotedLetterGroups = QuoteJoin(testLetterGroups);
@@ -198,7 +198,35 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             Assert.AreEqual(
                 expectedLetters,
                 actualLetters,
-                $"Expected the distinct letters \"{expectedLetters}\" and not \"{actualLetters}\" for the letter groups {quotedLetterGroups}).");
+                $"Expected the sorted letters \"{expectedLetters}\" and not \"{actualLetters}\" for the letter groups {quotedLetterGroups}).");
+        }
+
+        /// <summary>
+        ///     Verify whether given the duplicate sequence of the letter groups consisting of all three-letter alphabetic ranges, i.e.,
+        ///     "abc", "def", ..., "xyz", "abc", "def", ... , "xyz" that the sorted lowercase alphabet is returned.
+        /// </summary>
+        [TestMethod]
+        public void SortedLetters_GivenDuplicateLetterGroupsConsistingOfAllThreeLetterAlphabeticRangesAsText_ReturnsSortedLowercaseAlphabet()
+        {
+            // Arrange
+            var testLetterGroups = Enumerable.Range(LowercaseA, EnglishAlphabetSize - 2)
+                .Select(startingLetter => GenerateAlphabeticRangeAsText((char)startingLetter, 3));
+
+            var duplicateTestLetterGroups = testLetterGroups.Concat(testLetterGroups).ToArray();
+
+            var testSideLetter = new SideLetters(duplicateTestLetterGroups);
+            var expectedLetters = LowercaseAlphabetText;
+
+            // Act
+            var actualLetters = testSideLetter.SortedLetters;
+
+            // Assert
+            var quotedLetterGroups = QuoteJoin(duplicateTestLetterGroups);
+
+            Assert.AreEqual(
+                expectedLetters,
+                actualLetters,
+                $"Expected the sorted letters \"{expectedLetters}\" and not \"{actualLetters}\" for the letter groups {quotedLetterGroups}).");
         }
 
         /// <summary>
