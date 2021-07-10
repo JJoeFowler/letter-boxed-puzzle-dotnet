@@ -12,6 +12,7 @@ namespace LetterBoxedPuzzle.Framework.Models
     using System.Linq;
 
     using LetterBoxedPuzzle.Framework.Enums;
+    using LetterBoxedPuzzle.Framework.Extensions;
 
     using static Utilities.AlphabetUtilities;
 
@@ -139,12 +140,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <returns>The next word chain.</returns>
         private IEnumerable<IEnumerable<CandidateWord>> GetCandidateWordChains()
         {
-            return this.WordLinks.Select(wordLink => wordLink.MatchingCandidateWords)
-                .Aggregate(
-                    (IEnumerable<IEnumerable<CandidateWord>>)new[] { Enumerable.Empty<CandidateWord>() },
-                    (current, candidateWords) => current.SelectMany(
-                        _ => candidateWords,
-                        (wordChain, candidateWord) => wordChain.Concat(new[] { candidateWord })));
+            return this.WordLinks.Select(wordLink => wordLink.MatchingCandidateWords).CartesianProduct();
         }
     }
 }
