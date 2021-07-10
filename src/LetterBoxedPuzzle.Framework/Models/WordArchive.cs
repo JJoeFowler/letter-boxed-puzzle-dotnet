@@ -72,16 +72,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// </summary>
         /// <param name="words">The words.</param>
         /// <returns>The candidate words keyed by their name.</returns>
-        private static IReadOnlyDictionary<string, CandidateWord> GetCandidateWordsByName(string[] words)
-        {
-            var candidateWords = words switch
-                {
-                    null => throw new ArgumentNullException(nameof(words)),
-
-                    _ => words.Select(word => new CandidateWord(word)).Distinct(),
-                };
-
-            return candidateWords.ToDictionary(candidate => candidate.LowercaseWord, candidate => candidate);
-        }
+        private static IReadOnlyDictionary<string, CandidateWord> GetCandidateWordsByName(IEnumerable<string> words) =>
+            words.Select(word => new CandidateWord(word)).Distinct().ToDictionary(candidate => candidate.LowercaseWord, candidate => candidate);
     }
 }
