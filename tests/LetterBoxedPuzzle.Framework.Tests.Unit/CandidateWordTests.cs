@@ -52,9 +52,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             string? candidateWordLetters = null;
 
             // Act
-#pragma warning disable CS8604 // Possible null reference argument.
-            _ = new CandidateWord(candidateWordLetters);
-#pragma warning restore CS8604 // Possible null reference argument.
+            _ = new CandidateWord(candidateWordLetters!);
         }
 
         /// <summary>
@@ -355,9 +353,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             string? nullValue = null;
 
             // Act
-#pragma warning disable 8604
-            _ = new CandidateWord("word").IsContainedIn(nullValue);
-#pragma warning restore 8604
+            _ = new CandidateWord("word").IsContainedIn(nullValue!);
         }
 
         /// <summary>
@@ -389,9 +385,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             SideLetters? nullValue = null;
 
             // Act
-#pragma warning disable 8604
-            _ = new CandidateWord(SimpleTestWord).IsAllowed(nullValue);
-#pragma warning restore 8604
+            _ = new CandidateWord(SimpleTestWord).IsAllowed(nullValue!);
         }
 
         /// <summary>

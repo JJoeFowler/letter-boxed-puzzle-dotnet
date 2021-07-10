@@ -40,9 +40,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void ToFirstCharUpper_GivenNullParameters_ThrowsArgumentNullException()
         {
             // Act, disabling warning of passing a null value for a non-nullable string parameter.
-#pragma warning disable 8625
-            _ = StringExtensions.ToFirstCharUpper(null);
-#pragma warning restore 8625
+            _ = StringExtensions.ToFirstCharUpper(null!);
         }
 
         /// <summary>

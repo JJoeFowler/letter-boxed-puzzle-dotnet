@@ -43,14 +43,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void SideLetters_GivenNullValue_ThrowsNullReferenceException()
         {
             // Arrange
-#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
-            string[]? nullValue = null;
-#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
+            string[]? nullValue = null!;
 
             // Act
-#pragma warning disable 8604
             _ = new SideLetters(nullValue);
-#pragma warning restore 8604
         }
 
         /// <summary>
@@ -105,9 +101,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             var twoElementSideElementGroup = new[] { "abc", null };
 
             // Act
-#pragma warning disable 8620
-            _ = new SideLetters(twoElementSideElementGroup);
-#pragma warning restore 8620
+            _ = new SideLetters(twoElementSideElementGroup!);
         }
 
         /// <summary>
@@ -184,7 +178,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var testLetterGroups = Enumerable.Range(LowercaseA, EnglishAlphabetSize - 2)
-                .Select(startingLetter => GenerateAlphabeticRangeAsText((char)startingLetter, 3)).Reverse().ToArray();
+                .Select(startingLetter => GenerateAlphabeticRangeAsText((char)startingLetter, 3))
+                .Reverse()
+                .ToArray();
 
             var testSideLetter = new SideLetters(testLetterGroups);
             var expectedLetters = LowercaseAlphabetText;
@@ -328,9 +324,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             string? nullValue = null;
 
             // Act
-#pragma warning disable CS8604 // Possible null reference argument.
-            _ = TestSideLettersForThreeSides.IsForbiddenTwoLetterPair(nullValue);
-#pragma warning restore CS8604 // Possible null reference argument.
+            _ = TestSideLettersForThreeSides.IsForbiddenTwoLetterPair(nullValue!);
         }
 
         /// <summary>

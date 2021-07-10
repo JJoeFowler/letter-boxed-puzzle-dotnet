@@ -62,10 +62,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // Arrange
             string[]? nullValue = null;
 
-            // Act, disabling passing a null value for a non-nullable reference type.
-#pragma warning disable 8604
-            _ = QuoteJoin(nullValue);
-#pragma warning restore 8604
+            // Act
+            _ = QuoteJoin(nullValue!);
         }
 
         /// <summary>
@@ -78,10 +76,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             // Arrange
             char[]? nullValue = null;
 
-            // Act, disabling passing a null value for a non-nullable reference type.
-#pragma warning disable 8604
-            _ = QuoteJoin(nullValue);
-#pragma warning restore 8604
+            // Act
+            _ = QuoteJoin(nullValue!);
         }
 
         /// <summary>
@@ -91,16 +87,13 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         [ExpectedException(typeof(ArgumentException))]
         public void QuoteJoin_GivenArgumentsWithNullValue_ThrowsArgumentException()
         {
-            // Arrange, disabling warning for non-nullable string array having a null value.
-#pragma warning disable 8625
-            string[] parametersWithNullValue = { "abc", null, "def" };
-#pragma warning restore 8625
+            // Arrange
+            string[] parametersWithNullValue = { "abc", null!, "def" };
 
             // Act
             _ = QuoteJoin(parametersWithNullValue);
         }
 
-        /// <summary>
         /// <summary>
         ///     Verify whether the given an empty string array that the double-quoted empty string "" is returned.
         /// </summary>

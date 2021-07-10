@@ -53,14 +53,14 @@ namespace LetterBoxedPuzzle.Framework.Utilities
             {
                 IsLowercaseAlphabetLetterByCharacter[index] = true;
                 IsAlphabetLetterByCharacter[index] = true;
-                AlphabetBitMaskByByteValue[index] = (index - AlphabetConstants.LowercaseA + 1).ToAlphabetBitMask();
+                AlphabetBitMaskByByteValue[index] = ((index - AlphabetConstants.LowercaseA) + 1).ToAlphabetBitMask();
             }
 
             for (int index = AlphabetConstants.UppercaseA; index <= AlphabetConstants.UppercaseZ; index++)
             {
                 IsUppercaseAlphabetLetterByCharacter[index] = true;
                 IsAlphabetLetterByCharacter[index] = true;
-                AlphabetBitMaskByByteValue[index] = (index - AlphabetConstants.UppercaseA + 1).ToAlphabetBitMask();
+                AlphabetBitMaskByByteValue[index] = ((index - AlphabetConstants.UppercaseA) + 1).ToAlphabetBitMask();
             }
         }
 
@@ -162,7 +162,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </exception>
         public static char[] GenerateAlphabeticRangeSequence(char startingLetter, int length)
         {
-            var maximumLength = AlphabetConstants.EnglishAlphabetSize - startingLetter
+            var maximumLength = (AlphabetConstants.EnglishAlphabetSize - startingLetter)
                 + (IsLowercaseAlphabetLetter(startingLetter) ? AlphabetConstants.LowercaseA : AlphabetConstants.UppercaseA);
 
             return (startingLetter, length) switch
@@ -217,7 +217,8 @@ namespace LetterBoxedPuzzle.Framework.Utilities
 
                     _ => (from firstLetter in text.ToLowerInvariant()
                           from secondLetter in text.ToLowerInvariant()
-                          select firstLetter + secondLetter.ToString()).Distinct().ToArray(),
+                          select firstLetter + secondLetter.ToString()).Distinct()
+                        .ToArray(),
                 };
     }
 }

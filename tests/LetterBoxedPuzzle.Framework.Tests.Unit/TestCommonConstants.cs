@@ -41,9 +41,17 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         /// <summary>
         ///     Simple test word alphabet bit mask.
         /// </summary>
-        internal const AlphabetBitMask SimpleTestWordAlphabetBitMask = AlphabetBitMask.S | AlphabetBitMask.I | AlphabetBitMask.M
-            | AlphabetBitMask.P | AlphabetBitMask.L | AlphabetBitMask.E | AlphabetBitMask.T | AlphabetBitMask.W | AlphabetBitMask.O
-            | AlphabetBitMask.R | AlphabetBitMask.D;
+        internal const AlphabetBitMask SimpleTestWordAlphabetBitMask = AlphabetBitMask.S
+            | AlphabetBitMask.I
+            | AlphabetBitMask.M
+            | AlphabetBitMask.P
+            | AlphabetBitMask.L
+            | AlphabetBitMask.E
+            | AlphabetBitMask.T
+            | AlphabetBitMask.W
+            | AlphabetBitMask.O
+            | AlphabetBitMask.R
+            | AlphabetBitMask.D;
 
         /// <summary>
         ///     A-to-Z test word.
@@ -75,8 +83,12 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         /// <summary>
         ///     The non-alphabet characters.
         /// </summary>
-        internal static readonly char[] NonAlphabetCharacters = Enumerable.Range(0, char.MaxValue).Select(x => (char)x).ToArray()
-            .Except(LowercaseAlphabet).Except(UppercaseAlphabet).ToArray();
+        internal static readonly char[] NonAlphabetCharacters = Enumerable.Range(0, char.MaxValue)
+            .Select(x => (char)x)
+            .ToArray()
+            .Except(LowercaseAlphabet)
+            .Except(UppercaseAlphabet)
+            .ToArray();
 
         /// <summary>
         ///     The test alphabet bit masks for the full alphabet.

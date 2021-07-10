@@ -11,6 +11,8 @@ namespace LetterBoxedPuzzle.Framework.Models
     using System.Collections.Generic;
     using System.Linq;
 
+    using LetterBoxedPuzzle.Framework.Enums;
+
     using static Utilities.AlphabetUtilities;
 
     /// <summary>
@@ -20,25 +22,36 @@ namespace LetterBoxedPuzzle.Framework.Models
     public class WordChain
     {
         /// <summary>
+        ///     Maximum number of word links to form a word chain.
+        /// </summary>
+        public const int MaximumWordLinksLength = 6;
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="WordChain" /> class.
         /// </summary>
         /// <param name="candidateWords">The candidate words.</param>
         /// <param name="linkingLetters">The linking letters.</param>
+        /// <param name="sideLetters">The side letters.</param>
         /// <exception cref="ArgumentNullException">Thrown when given a null value for any of the parameters.</exception>
-        public WordChain(CandidateWord[] candidateWords, IEnumerable<char> linkingLetters)
+        public WordChain(CandidateWord[] candidateWords, IEnumerable<char> linkingLetters, SideLetters sideLetters)
         {
-            (this.CandidateWords, this.LinkingLetters) = (candidateWords, linkingLetters) switch
+            (this.CandidateWords, this.LinkingLetters, this.SideLetters) = (candidateWords, linkingLetters, sideLetters) switch
                 {
-                    (null, _) => throw new ArgumentNullException(nameof(candidateWords)),
+                    (null, _, _) => throw new ArgumentNullException(nameof(candidateWords)),
 
-                    (_, null) => throw new ArgumentNullException(nameof(linkingLetters)),
+                    (_, null, _) => throw new ArgumentNullException(nameof(linkingLetters)),
 
-                    (_, _) when candidateWords.Length == 0 => throw new ArgumentException($"'{nameof(candidateWords)}' cannot be empty."),
+                    (_, _, null) => throw new ArgumentNullException(nameof(sideLetters)),
 
-                    (_, _) when linkingLetters.All(IsAlphabetLetter) => throw new ArgumentException(
+                    (_, _, _) when candidateWords.Length == 0 => throw new ArgumentException($"'{nameof(candidateWords)}' cannot be empty."),
+
+                    (_, _, _) when linkingLetters.Count() >= MaximumWordLinksLength => throw new ArgumentException(
+                        $"'{linkingLetters}' must be less than {MaximumWordLinksLength}."),
+
+                    (_, _, _) when !linkingLetters.All(IsAlphabetLetter) => throw new ArgumentException(
                         $"'{nameof(linkingLetters)}' must only be letters of the alphabet"),
 
-                    (_, _) => (candidateWords, linkingLetters.ToArray()),
+                    (_, _, _) => (candidateWords, linkingLetters.ToArray(), sideLetters),
                 };
 
             this.WordLinks = GenerateWordLinks(candidateWords, linkingLetters);
@@ -56,9 +69,27 @@ namespace LetterBoxedPuzzle.Framework.Models
         public char[] LinkingLetters { get; }
 
         /// <summary>
+        ///     Gets the side letters for the puzzle.
+        /// </summary>
+        public SideLetters SideLetters { get; }
+
+        /// <summary>
         ///     Gets the words links for the word chain.
         /// </summary>
         public WordLink[] WordLinks { get; }
+
+        /// <summary>
+        ///     Gets all the solutions of all word chains whose letters collectively use all the side letters of the puzzle.
+        /// </summary>
+        /// <returns>The word chains whose letters use all the side letters.</returns>
+        public IEnumerable<string>[] GetSolutions()
+        {
+            var sideLetterBitMask = new CandidateWord(this.SideLetters.SortedLetters).AlphabetBitMask;
+
+            return (from candidateWordChain in this.GetCandidateWordChains()
+                    where IsCompleteChain(sideLetterBitMask, candidateWordChain)
+                    select candidateWordChain.Select(word => word.LowercaseWord)).ToArray();
+        }
 
         /// <summary>
         ///     Generate the words links for the specified linking letters using the specified candidate words.
@@ -70,7 +101,9 @@ namespace LetterBoxedPuzzle.Framework.Models
             linkingLetters.Count() switch
                 {
                     0 => new WordLink[] { new (candidateWords, null, null) },
-                    _ => GenerateLinkingLetterPairs(linkingLetters).Select(pair => new WordLink(candidateWords, pair.Current, pair.Next)).ToArray(),
+                    _ => GenerateLinkingLetterPairs(linkingLetters)
+                        .Select(pair => new WordLink(candidateWords, pair.Current, pair.Next))
+                        .ToArray(),
                 };
 
         /// <summary>
@@ -85,6 +118,33 @@ namespace LetterBoxedPuzzle.Framework.Models
             var nullableLinkingLetters = linkingLetters.Select(letter => (char?)letter);
 
             return nullCharacter.Concat(nullableLinkingLetters).Zip(nullableLinkingLetters.Concat(nullCharacter)).ToArray();
+        }
+
+        /// <summary>
+        ///     Determines whether the given chain is a complete chain that uses all the letters for the specified alphabet bit mask.
+        /// </summary>
+        /// <param name="alphabetBitMask">The alphabet bit mask.</param>
+        /// <param name="candidateWordChain">The candidate word chain.</param>
+        /// <returns>
+        ///     <see langword="true" /> if the word chain has all the letters to match the specified alphabet bit mask, or
+        ///     <see langword="false" /> otherwise.
+        /// </returns>
+        private static bool IsCompleteChain(AlphabetBitMask alphabetBitMask, IEnumerable<CandidateWord> candidateWordChain) =>
+            alphabetBitMask
+            == candidateWordChain.Aggregate(AlphabetBitMask.None, (current, candidateWord) => current | candidateWord.AlphabetBitMask);
+
+        /// <summary>
+        ///     Get the chains of candidate words, where each candidate word is from one of the word links.
+        /// </summary>
+        /// <returns>The next word chain.</returns>
+        private IEnumerable<IEnumerable<CandidateWord>> GetCandidateWordChains()
+        {
+            return this.WordLinks.Select(wordLink => wordLink.MatchingCandidateWords)
+                .Aggregate(
+                    (IEnumerable<IEnumerable<CandidateWord>>)new[] { Enumerable.Empty<CandidateWord>() },
+                    (current, candidateWords) => current.SelectMany(
+                        _ => candidateWords,
+                        (wordChain, candidateWord) => wordChain.Concat(new[] { candidateWord })));
         }
     }
 }

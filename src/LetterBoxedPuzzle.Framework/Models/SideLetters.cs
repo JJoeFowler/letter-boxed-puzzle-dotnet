@@ -12,7 +12,6 @@ namespace LetterBoxedPuzzle.Framework.Models
     using System.Linq;
 
     using static Utilities.AlphabetUtilities;
-    using static Utilities.StringUtilities;
 
     /// <summary>
     ///     Class for the groups of letters along the sides of a letter-boxed puzzle.

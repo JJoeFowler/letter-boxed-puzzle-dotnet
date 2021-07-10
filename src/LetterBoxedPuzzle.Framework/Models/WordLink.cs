@@ -42,7 +42,8 @@ namespace LetterBoxedPuzzle.Framework.Models
 
                     (_, _, _) => (
                         candidateWords.Where(word => !firstLetter.HasValue || (word.FirstLetter == firstLetter))
-                            .Where(word => !lastLetter.HasValue || (word.LastLetter == lastLetter)).ToArray(), firstLetter, lastLetter),
+                            .Where(word => !lastLetter.HasValue || (word.LastLetter == lastLetter))
+                            .ToArray(), firstLetter, lastLetter),
                 };
         }
 

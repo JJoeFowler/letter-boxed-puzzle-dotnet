@@ -48,7 +48,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verify whether the given out-of-range index, which is not between 1 to 26, is converted to '<see cref="AlphabetBitMask.None"/>'.
+        ///     Verify whether the given out-of-range index, which is not between 1 to 26, is converted to '<see cref="AlphabetBitMask.None" />'.
         /// </summary>
         [TestMethod]
         public void ToAlphabetBitMask_GivenIndexOutOfRange_ReturnsAlphabetBitMaskNone()

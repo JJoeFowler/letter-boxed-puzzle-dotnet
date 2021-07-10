@@ -283,9 +283,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             string? nullValue = null;
 
             // Act
-#pragma warning disable 8604
-            _ = GetAlphabetBitMask(nullValue);
-#pragma warning restore 8604
+            _ = GetAlphabetBitMask(nullValue!);
         }
 
         /// <summary>
@@ -360,8 +358,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void GenerateAlphabeticRangeSequence_GivenAlphabetLettersWithMaximumValidLengths_ReturnsSequenceOfMaximumLengths()
         {
             // Arrange
-            var maximumLowercaseLengthPairs = LowercaseAlphabet.Select(character => (c: character, 'a' + AlphabetSize - character));
-            var maximumUppercaseLengthPairs = UppercaseAlphabet.Select(character => (c: character, 'A' + AlphabetSize - character));
+            var maximumLowercaseLengthPairs = LowercaseAlphabet.Select(character => (c: character, ('a' + AlphabetSize) - character));
+            var maximumUppercaseLengthPairs = UppercaseAlphabet.Select(character => (c: character, ('A' + AlphabetSize) - character));
 
             (char character, int length)[] maximumAlphabetLetterLengthPairs =
                 maximumLowercaseLengthPairs.Union(maximumUppercaseLengthPairs).ToArray();
@@ -413,8 +411,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var zeroLengthPair = new[] { ('A', 0) };
-            var invalidLowercaseLengthPairs = LowercaseAlphabet.Select(c => (c, 'a' + AlphabetSize + 1 - c)).ToArray();
-            var invalidUppercaseLengthPairs = UppercaseAlphabet.Select(c => (c, 'A' + AlphabetSize + 1 - c)).ToArray();
+            var invalidLowercaseLengthPairs = LowercaseAlphabet.Select(c => (c, ('a' + AlphabetSize + 1) - c)).ToArray();
+            var invalidUppercaseLengthPairs = UppercaseAlphabet.Select(c => (c, ('A' + AlphabetSize + 1) - c)).ToArray();
 
             IEnumerable<(char character, int lengh)> invalidAlphabetLengthPairs =
                 zeroLengthPair.Union(invalidLowercaseLengthPairs).Union(invalidUppercaseLengthPairs);
@@ -486,8 +484,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void GenerateAlphabeticRangeAsText_GivenAlphabetLettersWithMaximumValidLengths_ReturnsTextOfMaximumLengths()
         {
             // Arrange
-            var maximumLowercaseLengthPairs = LowercaseAlphabet.Select(character => (c: character, 'a' + AlphabetSize - character));
-            var maximumUppercaseLengthPairs = UppercaseAlphabet.Select(character => (c: character, 'A' + AlphabetSize - character));
+            var maximumLowercaseLengthPairs = LowercaseAlphabet.Select(character => (c: character, ('a' + AlphabetSize) - character));
+            var maximumUppercaseLengthPairs = UppercaseAlphabet.Select(character => (c: character, ('A' + AlphabetSize) - character));
 
             (char character, int length)[] maximumAlphabetLetterLengthPairs =
                 maximumLowercaseLengthPairs.Union(maximumUppercaseLengthPairs).ToArray();
@@ -521,8 +519,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         {
             // Arrange
             var zeroLengthPair = new[] { ('A', 0) };
-            var invalidLowercaseLengthPairs = LowercaseAlphabet.Select(c => (c, 'a' + AlphabetSize + 1 - c)).ToArray();
-            var invalidUppercaseLengthPairs = UppercaseAlphabet.Select(c => (c, 'A' + AlphabetSize + 1 - c)).ToArray();
+            var invalidLowercaseLengthPairs = LowercaseAlphabet.Select(c => (c, ('a' + AlphabetSize + 1) - c)).ToArray();
+            var invalidUppercaseLengthPairs = UppercaseAlphabet.Select(c => (c, ('A' + AlphabetSize + 1) - c)).ToArray();
 
             IEnumerable<(char character, int lengh)> invalidAlphabetLengthPairs =
                 zeroLengthPair.Union(invalidLowercaseLengthPairs).Union(invalidUppercaseLengthPairs);
@@ -663,9 +661,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             string? textValue = null;
 
             // Act
-#pragma warning disable 8604
-            _ = GenerateAllDistinctTwoLetterPairs(textValue);
-#pragma warning restore 8604
+            _ = GenerateAllDistinctTwoLetterPairs(textValue!);
         }
 
         /// <summary>

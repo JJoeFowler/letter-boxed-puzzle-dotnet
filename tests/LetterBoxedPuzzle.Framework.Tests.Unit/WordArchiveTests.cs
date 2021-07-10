@@ -98,9 +98,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         public void WordArchive_GivenNullValue_ThrowsArgumentNullException()
         {
             // Act, disabling the warning of passing a null value for a non-nullable argument.
-#pragma warning disable 8625
-            _ = new WordArchive(null);
-#pragma warning restore 8625
+            _ = new WordArchive(null!);
         }
 
         /// <summary>
@@ -392,10 +390,28 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             }
         }
 
+        [TestMethod]
+        public void GetSolutions_Test()
+        {
+            var sideLetters = new SideLetters("oai", "ucw", "tlq", "erd");
+            var wordArchive = new WordArchive(WordConstants.EnglishWordsText);
+
+            // var wordArchive = new WordArchive("acquit act art tacit tartar tear");
+            var candidateWords = wordArchive.GetPuzzleCandidateWords(sideLetters);
+            var wordChain = new WordChain(candidateWords, new[] { 't' }, sideLetters);
+
+            var solutions = wordChain.GetSolutions().ToArray();
+
+            foreach (var solution in solutions)
+            {
+                Console.WriteLine(string.Join("-", solution));
+            }
+        }
+
         /// <summary>
         ///     Verifies whether the word archive initialized by all English words contains the test word.
         /// </summary>
-        [Ignore]
+        [TestMethod]
         public void WordArchive_GivenEnglishWordsText_ContainsTestWord()
         {
             var wordArchive = new WordArchive(WordConstants.EnglishWordsText);
@@ -430,7 +446,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             var letterBoxedLetters = sideLetters.SortedLetters;
 
             var letterBoxedWordsLength = candidateWordsByName.Keys.Select(word => candidateWordsByName[word].IsContainedIn(letterBoxedLetters))
-                .ToArray().Length;
+                .ToArray()
+                .Length;
 
             Console.WriteLine($"There are {letterBoxedWordsLength} words using only letters '{letterBoxedLetters}'.");
             Console.WriteLine();
@@ -524,7 +541,8 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             {
                 var letterBitMask = GetAlphabetBitMask(letter) | GetAlphabetBitMask(smallestLetter);
                 var englishWordsForLetterWithSmallestLetter = englishWords
-                    .Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) == (int)letterBitMask).ToArray();
+                    .Where(word => (int)(candidateWordsByName[word].AlphabetBitMask & letterBitMask) == (int)letterBitMask)
+                    .ToArray();
 
                 var wordsStartWithLetterWithSmallestLetter = englishWordsForLetterWithSmallestLetter.Where(word => word[0] == letter).ToArray();
                 var wordsEndWithLetterWithSmallestLetter = englishWordsForLetterWithSmallestLetter.Where(word => word[^1] == letter).ToArray();
@@ -551,7 +569,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                     startWithSmallestLetterLength = startsWithWordsWithSmallestLetterByLetter[letter].Length;
                 }
 
-                var twoWordChecks = startLength * endWithSmallestLetterLength + startWithSmallestLetterLength * endLength;
+                var twoWordChecks = (startLength * endWithSmallestLetterLength) + (startWithSmallestLetterLength * endLength);
                 totalTwoWordChecks += twoWordChecks;
 
                 Console.Write($"({startLength} words starting with '{letter}' and ");
@@ -616,7 +634,9 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 }
             }
 
-            var sortedTwoWordSolutions = twoWordSolutions.OrderBy(x => x.first.Length + x.second.Length).ThenBy(x => x.first).ThenBy(x => x.second)
+            var sortedTwoWordSolutions = twoWordSolutions.OrderBy(x => x.first.Length + x.second.Length)
+                .ThenBy(x => x.first)
+                .ThenBy(x => x.second)
                 .ToArray();
 
             Console.WriteLine();

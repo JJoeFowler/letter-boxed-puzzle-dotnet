@@ -7,6 +7,8 @@
 
 namespace LetterBoxedPuzzle.Framework.Constants
 {
+    using LetterBoxedPuzzle.Framework.Properties;
+
     /// <summary>
     ///     Class of constants related to project resources.
     /// </summary>
@@ -15,6 +17,6 @@ namespace LetterBoxedPuzzle.Framework.Constants
         /// <summary>
         ///     The text of all English words, where each word is separated by a new line.
         /// </summary>
-        public static readonly string EnglishWordsText = Properties.Resources.Scrabble_Words_2019;
+        public static readonly string EnglishWordsText = Resources.Scrabble_Words_2019;
     }
 }

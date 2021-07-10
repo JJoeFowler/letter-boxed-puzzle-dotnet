@@ -44,8 +44,9 @@ namespace LetterBoxedPuzzle.Framework.Models
 
             var lowercaseCharacters = this.LowercaseCharacters = this.LowercaseWord.ToCharArray();
 
-            this.SequentialLetters = Enumerable.Range(0, lowercaseCharacters.Length - 1).Select(
-                index => lowercaseCharacters[index].ToString() + lowercaseCharacters[index + 1]).ToArray();
+            this.SequentialLetters = Enumerable.Range(0, lowercaseCharacters.Length - 1)
+                .Select(index => lowercaseCharacters[index].ToString() + lowercaseCharacters[index + 1])
+                .ToArray();
 
             this.ByteSequence = this.LowercaseWord.Select(x => (byte)x).ToArray();
 
