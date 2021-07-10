@@ -10,7 +10,7 @@ namespace LetterBoxedPuzzle.Framework.Extensions
     using System;
 
     /// <summary>
-    ///     Class for string utility methods.
+    ///     Class for extension methods for strings.
     /// </summary>
     public static class StringExtensions
     {
