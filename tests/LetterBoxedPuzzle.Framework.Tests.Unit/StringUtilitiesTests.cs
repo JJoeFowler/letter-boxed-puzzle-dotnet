@@ -53,7 +53,39 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         }
 
         /// <summary>
-        ///     Verify whether the given an  array that the single-quoted empty string '' is returned.
+        ///     Verify whether an argument null exception is thrown when given a null value for the overload for string parameters.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void QuoteJoin_GivenNullValueForStringParameters_ThrowsArgumentNullException()
+        {
+            // Arrange
+            string[]? nullValue = null;
+
+            // Act, disabling passing a null value for a non-nullable reference type.
+#pragma warning disable 8604
+            _ = QuoteJoin(nullValue);
+#pragma warning restore 8604
+        }
+
+        /// <summary>
+        ///     Verify whether an argument null exception is thrown when given a null value for the overload for character parameters.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void QuoteJoin_GivenNullValueForCharacterParameters_ThrowsArgumentNullException()
+        {
+            // Arrange
+            char[]? nullValue = null;
+
+            // Act, disabling passing a null value for a non-nullable reference type.
+#pragma warning disable 8604
+            _ = QuoteJoin(nullValue);
+#pragma warning restore 8604
+        }
+
+        /// <summary>
+        ///     Verify whether an argument exception is thrown when given a null value for any of the string parameters.
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -68,6 +100,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             _ = QuoteJoin(parametersWithNullValue);
         }
 
+        /// <summary>
         /// <summary>
         ///     Verify whether the given an empty string array that the double-quoted empty string "" is returned.
         /// </summary>

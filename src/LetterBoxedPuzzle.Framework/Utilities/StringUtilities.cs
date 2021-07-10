@@ -22,16 +22,19 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </summary>
         /// <param name="textValues">The text values.</param>
         /// <returns>The join of each text value double-quoted and separated by a comma and a space.</returns>
-        public static string QuoteJoin(params string[] textValues)
-        {
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            if (textValues.Any(x => x == null))
-            {
-                throw new ArgumentException($"None of the values for the parameter {nameof(textValues)} can be null.");
-            }
+        /// <exception cref="ArgumentNullException">Thrown when given a null value for the text values.</exception>
+        /// <exception cref="ArgumentException">Thrown when given a null value for any text value.</exception>
+        public static string QuoteJoin(params string[] textValues) =>
 
-            return $"\"{string.Join("\", \"", textValues.Select(value => value ?? "null"))}\"";
-        }
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            textValues switch
+                {
+                    null => throw new ArgumentNullException(nameof(textValues)),
+
+                    _ when textValues.Any(x => x == null) => throw new ArgumentException($"'{nameof(textValues)}' cannot have null values."),
+
+                    _ => $"\"{string.Join("\", \"", textValues.Select(value => value ?? "null"))}\"",
+                };
 
         /// <summary>
         ///     Single quote and join the given characters with a comma and space, where given array [ character1, character2, ..., character<i>N</i>
@@ -39,9 +42,14 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </summary>
         /// <param name="characters">The text values.</param>
         /// <returns>The join of each character single-quoted and separated by a comma and a space.</returns>
-        public static string QuoteJoin(params char[] characters)
-        {
-            return $"'{string.Join("', '", characters)}'";
-        }
+        /// <exception cref="ArgumentNullException">Thrown when given a null value for the characters.</exception>
+        /// <exception cref="ArgumentException">Thrown when given a null value for any text value.</exception>
+        public static string QuoteJoin(params char[] characters) =>
+            characters switch
+                {
+                    null => throw new ArgumentNullException(nameof(characters)),
+
+                    _ => $"'{string.Join("', '", characters)}'",
+                };
     }
 }
