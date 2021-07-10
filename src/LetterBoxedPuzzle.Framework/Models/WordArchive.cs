@@ -28,7 +28,13 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <param name="wordText">The word text, white-space delimited.</param>
         public WordArchive(string wordText)
         {
-            this.allWords = Regex.Split(wordText.ToLowerInvariant(), @"\s+").Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
+            this.allWords = wordText switch
+                {
+                    null => throw new ArgumentNullException(nameof(wordText)),
+
+                    _ => Regex.Split(wordText.ToLowerInvariant(), @"\s+").Where(s => !string.IsNullOrWhiteSpace(s)).ToArray(),
+                };
+
             this.AllCandidateWordsByName = GetCandidateWordsByName(this.allWords);
         }
 
@@ -49,10 +55,8 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// </summary>
         /// <param name="sideLetters">The side letters of the puzzle.</param>
         /// <returns>The words allowed by the puzzle.</returns>
-        public string[] GetPermittedPuzzleWords(SideLetters sideLetters)
-        {
-            return this.allWords.Where(word => this.AllCandidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
-        }
+        public string[] GetPermittedPuzzleWords(SideLetters sideLetters) =>
+            this.allWords.Where(word => this.AllCandidateWordsByName[word].IsAllowed(sideLetters)).ToArray();
 
         /// <summary>
         ///     Gets the permitted candidate words for the specified side letters of the puzzle, which includes their alphabet bit masks
@@ -60,10 +64,8 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// </summary>
         /// <param name="sideLetters">The side letters of the puzzle.</param>
         /// <returns>The candidate words for the specified puzzle side letters.</returns>
-        public CandidateWord[] GetPuzzleCandidateWords(SideLetters sideLetters)
-        {
-            return this.GetPermittedPuzzleWords(sideLetters).Select(word => this.AllCandidateWordsByName[word]).ToArray();
-        }
+        public CandidateWord[] GetPuzzleCandidateWords(SideLetters sideLetters) =>
+            this.GetPermittedPuzzleWords(sideLetters).Select(word => this.AllCandidateWordsByName[word]).ToArray();
 
         /// <summary>
         ///     Gets the candidate words keyed by their name for the given words.
@@ -72,9 +74,12 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <returns>The candidate words keyed by their name.</returns>
         private static IReadOnlyDictionary<string, CandidateWord> GetCandidateWordsByName(string[] words)
         {
-            _ = words ?? throw new ArgumentNullException(nameof(words));
+            var candidateWords = words switch
+                {
+                    null => throw new ArgumentNullException(nameof(words)),
 
-            var candidateWords = words.Select(word => new CandidateWord(word)).Distinct();
+                    _ => words.Select(word => new CandidateWord(word)).Distinct(),
+                };
 
             return candidateWords.ToDictionary(candidate => candidate.LowercaseWord, candidate => candidate);
         }

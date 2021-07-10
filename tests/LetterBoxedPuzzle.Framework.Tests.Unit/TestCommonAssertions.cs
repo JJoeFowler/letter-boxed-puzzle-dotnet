@@ -69,7 +69,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
                 try
                 {
                     // ReSharper disable once SuggestVarOrType_SimpleTypes
-                    TOutput? output = testFunction(invalidInput);
+                    TOutput output = testFunction(invalidInput);
 
                     assertMethod(output, $"Did not throw an {expectedExceptionType} {messageEnd}.");
                 }

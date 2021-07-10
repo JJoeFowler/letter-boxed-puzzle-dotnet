@@ -66,9 +66,6 @@ namespace LetterBoxedPuzzle.Framework.Extensions
         /// </summary>
         /// <param name="alphabetBitMask">The alphabet bit mask.</param>
         /// <returns>The alphabetic index between 0 and 26 of the given one-letter alphabet bit mask.</returns>
-        public static int ToAlphabeticIndex(this AlphabetBitMask alphabetBitMask)
-        {
-            return AlphabeticIndexByLetter[alphabetBitMask];
-        }
+        public static int ToAlphabeticIndex(this AlphabetBitMask alphabetBitMask) => AlphabeticIndexByLetter[alphabetBitMask];
     }
 }

@@ -23,7 +23,9 @@ namespace LetterBoxedPuzzle.Framework.Extensions
             input switch
                 {
                     null => throw new ArgumentNullException(nameof(input)),
+
                     "" => throw new ArgumentException($"The parameter '{nameof(input)}' cannot be empty."),
+
                     _ => input[..1].ToUpperInvariant() + input[1..],
                 };
     }

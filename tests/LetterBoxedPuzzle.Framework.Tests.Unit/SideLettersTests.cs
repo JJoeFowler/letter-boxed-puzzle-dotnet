@@ -36,10 +36,10 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         internal static readonly SideLetters TestSideLettersForThreeSides = new (TestLetterGroupsForThreeSides);
 
         /// <summary>
-        ///     Verify whether a null reference exception is thrown if given a null value to instantiate the class.
+        ///     Verify whether an argument null exception is thrown if given a null value to instantiate the class.
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(NullReferenceException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void SideLetters_GivenNullValue_ThrowsNullReferenceException()
         {
             // Arrange

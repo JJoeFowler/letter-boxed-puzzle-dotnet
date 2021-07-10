@@ -26,24 +26,20 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <param name="lastLetter">The last letter lowercased if specified or null if not.</param>
         public WordLink(CandidateWord[] candidateWords, char? firstLetter, char? lastLetter)
         {
-            _ = candidateWords ?? throw new ArgumentNullException(nameof(candidateWords));
-
-            static void CheckIfLetterIsNonAlphabetic(char? letter, string parameterName)
-            {
-                if (letter.HasValue && !IsLowercaseAlphabetLetter(letter.Value))
+            (this.MatchingCandidateWords, this.FirstLetter, this.LastLetter) = (candidateWords, firstLetter, lastLetter) switch
                 {
-                    throw new ArgumentException($"Parameter {parameterName} must be a lowercase letter of the alphabet.");
-                }
-            }
+                    (null, _, _) => throw new ArgumentNullException(nameof(candidateWords)),
 
-            CheckIfLetterIsNonAlphabetic(firstLetter, nameof(firstLetter));
-            CheckIfLetterIsNonAlphabetic(lastLetter, nameof(lastLetter));
+                    (_, _, _) when firstLetter.HasValue && !IsLowercaseAlphabetLetter(firstLetter.Value) => throw new ArgumentException(
+                        $"'{nameof(firstLetter)}' must be a lowercase letter of the alphabet."),
 
-            this.FirstLetter = firstLetter;
-            this.LastLetter = lastLetter;
+                    (_, _, _) when lastLetter.HasValue && !IsLowercaseAlphabetLetter(lastLetter.Value) => throw new ArgumentException(
+                        $"'{nameof(lastLetter)}' must be a lowercase letter of the alphabet."),
 
-            this.MatchingCandidateWords = candidateWords.Where(word => !firstLetter.HasValue || (word.FirstLetter == firstLetter))
-                .Where(word => !lastLetter.HasValue || (word.LastLetter == lastLetter)).ToArray();
+                    (_, _, _) => (
+                        candidateWords.Where(word => !firstLetter.HasValue || (word.FirstLetter == firstLetter))
+                            .Where(word => !lastLetter.HasValue || (word.LastLetter == lastLetter)).ToArray(), firstLetter, lastLetter),
+                };
         }
 
         /// <summary>

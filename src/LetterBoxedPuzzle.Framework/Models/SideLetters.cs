@@ -33,24 +33,21 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// </exception>
         public SideLetters(params string[] letterGroups)
         {
-            var sideCount = letterGroups.Length;
+            this.LetterGroups = letterGroups switch
+                {
+                    null => throw new ArgumentNullException(nameof(letterGroups)),
 
-            if (letterGroups.Any(string.IsNullOrEmpty))
-            {
-                throw new ArgumentException(
-                    $"One or more of the given groups of letters along the sides {QuoteJoin(letterGroups)}' is null or empty.");
-            }
+                    _ when letterGroups.Any(string.IsNullOrEmpty) => throw new ArgumentException(
+                        $"The values of '{nameof(letterGroups)}' cannot be null or empty."),
 
-            if (sideCount < MinimumLetterBoxedSides)
-            {
-                throw new ArgumentException($"Must provide at least {MinimumLetterBoxedSides} groups of letters rather than {sideCount}.");
-            }
+                    _ when letterGroups.All(letters => letters.All(IsAlphabetLetter)) != true => throw new ArgumentException(
+                        $"The values of '{nameof(letterGroups)}' must be letters of the alphabet."),
 
-            if (letterGroups.All(letters => letters.All(IsAlphabetLetter)) != true)
-            {
-                throw new ArgumentException(
-                    $"Given groups of letters along the sides {QuoteJoin(letterGroups)}' cannot contain non-alphabet characters.");
-            }
+                    _ when letterGroups.Length < MinimumLetterBoxedSides => throw new ArgumentException(
+                        $"'{nameof(letterGroups)}' must have at {MinimumLetterBoxedSides} values."),
+
+                    _ => letterGroups.Select(group => group.ToLowerInvariant()).ToArray(),
+                };
 
             this.LetterGroups = letterGroups.Select(group => group.ToLowerInvariant()).ToArray();
 
@@ -91,22 +88,18 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <exception cref="ArgumentException">
         ///     Thrown when given a string not of length two or when given a two-letter pair with a non-alphabet character.
         /// </exception>
-        public bool IsForbiddenTwoLetterPair(string twoLetterPair)
-        {
-            _ = twoLetterPair ?? throw new ArgumentNullException(nameof(twoLetterPair));
+        public bool IsForbiddenTwoLetterPair(string twoLetterPair) =>
+            twoLetterPair switch
+                {
+                    null => throw new ArgumentNullException(nameof(twoLetterPair)),
 
-            if (twoLetterPair.Length != 2)
-            {
-                throw new ArgumentException($"Given letters '{twoLetterPair}' do not have length 2.");
-            }
+                    _ when twoLetterPair.Length != 2 => throw new ArgumentException($"'{twoLetterPair}' does not have length 2."),
 
-            if (!twoLetterPair.All(IsAlphabetLetter))
-            {
-                throw new ArgumentException($"Given two letters '{twoLetterPair}' are not both letters of the alphabet.");
-            }
+                    _ when !twoLetterPair.All(IsAlphabetLetter) => throw new ArgumentException(
+                        $"'{twoLetterPair}' must be letters of the alphabet."),
 
-            return this.ForbiddenTwoLetterPairSet.Contains(twoLetterPair.ToLowerInvariant());
-        }
+                    _ => this.ForbiddenTwoLetterPairSet.Contains(twoLetterPair.ToLowerInvariant()),
+                };
 
         /// <summary>
         ///     Generate the distinct forbidden two-letter pairs that cannot be contained in a solution of a letter-boxed puzzle.

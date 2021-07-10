@@ -86,10 +86,7 @@ namespace LetterBoxedPuzzle.Framework.Constants
         ///     Calculates the alphabet bit mask with all of its bits set.
         /// </summary>
         /// <returns>The alphabet bit mask with all bits set.</returns>
-        private static AlphabetBitMask CalculateAlphabetBitMaskWithAllBitsSet()
-        {
-            var alphabeticIndices = Enumerable.Range(1, EnglishAlphabetSize);
-            return alphabeticIndices.Aggregate(AlphabetBitMask.None, (current, index) => current | index.ToAlphabetBitMask());
-        }
+        private static AlphabetBitMask CalculateAlphabetBitMaskWithAllBitsSet() =>
+            Enumerable.Range(1, EnglishAlphabetSize).Aggregate(AlphabetBitMask.None, (current, index) => current | index.ToAlphabetBitMask());
     }
 }

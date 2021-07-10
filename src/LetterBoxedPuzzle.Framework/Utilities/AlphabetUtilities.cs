@@ -20,6 +20,11 @@ namespace LetterBoxedPuzzle.Framework.Utilities
     public static class AlphabetUtilities
     {
         /// <summary>
+        ///     The minimum length of the text used to generate two-letter pairs.
+        /// </summary>
+        internal const int MinimumTwoLetterPairsTextLength = 2;
+
+        /// <summary>
         ///     The bit-wise enumerated letters of the alphabet indexed by their byte values.
         /// </summary>
         internal static readonly AlphabetBitMask[] AlphabetBitMaskByByteValue = new AlphabetBitMask[byte.MaxValue + 1];
@@ -67,10 +72,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <returns>
         ///     <see langword="true" /> if given character is an alphabet letter, or <see langword="false" /> otherwise.
         /// </returns>
-        public static bool IsAlphabetLetter(char character)
-        {
-            return IsAlphabetLetterByCharacter[character];
-        }
+        public static bool IsAlphabetLetter(char character) => IsAlphabetLetterByCharacter[character];
 
         /// <summary>
         ///     Determine whether the given character is a lowercase alphabet letter, which is between 'a' and 'z'.
@@ -79,10 +81,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <returns>
         ///     <see langword="true" /> if given character is a lowercase alphabet letter, or <see langword="false" /> otherwise.
         /// </returns>
-        public static bool IsLowercaseAlphabetLetter(char character)
-        {
-            return IsLowercaseAlphabetLetterByCharacter[character];
-        }
+        public static bool IsLowercaseAlphabetLetter(char character) => IsLowercaseAlphabetLetterByCharacter[character];
 
         /// <summary>
         ///     Determine whether the given character is an uppercase alphabet letter, which is between 'A' and 'Z'.
@@ -91,10 +90,7 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <returns>
         ///     <see langword="true" /> if given character is an uppercase alphabet letter, or <see langword="false" /> otherwise.
         /// </returns>
-        public static bool IsUppercaseAlphabetLetter(char character)
-        {
-            return IsUppercaseAlphabetLetterByCharacter[character];
-        }
+        public static bool IsUppercaseAlphabetLetter(char character) => IsUppercaseAlphabetLetterByCharacter[character];
 
         /// <summary>
         ///     Gets the byte value for the given character assuming it can be converted to a byte.
@@ -122,15 +118,14 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <param name="alphabetLetter">The alphabet letter.</param>
         /// <returns>The bit mask of the given letter.</returns>
         /// <exception cref="ArgumentException">Thrown when given a character not in the alphabet.</exception>
-        public static AlphabetBitMask GetAlphabetBitMask(char alphabetLetter)
-        {
-            if (!IsAlphabetLetter(alphabetLetter))
-            {
-                throw new ArgumentException($"Given character {alphabetLetter} must be an alphabet letter.");
-            }
+        public static AlphabetBitMask GetAlphabetBitMask(char alphabetLetter) =>
+            alphabetLetter switch
+                {
+                    _ when !IsAlphabetLetter(alphabetLetter) => throw new ArgumentException(
+                        $"'{nameof(alphabetLetter)}' must be a letter of the alphabet."),
 
-            return AlphabetBitMaskByByteValue[GetByteValue(alphabetLetter)];
-        }
+                    _ => AlphabetBitMaskByByteValue[GetByteValue(alphabetLetter)],
+                };
 
         /// <summary>
         ///     Get the alphabet bit mask value for the given alphabet letters.
@@ -139,12 +134,15 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <returns>The bit mask of the given letter.</returns>
         /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
         /// <exception cref="ArgumentException">Thrown when given a non-alphabet letter.</exception>
-        public static AlphabetBitMask GetAlphabetBitMask(string alphabetLetters)
-        {
-            _ = alphabetLetters ?? throw new ArgumentNullException(nameof(alphabetLetters));
+        public static AlphabetBitMask GetAlphabetBitMask(string alphabetLetters) =>
+            alphabetLetters switch
+                {
+                    null => throw new ArgumentNullException(nameof(alphabetLetters)),
 
-            return alphabetLetters.Aggregate(AlphabetBitMask.None, (current, alphabetLetter) => current | GetAlphabetBitMask(alphabetLetter));
-        }
+                    _ => alphabetLetters.Aggregate(
+                        AlphabetBitMask.None,
+                        (current, alphabetLetter) => current | GetAlphabetBitMask(alphabetLetter)),
+                };
 
         /// <summary>
         ///     <para>
@@ -164,21 +162,21 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// </exception>
         public static char[] GenerateAlphabeticRangeSequence(char startingLetter, int length)
         {
-            if (!IsAlphabetLetter(startingLetter))
-            {
-                throw new ArgumentException($"Given starting letter {startingLetter} must be a letter of the alphabet.");
-            }
-
             var maximumLength = AlphabetConstants.EnglishAlphabetSize - startingLetter
                 + (IsLowercaseAlphabetLetter(startingLetter) ? AlphabetConstants.LowercaseA : AlphabetConstants.UppercaseA);
 
-            if ((length < 1) || (length > maximumLength))
-            {
-                throw new ArgumentOutOfRangeException(
-                    $"The length {length} for starting letter '{startingLetter}' exceeded maximum allow value of {maximumLength}.");
-            }
+            return (startingLetter, length) switch
+                {
+                    (_, _) when !IsAlphabetLetter(startingLetter) => throw new ArgumentException(
+                        $"'{nameof(startingLetter)}' must be a letter of the alphabet."),
 
-            return Enumerable.Range(startingLetter, length).Select(x => (char)x).ToArray();
+                    (_, _) when length < 1 => throw new ArgumentOutOfRangeException($"The value of '{nameof(length)}' must be at least 1."),
+
+                    (_, _) when length > maximumLength => throw new ArgumentOutOfRangeException(
+                        $"The value of '{nameof(length)}' for '{nameof(startingLetter)}' cannot exceed maximum length of {maximumLength}."),
+
+                    (_, _) => Enumerable.Range(startingLetter, length).Select(x => (char)x).ToArray(),
+                };
         }
 
         /// <summary>
@@ -197,10 +195,8 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown when not given a length less than 1 or a length out of range that would lead to non-alphabetic text.
         /// </exception>
-        public static string GenerateAlphabeticRangeAsText(char startingLetter, int length)
-        {
-            return new string(GenerateAlphabeticRangeSequence(startingLetter, length));
-        }
+        public static string GenerateAlphabeticRangeAsText(char startingLetter, int length) =>
+            new (GenerateAlphabeticRangeSequence(startingLetter, length));
 
         /// <summary>
         ///     Generate all distinct two-letter pairs of letters for the given text, including the pairs of the same letter.
@@ -209,27 +205,19 @@ namespace LetterBoxedPuzzle.Framework.Utilities
         /// <returns>All (<i>n</i> choose 2 + <i>n</i>) two-letter pairs consisting of letters of the given text of length <i>n</i>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
         /// <exception cref="ArgumentException">Thrown when given text contains one or more characters not in the alphabet.</exception>
-        public static string[] GenerateAllDistinctTwoLetterPairs(string text)
-        {
-            _ = text ?? throw new ArgumentNullException(nameof(text));
+        public static string[] GenerateAllDistinctTwoLetterPairs(string text) =>
+            text switch
+                {
+                    null => throw new ArgumentNullException(nameof(text)),
 
-            const int minimumLength = 2;
+                    _ when text.Length < MinimumTwoLetterPairsTextLength => throw new ArgumentException(
+                        $"'{nameof(text)}' must have at least {MinimumTwoLetterPairsTextLength} characters."),
 
-            if (text.Length < minimumLength)
-            {
-                throw new ArgumentException($"Given '{text}' must must have minimum length of at least {minimumLength}.");
-            }
+                    _ when !text.All(IsAlphabetLetter) => throw new ArgumentException($"{nameof(text)}' must be letters of the alphabet."),
 
-            if (!text.All(IsAlphabetLetter))
-            {
-                throw new ArgumentException($"Given '{text}' can only contain letters in the alphabet.");
-            }
-
-            var lowercaseText = text.ToLowerInvariant();
-
-            return (from firstLetter in lowercaseText
-                    from secondLetter in lowercaseText
-                    select firstLetter + secondLetter.ToString()).Distinct().ToArray();
-        }
+                    _ => (from firstLetter in text.ToLowerInvariant()
+                          from secondLetter in text.ToLowerInvariant()
+                          select firstLetter + secondLetter.ToString()).Distinct().ToArray(),
+                };
     }
 }

@@ -91,6 +91,19 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
         private static readonly string[] TestNotAllowedWords = { "acid", "bad", "cage", "dig", "each", "fade", "gig", "high", "iced" };
 
         /// <summary>
+        ///     Verifies whether given a null value that an argument null exception is thrown.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void WordArchive_GivenNullValue_ThrowsArgumentNullException()
+        {
+            // Act, disabling the warning of passing a null value for a non-nullable argument.
+#pragma warning disable 8625
+            _ = new WordArchive(null);
+#pragma warning restore 8625
+        }
+
+        /// <summary>
         ///     Verifies whether the legal words does not contain any words having white space.
         /// </summary>
         [TestMethod]

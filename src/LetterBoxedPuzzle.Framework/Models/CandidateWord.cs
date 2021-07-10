@@ -8,7 +8,6 @@
 namespace LetterBoxedPuzzle.Framework.Models
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using LetterBoxedPuzzle.Framework.Constants;
@@ -29,30 +28,24 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <exception cref="ArgumentException">Thrown when given an empty string or word with non-alphabet letters.</exception>
         public CandidateWord(string word)
         {
-            _ = word ?? throw new ArgumentNullException(nameof(word));
+            this.LowercaseWord = word switch
+                {
+                    null => throw new ArgumentNullException(nameof(word)),
 
-            if (string.IsNullOrEmpty(word))
-            {
-                throw new ArgumentException("Cannot use empty string to initialize a candidate word.");
-            }
+                    "" => throw new ArgumentException($"'{nameof(word)}' cannot be empty."),
 
-            if (!word.All(IsAlphabetLetter))
-            {
-                throw new ArgumentException($"Cannot use '{word}' containing non-alphabet letters to initialize a candidate word.");
-            }
+                    _ when !word.All(IsAlphabetLetter) => throw new ArgumentException($"'{nameof(word)}' must be letters of the alphabet ."),
 
-            this.LowercaseWord = word.ToLowerInvariant();
+                    _ => word.ToLowerInvariant(),
+                };
+
             this.FirstLetter = this.LowercaseWord[0];
             this.LastLetter = this.LowercaseWord[^1];
 
             var lowercaseCharacters = this.LowercaseCharacters = this.LowercaseWord.ToCharArray();
-            this.SequentialLetters = Enumerable.Range(0, lowercaseCharacters.Length - 1).Aggregate(
-                new List<string>(),
-                (current, index) =>
-                {
-                    current.Add(lowercaseCharacters[index].ToString() + lowercaseCharacters[index + 1]);
-                    return current;
-                }).ToArray();
+
+            this.SequentialLetters = Enumerable.Range(0, lowercaseCharacters.Length - 1).Select(
+                index => lowercaseCharacters[index].ToString() + lowercaseCharacters[index + 1]).ToArray();
 
             this.ByteSequence = this.LowercaseWord.Select(x => (byte)x).ToArray();
 
@@ -106,17 +99,16 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
         /// <exception cref="ArgumentException">Thrown when given one or more non-alphabet letters.</exception>
-        public bool IsContainedIn(string candidateLetters)
-        {
-            _ = candidateLetters ?? throw new ArgumentNullException(nameof(candidateLetters));
+        public bool IsContainedIn(string candidateLetters) =>
+            candidateLetters switch
+                {
+                    null => throw new ArgumentNullException(nameof(candidateLetters)),
 
-            if (!candidateLetters.All(IsAlphabetLetter))
-            {
-                throw new ArgumentException($"Given candidate letters {candidateLetters} are not all letters of the alphabet.");
-            }
+                    _ when !candidateLetters.All(IsAlphabetLetter) => throw new ArgumentException(
+                        $"'{nameof(candidateLetters)}' must be letters of the alphabet ."),
 
-            return (this.AlphabetBitMask & (AlphabetConstants.AlphabetBitMaskWithAllBitsSet ^ GetAlphabetBitMask(candidateLetters))) == 0;
-        }
+                    _ => (this.AlphabetBitMask & (AlphabetConstants.AlphabetBitMaskWithAllBitsSet ^ GetAlphabetBitMask(candidateLetters))) == 0,
+                };
 
         /// <summary>
         ///     Determines whether the candidate words is an allowed word for a letter-boxed puzzle given its side letters, where no two
@@ -127,12 +119,13 @@ namespace LetterBoxedPuzzle.Framework.Models
         ///     <see langword="true" /> if this candidate word is allowed for given the side letters, or <see langword="false" /> otherwise.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown when given a null value for the side letters.</exception>
-        public bool IsAllowed(SideLetters sideLetters)
-        {
-            _ = sideLetters ?? throw new ArgumentNullException(nameof(sideLetters));
+        public bool IsAllowed(SideLetters sideLetters) =>
+            sideLetters switch
+                {
+                    null => throw new ArgumentNullException(nameof(sideLetters)),
 
-            return this.IsContainedIn(sideLetters.DistinctLetters)
-                && !this.SequentialLetters.Any(letters => sideLetters.IsForbiddenTwoLetterPair(letters));
-        }
+                    _ => this.IsContainedIn(sideLetters.DistinctLetters)
+                        && !this.SequentialLetters.Any(letters => sideLetters.IsForbiddenTwoLetterPair(letters)),
+                };
     }
 }
