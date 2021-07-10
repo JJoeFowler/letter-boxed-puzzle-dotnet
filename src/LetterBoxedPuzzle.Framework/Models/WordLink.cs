@@ -24,6 +24,10 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <param name="candidateWords">The candidate words.</param>
         /// <param name="firstLetter">The first letter lowercased if specified or null if not.</param>
         /// <param name="lastLetter">The last letter lowercased if specified or null if not.</param>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value for the candidate words.</exception>
+        /// <exception cref="ArgumentException">
+        ///     Thrown when given a character that is not a lowercase letter of the alphabet for either the  first or last letter.
+        /// </exception>
         public WordLink(CandidateWord[] candidateWords, char? firstLetter, char? lastLetter)
         {
             (this.MatchingCandidateWords, this.FirstLetter, this.LastLetter) = (candidateWords, firstLetter, lastLetter) switch

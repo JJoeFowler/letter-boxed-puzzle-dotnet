@@ -28,8 +28,9 @@ namespace LetterBoxedPuzzle.Framework.Models
         ///     Initializes a new instance of the <see cref="SideLetters" /> class.
         /// </summary>
         /// <param name="letterGroups">The groups of letters along the sides of a letter-boxed puzzle.</param>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
         /// <exception cref="ArgumentException">
-        ///     Thrown when any letter group is null, empty, or contains a non-alphabet letter or when there are fewer than two groups.
+        ///     Thrown when the letter group is empty, contains a non-alphabet letter, or when there are fewer than two groups.
         /// </exception>
         public SideLetters(params string[] letterGroups)
         {

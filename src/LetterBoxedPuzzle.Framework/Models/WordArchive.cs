@@ -26,6 +26,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         ///     Initializes a new instance of the <see cref="WordArchive" /> class.
         /// </summary>
         /// <param name="wordText">The word text, white-space delimited.</param>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
         public WordArchive(string wordText)
         {
             this.allWords = wordText switch

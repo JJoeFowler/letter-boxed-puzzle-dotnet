@@ -19,12 +19,14 @@ namespace LetterBoxedPuzzle.Framework.Extensions
         /// </summary>
         /// <param name="input">The input string.</param>
         /// <returns>The string with the first character in uppercase.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
+        /// <exception cref="ArgumentException">Thrown when given an empty string.</exception>
         public static string ToFirstCharUpper(this string input) =>
             input switch
                 {
                     null => throw new ArgumentNullException(nameof(input)),
 
-                    "" => throw new ArgumentException($"The parameter '{nameof(input)}' cannot be empty."),
+                    "" => throw new ArgumentException($"'{nameof(input)}' cannot be empty."),
 
                     _ => input[..1].ToUpperInvariant() + input[1..],
                 };

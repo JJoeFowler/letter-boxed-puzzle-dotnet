@@ -118,7 +118,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         /// <returns>
         ///     <see langword="true" /> if this candidate word is allowed for given the side letters, or <see langword="false" /> otherwise.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown when given a null value for the side letters.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
         public bool IsAllowed(SideLetters sideLetters) =>
             sideLetters switch
                 {
