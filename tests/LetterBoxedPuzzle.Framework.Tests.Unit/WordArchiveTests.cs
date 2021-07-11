@@ -390,24 +390,6 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
             }
         }
 
-        [TestMethod]
-        public void GetSolutions_Test()
-        {
-            var sideLetters = new SideLetters("oai", "ucw", "tlq", "erd");
-            var wordArchive = new WordArchive(WordConstants.EnglishWordsText);
-
-            // var wordArchive = new WordArchive("acquit act art tacit tartar tear");
-            var candidateWords = wordArchive.GetPuzzleCandidateWords(sideLetters);
-            var wordChain = new WordChain(candidateWords, new[] { 't' }, sideLetters);
-
-            var solutions = wordChain.GetSolutions().ToArray();
-
-            foreach (var solution in solutions)
-            {
-                Console.WriteLine(string.Join("-", solution));
-            }
-        }
-
         /// <summary>
         ///     Verifies whether the word archive initialized by all English words contains the test word.
         /// </summary>

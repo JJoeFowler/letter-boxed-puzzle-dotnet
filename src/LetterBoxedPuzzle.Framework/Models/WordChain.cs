@@ -23,11 +23,6 @@ namespace LetterBoxedPuzzle.Framework.Models
     public class WordChain
     {
         /// <summary>
-        ///     Maximum number of word links to form a word chain.
-        /// </summary>
-        public const int MaximumWordLinksLength = 6;
-
-        /// <summary>
         ///     Initializes a new instance of the <see cref="WordChain" /> class.
         /// </summary>
         /// <param name="candidateWords">The candidate words.</param>
@@ -46,8 +41,8 @@ namespace LetterBoxedPuzzle.Framework.Models
 
                     (_, _, _) when candidateWords.Length == 0 => throw new ArgumentException($"'{nameof(candidateWords)}' cannot be empty."),
 
-                    (_, _, _) when linkingLetters.Count() >= MaximumWordLinksLength => throw new ArgumentException(
-                        $"'{linkingLetters}' must be less than {MaximumWordLinksLength}."),
+                    (_, _, _) when linkingLetters.Count() >= PuzzleSolver.MaximumSolutionWordCount => throw new ArgumentException(
+                        $"'{linkingLetters}' must be less than {PuzzleSolver.MaximumSolutionWordCount}."),
 
                     (_, _, _) when !linkingLetters.All(IsAlphabetLetter) => throw new ArgumentException(
                         $"'{nameof(linkingLetters)}' must only be letters of the alphabet"),
@@ -80,16 +75,20 @@ namespace LetterBoxedPuzzle.Framework.Models
         public WordLink[] WordLinks { get; }
 
         /// <summary>
-        ///     Gets all the solutions of all word chains whose letters collectively use all the side letters of the puzzle.
+        ///     Find all the solutions, one word taken from each word link of the word chain (where first letter of each subsequent word is
+        ///     the last letter of the previous word) whose letters collectively use all the side letters of the puzzle.
         /// </summary>
-        /// <returns>The word chains whose letters use all the side letters.</returns>
-        public IEnumerable<string>[] GetSolutions()
+        /// <returns>
+        ///     The solutions to the puzzle where each word comes from the respective word link of the word chain.
+        /// </returns>
+        public PuzzleSolution[] FindSolutions()
         {
             var sideLetterBitMask = new CandidateWord(this.SideLetters.SortedLetters).AlphabetBitMask;
 
             return (from candidateWordChain in this.GetCandidateWordChains()
                     where IsCompleteChain(sideLetterBitMask, candidateWordChain)
-                    select candidateWordChain.Select(word => word.LowercaseWord)).ToArray();
+                    select candidateWordChain).Select(words => new PuzzleSolution(words, this.SideLetters))
+                .ToArray();
         }
 
         /// <summary>
@@ -138,9 +137,7 @@ namespace LetterBoxedPuzzle.Framework.Models
         ///     Get the chains of candidate words, where each candidate word is from one of the word links.
         /// </summary>
         /// <returns>The next word chain.</returns>
-        private IEnumerable<IEnumerable<CandidateWord>> GetCandidateWordChains()
-        {
-            return this.WordLinks.Select(wordLink => wordLink.MatchingCandidateWords).CartesianProduct();
-        }
+        private IEnumerable<IEnumerable<CandidateWord>> GetCandidateWordChains() =>
+            this.WordLinks.Select(wordLink => wordLink.MatchingCandidateWords).CartesianProduct();
     }
 }

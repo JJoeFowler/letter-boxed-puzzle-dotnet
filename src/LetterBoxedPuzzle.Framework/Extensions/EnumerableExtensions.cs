@@ -38,18 +38,20 @@ namespace LetterBoxedPuzzle.Framework.Extensions
         /// <param name="groupsSequence">The sequences of groups of values.</param>
         /// <returns>The sequence of elements forming the Cartesian product of the input sequence.</returns>
         /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
-        /// <exception cref="ArgumentException">Thrown when any of the specified enumerables are empty.</exception>
+        /// <exception cref="ArgumentException">Thrown when any of the specified enumerables are null.</exception>
         public static IEnumerable<IEnumerable<TValue>> CartesianProduct<TValue>(this IEnumerable<IEnumerable<TValue>> groupsSequence) =>
             groupsSequence switch
                 {
                     null => throw new ArgumentNullException(nameof(groupsSequence)),
 
-                    _ when groupsSequence.Any(group => group?.Any() != true) => throw new ArgumentException(
-                        $"'{nameof(groupsSequence)}' cannot contain a null value or be empty."),
+                    _ when groupsSequence.Any(group => group is null!) => throw new ArgumentException(
+                        $"'{nameof(groupsSequence)}' cannot contain a null value."),
+
+                    _ when groupsSequence.Any(group => group.Any() != true) => Enumerable.Empty<IEnumerable<TValue>>(),
 
                     _ => groupsSequence.Aggregate(
                         Enumerable.Empty<TValue>().AsSingleElement(),
-                        (current, groups) => current.SelectMany(_ => groups, (group, item) => @group.Concat(new[] { item }))),
+                        (current, groups) => current.SelectMany(_ => groups, (group, item) => group.Concat(new[] { item }))),
                 };
     }
 }
