@@ -21,30 +21,35 @@ namespace LetterBoxedPuzzle.Framework.Extensions
         /// </summary>
         /// <param name="value">The value.</param>
         /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <returns>A single-element enumerable.</returns>
+        /// <returns>A single-element enumerable containing the specified value.</returns>
         public static IEnumerable<TValue> AsSingleElement<TValue>(this TValue value) => new[] { value };
 
         /// <summary>
-        ///     Computes the Cartesian product of the specified sequences of <i>N</i> groups, each with <i>K</i> values, resulting in sequence
-        ///     of <i>N * K</i> products. Each <i>K</i>-element product contains one element from each of the specified <i>N</i> groups of
-        ///     values, such that no two products contain the exact same elements.
+        ///     <para>
+        ///         Computes the Cartesian product of the specified sequence of <i>N</i> enumerables, each with <i>x1</i>, <i>x2</i>, ...,
+        ///         <i>xN</i> items, respectively, resulting in a sequence <i>x1 * x2 * ... * xN</i> long of <i>N</i>-element groups.
+        ///     </para>
+        ///     <para>
+        ///         Each resulting <i>N</i>-element group contains one element from each of the specified <i>N</i> enumerables of items,
+        ///         preserving the order of the original sequence, such that no two groups of the Cartesian project contain the exact same items.
+        ///     </para>
         /// </summary>
-        /// <typeparam name="TValue">The type of values of the groups.</typeparam>
+        /// <typeparam name="TValue">The type of the items of all the groups.</typeparam>
         /// <param name="groupsSequence">The sequences of groups of values.</param>
-        /// <returns>The sequences of products forming the Cartesian product of the input sequence of groups.</returns>
+        /// <returns>The sequence of elements forming the Cartesian product of the input sequence.</returns>
         /// <exception cref="ArgumentNullException">Thrown when given a null value.</exception>
-        /// <exception cref="ArgumentException">Thrown when any of the specified groups are empty.</exception>
+        /// <exception cref="ArgumentException">Thrown when any of the specified enumerables are empty.</exception>
         public static IEnumerable<IEnumerable<TValue>> CartesianProduct<TValue>(this IEnumerable<IEnumerable<TValue>> groupsSequence) =>
             groupsSequence switch
                 {
                     null => throw new ArgumentNullException(nameof(groupsSequence)),
 
                     _ when groupsSequence.Any(group => group?.Any() != true) => throw new ArgumentException(
-                        $"'{nameof(groupsSequence)}' cannot contain a null value or an empty group."),
+                        $"'{nameof(groupsSequence)}' cannot contain a null value or be empty."),
 
                     _ => groupsSequence.Aggregate(
                         Enumerable.Empty<TValue>().AsSingleElement(),
-                        (current, groups) => current.SelectMany(_ => groups, (product, value) => product.Concat(new[] { value }))),
+                        (current, groups) => current.SelectMany(_ => groups, (group, item) => @group.Concat(new[] { item }))),
                 };
     }
 }
