@@ -17,7 +17,7 @@ namespace LetterBoxedPuzzle.Framework.Tests.Unit
     using static TestCommonConstants;
 
     /// <summary>
-    ///     Unit tests for the string utility methods class.
+    ///     Unit tests for the string extension methods class.
     /// </summary>
     [TestClass]
     public class StringExtensionsTests

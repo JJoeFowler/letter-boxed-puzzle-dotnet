@@ -17,6 +17,14 @@ namespace LetterBoxedPuzzle.Framework.Extensions
     public static class EnumerableExtensions
     {
         /// <summary>
+        ///     Converts the specified value into a single-element enumerable.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <returns>A single-element enumerable.</returns>
+        public static IEnumerable<TValue> AsSingleElement<TValue>(this TValue value) => new[] { value };
+
+        /// <summary>
         ///     Computes the Cartesian product of the specified sequences of <i>N</i> groups, each with <i>K</i> values, resulting in sequence
         ///     of <i>N * K</i> products. Each <i>K</i>-element product contains one element from each of the specified <i>N</i> groups of
         ///     values, such that no two products contain the exact same elements.
@@ -31,11 +39,11 @@ namespace LetterBoxedPuzzle.Framework.Extensions
                 {
                     null => throw new ArgumentNullException(nameof(groupsSequence)),
 
-                    _ when groupsSequence.Any(group => !group.Any()) => throw new ArgumentException(
-                        $"'{nameof(groupsSequence)}' cannot contain an empty group."),
+                    _ when groupsSequence.Any(group => group?.Any() != true) => throw new ArgumentException(
+                        $"'{nameof(groupsSequence)}' cannot contain a null value or an empty group."),
 
                     _ => groupsSequence.Aggregate(
-                        (IEnumerable<IEnumerable<TValue>>)new[] { Enumerable.Empty<TValue>() },
+                        Enumerable.Empty<TValue>().AsSingleElement(),
                         (current, groups) => current.SelectMany(_ => groups, (product, value) => product.Concat(new[] { value }))),
                 };
     }
